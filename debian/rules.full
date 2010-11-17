@@ -1,0 +1,3 @@
+# Build the full MinGW-w64 development package.
+package := mingw-w64-dev
+subprojects := headers crt

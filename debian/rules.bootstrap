@@ -1,0 +1,3 @@
+# Build the MinGW-w64 headers required to build the rest.
+package := mingw-w64-headers
+subprojects := headers

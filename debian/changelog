@@ -1,0 +1,29 @@
+mingw-w64 (1.0+20101003-1) unstable; urgency=low
+
+  * New maintainer. (Closes: #594371.)
+  * New upstream snapshot.
+  * Standards-Version 3.9.1 (new packaging).
+  * Include patch from
+    http://mingw-w64.svn.sourceforge.net/viewvc/mingw-w64?view=revision&revision=3715
+    as suggested by Rafaël Carré.
+
+ -- Stephen Kitt <steve@sk2.org>  Thu, 18 Nov 2010 00:04:46 +0100
+
+mingw-w64 (0~20100125-3) unstable; urgency=low
+
+  * Switch to Architecture: all.  It's meant to have the same content
+    regardless of the Debian arch that hosts it.
+
+ -- Robert Millan <rmh.debian@aybabtu.com>  Sat, 30 Jan 2010 02:08:57 +0100
+
+mingw-w64 (0~20100125-2) unstable; urgency=low
+
+  * Match directory name used by gcc-mingw32.
+
+ -- Robert Millan <rmh.debian@aybabtu.com>  Tue, 26 Jan 2010 16:17:25 +0100
+
+mingw-w64 (0~20100125-1) unstable; urgency=low
+
+  * Initial release.  (Closes: #566907)
+
+ -- Robert Millan <rmh.debian@aybabtu.com>  Mon, 25 Jan 2010 22:58:25 +0100

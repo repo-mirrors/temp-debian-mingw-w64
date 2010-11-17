@@ -1,0 +1,7 @@
+# Watch control file for uscan
+# See uscan(1) for format
+
+version=3
+
+opts=uversionmangle=s/\.([^.]*)$/+$1/ \
+http://sf.net/mingw-w64/mingw-w64-v(.*)-snapshot-(.*)\.tar\.bz2

@@ -1,0 +1,23 @@
+Protect the CLSID typedef to avoid duplicate definitions in GUID
+implementation files. Patch taken from the upstream svn repository at
+http://mingw-w64.svn.sourceforge.net/viewvc/mingw-w64?view=revision&revision=3715
+
+--- mingw-w64-v1.0-20101003.orig/mingw-w64-headers/include/guiddef.h
++++ mingw-w64-v1.0-20101003/mingw-w64-headers/include/guiddef.h
+@@ -65,10 +65,16 @@
+ typedef IID *LPIID;
+ #define IID_NULL GUID_NULL
+ #define IsEqualIID(riid1,riid2) IsEqualGUID(riid1,riid2)
++
++#ifndef CLSID_DEFINED
++#define CLSID_DEFINED
+ typedef GUID CLSID;
++#endif
++
+ typedef CLSID *LPCLSID;
+ #define CLSID_NULL GUID_NULL
+ #define IsEqualCLSID(rclsid1,rclsid2) IsEqualGUID(rclsid1,rclsid2)
++
+ typedef GUID FMTID;
+ typedef FMTID *LPFMTID;
+ #define FMTID_NULL GUID_NULL
