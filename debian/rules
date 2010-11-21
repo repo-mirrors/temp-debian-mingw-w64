@@ -13,10 +13,9 @@ deb_version := $(shell dpkg-parsechangelog | sed -ne "s/^Version: \(.*\)/\1/p")
 deb_upstream_version := $(shell echo $(deb_version) | cut -d- -f1)
 gnu_upstream_version := $(shell echo $(deb_upstream_version) | cut -d. -f1-3)
 
-# Include the rules variant - symlink rules.bootstrap to produce the
-# minimal gcc required to build mingw-w64, or rules.full to produce
-# the full gcc.
-include debian/rules.variant
+# Build the full MinGW-w64 development package.
+package := mingw-w64-dev
+subprojects := headers crt
 
 include /usr/share/quilt/quilt.make
 
@@ -68,6 +67,7 @@ clean: unpatch
 	rm -rf $(stampdir) $(build_dir) $(upstream_dir) .pc autotools_files series debian/*.lintian-overrides
 
 CONFFLAGS = --prefix=/usr
+CFLAGS += -I$(top_dir)/mingw-w64-headers/include
 
 configure-stamp:
 	dh_testdir
