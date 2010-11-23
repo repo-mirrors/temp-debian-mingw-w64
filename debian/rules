@@ -19,7 +19,7 @@ subprojects := headers crt
 
 include /usr/share/quilt/quilt.make
 
-targets := i486-w64-mingw32 x86_64-w64-mingw32
+targets := i686-w64-mingw32 x86_64-w64-mingw32
 
 CFLAGS = -Wall -g
 # TODO Handle install with nostrip?
