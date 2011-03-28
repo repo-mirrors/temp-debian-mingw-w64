@@ -3,6 +3,8 @@
 # Build mingw-w64.
 # Copyright © 2010 Stephen Kitt <steve@sk2.org>
 
+SHELL=/bin/bash
+
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
@@ -75,7 +77,7 @@ configure-stamp:
 		for subproject in $(subprojects); do \
 			mkdir -p $(build_dir)/$$target/$$subproject && \
 			cd $(build_dir)/$$target/$$subproject && \
-			$(top_dir)/mingw-w64-$$subproject/configure $(CONFFLAGS) --host=$$target; \
+			$(top_dir)/mingw-w64-$$subproject/configure $(CONFFLAGS) --host=$$target $$(if [ "$${target/-w64-mingw32/}" == "i686" ]; then echo --enable-lib32 --disable-lib64; else echo --disable-lib32 --enable-lib64; fi); \
 		done; \
 	done
 	touch $@
