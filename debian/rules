@@ -66,7 +66,7 @@ clean: unpatch
 	dh_testdir
 	dh_testroot
 	dh_clean
-	rm -rf $(stampdir) $(build_dir) $(upstream_dir) .pc autotools_files series debian/*.lintian-overrides
+	rm -rf $(stampdir) $(build_dir) $(upstream_dir) .pc autotools_files series
 
 CONFFLAGS = --prefix=/usr
 CFLAGS += -I$(top_dir)/mingw-w64-headers/include
@@ -108,7 +108,6 @@ install-stamp: build-stamp
 	done
 	rmdir $(top_dir)/debian/$(package)/usr/include
 	rmdir $(patsubst %,$(top_dir)/debian/$(package)/usr/%/include/ddk,$(targets))
-	cd $(top_dir)/debian/$(package) && find ./usr -name \*.a -exec echo "mingw-w64-dev: arch-independent-package-contains-binary-or-object {}" \; >> ../$(package).lintian-overrides
 	touch $@
 
 binary-indep: build install
