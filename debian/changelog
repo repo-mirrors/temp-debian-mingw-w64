@@ -1,7 +1,9 @@
 mingw-w64 (1.0+20101003-1) unstable; urgency=low
 
   * New maintainer. (Closes: #594371.)
-  * New upstream snapshot.
+  * New upstream snapshot:
+    - Includes getopt.h. (Closes: #569914.)
+  * Build g++ for Win64. (Closes: #600451.)
   * Standards-Version 3.9.1 (new packaging).
   * Include patch from
     http://mingw-w64.svn.sourceforge.net/viewvc/mingw-w64?view=revision&revision=3715
