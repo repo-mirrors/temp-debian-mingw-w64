@@ -68,7 +68,7 @@ clean: unpatch
 	dh_clean
 	rm -rf $(stampdir) $(build_dir) $(upstream_dir) .pc autotools_files series
 
-CONFFLAGS = --prefix=/usr
+CONFFLAGS = --prefix=/usr --with-sdk=directx
 CFLAGS += -I$(top_dir)/mingw-w64-headers/include
 
 configure-stamp:

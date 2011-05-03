@@ -1,3 +1,9 @@
+mingw-w64 (1.0+20101003-2) unstable; urgency=low
+
+  * Enable DirectX SDK. (Closes: #625496.)
+
+ -- Stephen Kitt <steve@sk2.org>  Tue, 03 May 2011 23:36:38 +0200
+
 mingw-w64 (1.0+20101003-1) unstable; urgency=low
 
   * New maintainer. (Closes: #594371.)
