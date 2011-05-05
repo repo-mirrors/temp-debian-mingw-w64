@@ -63,11 +63,13 @@ src_libksuser=libsrc/ksuser.c
 src_liblargeint=libsrc/largeint.c
 
 src_libmingw32=include/oscalls.h include/internal.h include/sect_attribs.h \
-  crt/atonexit.c  crt/crt0_c.c    crt/dll_argv.c  crt/gccmain.c       crt/natstart.c       crt/pseudo-reloc-list.c  crt/wildcard.c  \
-  crt/charmax.c   crt/crt0_w.c    crt/dllargv.c   crt/gs_support.c    crt/_newmode.c       crt/tlssup.c             crt/xncommod.c  \
-  crt/cinitexe.c  crt/crt0_w.c    crt/dllentry.c  crt/merr.c          crt/pesect.c         crt/udllargc.c           crt/xthdloc.c   \
-  crt/CRT_fp10.c  crt/dllmain.c   crt/mingw_custom.c  crt/mingw_helpers.c  crt/pseudo-reloc.c       crt/udll_argv.c \
-  crt/xtxtmode.c  crt/crt_handler.c \
+  crt/atonexit.c      crt/crt0_c.c         crt/dll_argv.c  crt/gccmain.c     crt/natstart.c  crt/pseudo-reloc-list.c  crt/wildcard.c \
+  crt/charmax.c       crt/crt0_w.c         crt/dllargv.c   crt/gs_support.c  crt/_newmode.c  crt/tlssup.c             crt/xncommod.c \
+  crt/cinitexe.c      crt/crt0_w.c         crt/merr.c      crt/pesect.c      crt/udllargc.c  crt/xthdloc.c            crt/CRT_fp10.c \
+  crt/mingw_custom.c  crt/mingw_helpers.c  \
+  crt/pseudo-reloc.c  crt/udll_argv.c      \
+  crt/xtxtmode.c      crt/crt_handler.c    \
+  crt/dllmain.c       crt/dllentry.c       \
   libsrc/dummy_mingwthrd.c
 
 src_libmoldname=crt/isascii.c crt/iscsym.c crt/iscsymf.c crt/toascii.c crt/strcasecmp.c crt/strncasecmp.c crt/wcscmpi.c
@@ -119,6 +121,7 @@ src_libmingwex=\
   intrincs/bittests.c   intrincs/bittestsi.c   intrincs/bitscanfwd.c intrincs/bitscanrev.c intrincs/ilockinc16.c \
   intrincs/ilockdec16.c intrincs/ilockcxch16.c intrincs/ilockexchadd.c intrincs/ilockand.c intrincs/ilockor.c    \
   intrincs/ilockxor.c   intrincs/ilockinc.c    intrincs/ilockdec.c intrincs/ilockexch.c intrincs/ilockcxch.c     \
+  intrincs/__movsb.c    intrincs/__movsw.c     intrincs/__movsd.c     \
   intrincs/__stosb.c    intrincs/__stosw.c     intrincs/__stosd.c     \
   intrincs/currentteb.c intrincs/currentfiber.c intrincs/fiberdata.c  \
   \
@@ -222,8 +225,8 @@ src_libmingwex64=\
   intrincs/ilockadd64.c  \
   intrincs/readgsbyte.c  intrincs/readgsword.c   intrincs/readgsdword.c  intrincs/readgsqword.c    \
   intrincs/writegsbyte.c intrincs/writegsword.c  intrincs/writegsdword.c intrincs/writegsqword.c   \
-  intrincs/mul128ex.c    intrincs/umul128ex.c    \
-  intrincs/__stosq.c     intrincs/_rotl64.c      intrincs/_rotr64.c
+  intrincs/mul128ex.c    intrincs/umul128ex.c    intrincs/_umul128.c \
+  intrincs/__movsq.c     intrincs/__stosq.c      intrincs/_rotl64.c      intrincs/_rotr64.c
 
 # these only go into the 32 bit version:
 src_libmingwex32=\
@@ -371,14 +374,16 @@ lib32_libws2_32_a_AR = $(DTLIB32) && $(AR) $(ARFLAGS)
 #These defs have no accompanying sources.  Look into using the rule below to run the dlltool command
 #for all libraries, including those with sources.
 lib32_DATA = \
+  lib32/libauthz.a     \
   lib32/libaclui.a     lib32/libadvapi32.a  lib32/libapcups.a    lib32/libavicap32.a  lib32/libavifil32.a \
   lib32/libcap.a       lib32/libcfgmgr32.a  lib32/libcomctl32.a  lib32/libcomdlg32.a  lib32/libcrypt32.a  \
-  lib32/libctl3d32.a   lib32/libd3d8.a      lib32/libd3d9.a      lib32/libd3dim.a     lib32/libd3drm.a    \
+  lib32/libctl3d32.a   \
+  lib32/libclasspnp.a  lib32/libd3d8.a      lib32/libd3d9.a      lib32/libd3dim.a     lib32/libd3drm.a    \
   lib32/libd3dx8d.a    lib32/libd3dx9d.a    lib32/libd3dxof.a    lib32/libdbghelp.a   lib32/libddraw.a    \
-  lib32/libdhcpcsvc.a  lib32/libdlcapi.a    lib32/libdnsapi.a    lib32/libdplayx.a    \
-  lib32/libdpnaddr.a   lib32/libdpnet.a     lib32/libdpnlobby.a  lib32/libdpvoice.a   lib32/libdsetup.a   \
-  lib32/libdsound.a    lib32/libdxapi.a     lib32/libfaultrep.a  lib32/libgdi32.a     lib32/libglaux.a    \
-  lib32/libglu32.a     lib32/libglut32.a    lib32/libglut.a      lib32/libhal.a       lib32/libhid.a      \
+  lib32/libdhcpcsvc.a  lib32/libdlcapi.a    lib32/libdnsapi.a    lib32/libdplayx.a    lib32/libdpnaddr.a  \
+  lib32/libdpnet.a     lib32/libdpnlobby.a  lib32/libdpvoice.a   lib32/libdsetup.a    lib32/libdsound.a   \
+  lib32/libdxapi.a     lib32/libfaultrep.a  lib32/libgdi32.a     lib32/libglaux.a     lib32/libglu32.a    \
+  lib32/libglut32.a    lib32/libglut.a      lib32/libhal.a       lib32/libhid.a       lib32/libhidclass.a \
   lib32/libhidparse.a  lib32/libicmui.a     lib32/libigmpagnt.a  lib32/libimagehlp.a  lib32/libimm32.a    \
   lib32/libiphlpapi.a  lib32/libkernel32.a  lib32/libksproxy.a                        lib32/liblz32.a     \
   lib32/libmapi32.a    lib32/libmcd.a       lib32/libmfcuia32.a  lib32/libmgmtapi.a   lib32/libmprapi.a   \
@@ -391,16 +396,16 @@ lib32_DATA = \
   lib32/librapi.a      lib32/librasapi32.a  lib32/librasdlg.a    lib32/librpcdce4.a   lib32/librpcns4.a   \
   lib32/librpcrt4.a    lib32/librtm.a       lib32/librtutils.a   lib32/libscsiport.a  lib32/libsecur32.a  \
   lib32/libsetupapi.a                       lib32/libshfolder.a  lib32/libshlwapi.a   lib32/libsnmpapi.a  \
-  lib32/libsvrapi.a    lib32/libtapi32.a    lib32/libtdi.a       lib32/libth32.a      lib32/libthunk32.a  \
+  lib32/libsvrapi.a    lib32/libtapi32.a    lib32/libtdi.a       \
   lib32/liburl.a       lib32/libusbcamd2.a  lib32/libusbcamd.a   lib32/libusbd.a      lib32/libusbport.a  \
   lib32/libuser32.a    lib32/libuserenv.a   lib32/libusp10.a     lib32/libuxtheme.a   lib32/libvdmdbg.a   \
   lib32/libversion.a   lib32/libvideoprt.a  lib32/libwin32k.a    lib32/libwin32spl.a  lib32/libwininet.a  \
   lib32/libwinmm.a     lib32/libwinspool.a  lib32/libwinstrm.a   lib32/libwldap32.a   lib32/libwow32.a    \
   lib32/libwsnmp32.a   lib32/libwsock32.a   lib32/libwst.a       lib32/libwtsapi32.a  lib32/libnormaliz.a \
   \
-  lib32/libcrtdll.a    lib32/libmsvcrt.a   lib32/libmsvcr80.a   \
+  lib32/libcrtdll.a    lib32/libmsvcrt.a    lib32/libmsvcr80.a   \
   \
-  lib32/libpdh.a       lib32/libpdhui.a    \
+  lib32/libpdh.a       lib32/libpdhui.a     \
   lib32/libks.a        \
   \
   lib32/libd3dcompiler_33.a lib32/libd3dcompiler_34.a lib32/libd3dcompiler_35.a \
@@ -618,7 +623,7 @@ lib64_DATA = \
   lib64/libchsbrkr.a    lib64/libchtbrkr.a    lib64/libchtskdic.a     lib64/libciadmin.a    \
   lib64/libcic.a        lib64/libcimwin32.a   lib64/libCINTIME.a      lib64/libciodm.a      lib64/libc_is2022.a      \
   lib64/libc_iscii.a    lib64/libclbcatex.a   lib64/libclbcatq.a      lib64/libclb.a        lib64/libcliconfg.a      \
-  lib64/libclusapi.a    lib64/libcmcfg32.a    lib64/libcmdial32.a     lib64/libcmpbk32.a    \
+  lib64/libclasspnp.a   lib64/libclusapi.a    lib64/libcmcfg32.a      lib64/libcmdial32.a   lib64/libcmpbk32.a       \
   lib64/libcmprops.a    lib64/libcmsetacl.a   lib64/libcmutil.a       lib64/libcnbjmon.a    lib64/libcnetcfg.a       \
   lib64/libcnvfat.a     lib64/libcoadmin.a    lib64/libcolbact.a      lib64/libcomaddin.a   lib64/libcomadmin.a      \
   lib64/libcomcat.a     lib64/libcomctl32.a   lib64/libcomdlg32.a     lib64/libcompatui.a   lib64/libcompstui.a      \
@@ -654,24 +659,24 @@ lib64_DATA = \
   lib64/libgcdef.a      lib64/libgdi32.a      lib64/libgetuname.a     lib64/libglmf32.a     lib64/libglu32.a         \
   lib64/libgpedit.a     lib64/libgpkcsp.a     lib64/libgptext.a       lib64/libguitrn.a     lib64/libgzip.a          \
   lib64/libh323msp.a    lib64/libhal.a        lib64/libhbaapi.a       lib64/libhgfs.a       lib64/libhhsetup.a       \
-  lib64/libhid.a        lib64/libhlink.a      lib64/libhmmapi.a       lib64/libhnetcfg.a    lib64/libhnetmon.a       \
-  lib64/libhnetwiz.a    lib64/libhostmib.a    lib64/libhotplug.a      lib64/libhticons.a    lib64/libhtrn_jis.a      \
-  lib64/libhttpapi.a    lib64/libhttpext.a    lib64/libhttpmib.a      lib64/libhttpodbc.a   lib64/libhtui.a          \
-  lib64/libhypertrm.a   lib64/libiasacct.a    lib64/libiasads.a       lib64/libiashlpr.a    lib64/libiasnap.a        \
-  lib64/libiaspolcy.a   lib64/libiasrad.a     lib64/libiassam.a       lib64/libiassdo.a     lib64/libiassvcs.a       \
-  lib64/libicaapi.a     lib64/libicfgnt5.a    lib64/libicm32.a        lib64/libicmp.a       lib64/libicmui.a         \
-  lib64/libicwconn.a    lib64/libicwdial.a    lib64/libicwdl.a        lib64/libicwhelp.a    lib64/libicwphbk.a       \
-  lib64/libicwutil.a    lib64/libidq.a        lib64/libieakeng.a      lib64/libieaksie.a    lib64/libiedkcs32.a      \
-  lib64/libieencode.a   lib64/libiepeers.a    lib64/libiernonce.a     lib64/libiesetup.a    lib64/libifmon.a         \
-  lib64/libifsutil.a    lib64/libigmpagnt.a   lib64/libiisadmin.a     lib64/libiiscfg.a     lib64/libiisclex4.a      \
-  lib64/libiis.a        lib64/libiisext.a     lib64/libiislog.a       lib64/libiismap.a     lib64/libiisrstap.a      \
-  lib64/libiisrtl.a     lib64/libiissuba.a    lib64/libiisui.a        lib64/libiisuiobj.a   lib64/libiisutil.a       \
-  lib64/libiisw3adm.a   lib64/libiiswmi.a     lib64/libimagehlp.a     lib64/libimekrcic.a   lib64/libimeshare.a      \
-  lib64/libimgutil.a    lib64/libimjp81k.a    lib64/libimjpcic.a      lib64/libimjpcus.a    lib64/libimjpdct.a       \
-  lib64/libimjputyc.a   lib64/libimm32.a      lib64/libimsinsnt.a     lib64/libimskdic.a    lib64/libinetcfg.a       \
-  lib64/libinetcomm.a   lib64/libinetmgr.a    lib64/libinetmib1.a     lib64/libinetpp.a     lib64/libinetppui.a      \
-  lib64/libinfoadmn.a   lib64/libinfocomm.a   lib64/libinfoctrs.a     lib64/libinfosoft.a   lib64/libinitpki.a       \
-  lib64/libinput.a      lib64/libinseng.a     \
+  lib64/libhid.a        lib64/libhidclass.a   lib64/libhidparse.a     lib64/libhlink.a      lib64/libhmmapi.a        \
+  lib64/libhnetcfg.a    lib64/libhnetmon.a    lib64/libhnetwiz.a      lib64/libhostmib.a    lib64/libhotplug.a       \
+  lib64/libhticons.a    lib64/libhtrn_jis.a   lib64/libhttpapi.a      lib64/libhttpext.a    lib64/libhttpmib.a       \
+  lib64/libhttpodbc.a   lib64/libhtui.a       lib64/libhypertrm.a     lib64/libiasacct.a    lib64/libiasads.a        \
+  lib64/libiashlpr.a    lib64/libiasnap.a     lib64/libiaspolcy.a     lib64/libiasrad.a     lib64/libiassam.a        \
+  lib64/libiassdo.a     lib64/libiassvcs.a    lib64/libicaapi.a       lib64/libicfgnt5.a    lib64/libicm32.a         \
+  lib64/libicmp.a       lib64/libicmui.a      lib64/libicwconn.a      lib64/libicwdial.a    lib64/libicwdl.a         \
+  lib64/libicwhelp.a    lib64/libicwphbk.a    lib64/libicwutil.a      lib64/libidq.a        lib64/libieakeng.a       \
+  lib64/libieaksie.a    lib64/libiedkcs32.a   lib64/libieencode.a     lib64/libiepeers.a    lib64/libiernonce.a      \
+  lib64/libiesetup.a    lib64/libifmon.a      lib64/libifsutil.a      lib64/libigmpagnt.a   lib64/libiisadmin.a      \
+  lib64/libiiscfg.a     lib64/libiisclex4.a   lib64/libiis.a          lib64/libiisext.a     lib64/libiislog.a        \
+  lib64/libiismap.a     lib64/libiisrstap.a   lib64/libiisrtl.a       lib64/libiissuba.a    lib64/libiisui.a         \
+  lib64/libiisuiobj.a   lib64/libiisutil.a    lib64/libiisw3adm.a     lib64/libiiswmi.a     lib64/libimagehlp.a      \
+  lib64/libimekrcic.a   lib64/libimeshare.a   lib64/libimgutil.a      lib64/libimjp81k.a    lib64/libimjpcic.a       \
+  lib64/libimjpcus.a    lib64/libimjpdct.a    lib64/libimjputyc.a     lib64/libimm32.a      lib64/libimsinsnt.a      \
+  lib64/libimskdic.a    lib64/libinetcfg.a    lib64/libinetcomm.a     lib64/libinetmgr.a    lib64/libinetmib1.a      \
+  lib64/libinetpp.a     lib64/libinetppui.a   lib64/libinfoadmn.a     lib64/libinfocomm.a   lib64/libinfoctrs.a      \
+  lib64/libinfosoft.a   lib64/libinitpki.a    lib64/libinput.a        lib64/libinseng.a     \
   lib64/libiphlpapi.a   lib64/libipmontr.a    lib64/libipnathlp.a     lib64/libippromon.a   lib64/libiprip.a         \
   lib64/libiprop.a      lib64/libiprtprio.a   lib64/libiprtrmgr.a     lib64/libipsecsnp.a   lib64/libipsecsvc.a      \
   lib64/libipsmsnap.a   lib64/libipv6mon.a    lib64/libipxsap.a       lib64/libirclass.a    lib64/libisapips.a       \
