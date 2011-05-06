@@ -68,7 +68,7 @@ clean: unpatch
 	dh_clean
 	rm -rf $(stampdir) $(build_dir) $(upstream_dir) .pc autotools_files series
 
-CONFFLAGS = --prefix=/usr --with-sdk=directx
+CONFFLAGS = --prefix=/usr --with-sdk=all
 CFLAGS += -I$(top_dir)/mingw-w64-headers/include
 
 configure-stamp:
@@ -107,7 +107,6 @@ install-stamp: build-stamp
 		done; \
 	done
 	rmdir $(top_dir)/debian/$(package)/usr/include
-	rmdir $(patsubst %,$(top_dir)/debian/$(package)/usr/%/include/ddk,$(targets))
 	touch $@
 
 binary-indep: build install
