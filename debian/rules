@@ -19,8 +19,6 @@ gnu_upstream_version := $(shell echo $(deb_upstream_version) | cut -d. -f1-3)
 package := mingw-w64-dev
 subprojects := headers crt
 
-include /usr/share/quilt/quilt.make
-
 targets := i686-w64-mingw32 x86_64-w64-mingw32
 
 CFLAGS = -Wall -g
@@ -62,11 +60,11 @@ ifeq ($(with_pascal),yes)
   NJOBS :=
 endif
 
-clean: unpatch
+clean:
 	dh_testdir
 	dh_testroot
 	dh_clean
-	rm -rf $(stampdir) $(build_dir) $(upstream_dir) .pc autotools_files series
+	rm -rf $(stampdir) $(build_dir) $(upstream_dir) autotools_files series
 
 CONFFLAGS = --prefix=/usr --with-sdk=all
 CFLAGS += -I$(top_dir)/mingw-w64-headers/include
@@ -83,7 +81,7 @@ configure-stamp:
 	touch $@
 
 build: build-stamp
-build-stamp: $(QUILT_STAMPFN) configure-stamp
+build-stamp: configure-stamp
 	dh_testdir
 	for target in $(targets); do \
 		for subproject in $(subprojects); do \
