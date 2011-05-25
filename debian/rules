@@ -82,7 +82,8 @@ configure-stamp-crt:
 	done
 	touch $@
 
-build: build-stamp
+build: build-indep
+build-indep: build-stamp
 build-stamp: configure-stamp
 	dh_testdir
 	for target in $(targets); do \
@@ -108,7 +109,7 @@ install-stamp: build-stamp
 	rmdir $(top_dir)/debian/$(package)/usr/include
 	touch $@
 
-binary-indep: build install
+binary-indep: build-indep install
 	dh_testdir
 	dh_testroot
 	dh_installdocs
@@ -124,6 +125,8 @@ binary-indep: build install
 	dh_md5sums
 	dh_builddeb
 
+binary-arch:
+
 binary: binary-indep
 
-.PHONY: binary-indep binary clean build install
+.PHONY: binary-indep binary-arch binary clean build-indep build install
