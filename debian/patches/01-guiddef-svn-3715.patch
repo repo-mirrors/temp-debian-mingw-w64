@@ -1,6 +1,6 @@
-Protect the CLSID typedef to avoid duplicate definitions in GUID
-implementation files. Patch taken from the upstream svn repository at
-http://mingw-w64.svn.sourceforge.net/viewvc/mingw-w64?view=revision&revision=3715
+Description: Protect the CLSID typedef
+ This avoids duplicate definitions in GUID implementation files.
+Origin: http://mingw-w64.svn.sourceforge.net/viewvc/mingw-w64?view=revision&revision=3715
 
 --- mingw-w64-v1.0-20101003.orig/mingw-w64-headers/include/guiddef.h
 +++ mingw-w64-v1.0-20101003/mingw-w64-headers/include/guiddef.h
