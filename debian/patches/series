@@ -1,2 +1,3 @@
 01-guiddef-svn-3715.patch
 02-get_codepage.patch
+03-gcc-4.6-float.patch

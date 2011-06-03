@@ -5,8 +5,9 @@ mingw-w64 (1.0+20110428-1) unstable; urgency=low
   * Correctly define arch and indep targets and dependencies.
   * Standards-Version 3.9.2, no change required.
   * Use MinGW version of mb_wc_common.h. (Closes: #626437.)
+  * Update float.h to include gcc 4.6 changes.
 
- -- Stephen Kitt <steve@sk2.org>  Sat, 04 Jun 2011 00:05:57 +0200
+ -- Stephen Kitt <steve@sk2.org>  Sat, 04 Jun 2011 00:52:35 +0200
 
 mingw-w64 (1.0+20101003-1) unstable; urgency=low
 
