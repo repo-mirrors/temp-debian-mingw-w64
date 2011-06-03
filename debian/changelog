@@ -3,8 +3,9 @@ mingw-w64 (1.0+20110428-1) unstable; urgency=low
   * New upstream snapshot.
   * Enable all SDKs, including DirectX. (Closes: #625496.)
   * Correctly define arch and indep targets and dependencies.
+  * Standards-Version 3.9.2, no change required.
 
- -- Stephen Kitt <steve@sk2.org>  Wed, 25 May 2011 14:02:11 +0200
+ -- Stephen Kitt <steve@sk2.org>  Wed, 25 May 2011 14:05:04 +0200
 
 mingw-w64 (1.0+20101003-1) unstable; urgency=low
 
