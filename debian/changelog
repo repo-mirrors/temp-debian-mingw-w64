@@ -4,8 +4,9 @@ mingw-w64 (1.0+20110428-1) unstable; urgency=low
   * Enable all SDKs, including DirectX. (Closes: #625496.)
   * Correctly define arch and indep targets and dependencies.
   * Standards-Version 3.9.2, no change required.
+  * Use MinGW version of mb_wc_common.h. (Closes: #626437.)
 
- -- Stephen Kitt <steve@sk2.org>  Wed, 25 May 2011 14:05:04 +0200
+ -- Stephen Kitt <steve@sk2.org>  Sat, 04 Jun 2011 00:05:57 +0200
 
 mingw-w64 (1.0+20101003-1) unstable; urgency=low
 
