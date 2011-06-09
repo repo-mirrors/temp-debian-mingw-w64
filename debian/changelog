@@ -1,3 +1,9 @@
+mingw-w64 (1.0+20110535-1) unstable; urgency=low
+
+  * New upstream snapshot.
+
+ -- Stephen Kitt <steve@sk2.org>  Thu, 09 Jun 2011 07:12:44 +0200
+
 mingw-w64 (1.0+20110428-1) unstable; urgency=low
 
   * New upstream snapshot.
