@@ -96,18 +96,13 @@ extern "C" {
 #ifndef __mb_cur_max
 #ifdef _MSVCRT_
   extern int __mb_cur_max;
+#define __mb_cur_max	__mb_cur_max
 #else
   extern int * __MINGW_IMP_SYMBOL(__mb_cur_max);
 #define __mb_cur_max	(* __MINGW_IMP_SYMBOL(__mb_cur_max))
 #endif
 #endif
-#ifdef _MSVCRT_
-  extern int __mbcur_max;
 #define ___mb_cur_max_func() (__mb_cur_max)
-#else
-  extern int* __MINGW_IMP_SYMBOL(__mbcur_max);
-#define ___mb_cur_max_func() (* __MINGW_IMP_SYMBOL(__mb_cur_max))
-#endif
 #endif
 
 #define __max(a,b) (((a) > (b)) ? (a) : (b))
@@ -574,7 +569,12 @@ strtod (const char * __restrict__ __nptr, char ** __restrict__  __endptr)
   char *__cdecl itoa(int _Val,char *_DstBuf,int _Radix);
   char *__cdecl ltoa(long _Val,char *_DstBuf,int _Radix);
   int __cdecl putenv(const char *_EnvString);
+
+#ifndef _CRT_SWAB_DEFINED
+#define _CRT_SWAB_DEFINED  /* Also in unistd.h */
   void __cdecl swab(char *_Buf1,char *_Buf2,int _SizeInBytes);
+#endif
+
   char *__cdecl ultoa(unsigned long _Val,char *_Dstbuf,int _Radix);
   onexit_t __cdecl onexit(onexit_t _Func);
 #endif
