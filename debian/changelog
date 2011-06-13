@@ -1,4 +1,4 @@
-mingw-w64 (1.0+20110535-1) unstable; urgency=low
+mingw-w64 (1.0+20110523-1) unstable; urgency=low
 
   * New upstream snapshot.
   * This version and the previous breaks the gcc-4.5-based gcc-mingw-
