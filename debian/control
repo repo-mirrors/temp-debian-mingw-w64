@@ -3,7 +3,8 @@ Section: devel
 Priority: extra
 Maintainer: Stephen Kitt <steve@sk2.org>
 Build-Depends: debhelper (>= 7.0.50~)
-Build-Depends-Indep: gcc-mingw-w64 | gcc-mingw-w64-bootstrap
+Build-Depends-Indep:
+ gcc-mingw-w64 (>= 4.6.0) | gcc-mingw-w64-bootstrap (>= 4.6.0)
 Standards-Version: 3.9.2
 Homepage: http://mingw-w64.sf.net
 Vcs-Git: git://git.debian.org/collab-maint/mingw-w64.git
@@ -12,6 +13,7 @@ Vcs-Browser: http://git.debian.org/?p=collab-maint/mingw-w64.git;a=summary
 Package: mingw-w64-dev
 Architecture: all
 Depends: ${misc:Depends}
+Breaks: gcc-mingw-w64 (<< 4.6.0)
 Description: Development files for MinGW-w64
  MinGW-w64 provides a development and runtime environment for 32- and
  64-bit Windows applications using the GNU Compiler Collection (gcc).
@@ -21,8 +23,7 @@ Description: Development files for MinGW-w64
 
 Package: mingw-w64
 Architecture: all
-Depends: ${misc:Depends}, gcc-mingw-w64,
- mingw-w64-dev
+Depends: gcc-mingw-w64, mingw-w64-dev, ${misc:Depends}
 Description: Development environment targetting 32- and 64-bit Windows
  MinGW-w64 provides a development and runtime environment for 32- and
  64bit Windows applications using the GNU Compiler Collection (gcc).
