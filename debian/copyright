@@ -1,3 +1,4 @@
+Format: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=174
 Name: mingw-w64
 Source: http://mingw-w64.sourceforge.net/
 
@@ -31,7 +32,7 @@ License: ZPL-2.1
  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY DIRECT, INDIRECT,
  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
@@ -92,7 +93,7 @@ Files: mingw-w64-crt/math/sf_erf.c
 Copyright: 1993  Sun Microsystems, Inc.
 License:
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
 
 Files: mingw-w64-headers/direct-x/include/dmoreg.h
@@ -303,7 +304,7 @@ License:
 
 Files: debian/*
 Copyright: 2009, 2010  Robert Millan
-           2010        Stephen Kitt <steve@sk2.org>
+           2010, 2011  Stephen Kitt <steve@sk2.org>
 License: GPL-2+
 
 

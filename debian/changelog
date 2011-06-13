@@ -3,8 +3,9 @@ mingw-w64 (1.0+20110535-1) unstable; urgency=low
   * New upstream snapshot.
   * This version and the previous breaks the gcc-4.5-based gcc-mingw-
     w64.
+  * Properly specify the format of debian/copyright.
 
- -- Stephen Kitt <steve@sk2.org>  Mon, 13 Jun 2011 23:05:23 +0200
+ -- Stephen Kitt <steve@sk2.org>  Mon, 13 Jun 2011 23:06:42 +0200
 
 mingw-w64 (1.0+20110428-1) unstable; urgency=low
 
