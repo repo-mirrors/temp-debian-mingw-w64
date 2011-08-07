@@ -40,6 +40,7 @@ extern _CRTALLOC(".CRT$XIZ") _PIFV __xi_z[];
 extern _CRTALLOC(".CRT$XCA") _PVFV __xc_a[];
 extern _CRTALLOC(".CRT$XCZ") _PVFV __xc_z[];
 
+/* TLS initialization hook.  */
 extern const PIMAGE_TLS_CALLBACK __dyn_tls_init_callback;
 
 static int __proc_attached = 0;
@@ -98,14 +99,14 @@ WINBOOL WINAPI _CRT_INIT (HANDLE hDllHandle, DWORD dwReason, LPVOID lpreserved)
 	}
       if (__native_startup_state != __uninitialized)
 	{
-	  _amsg_exit(31);
+	  _amsg_exit (31);
 	}
       else
 	{
 	  __native_startup_state = __initializing;
 	  
 	  _initterm ((_PVFV *) (void *) __xi_a, (_PVFV *) (void *) __xi_z);
-	  _initterm (__xc_a,__xc_z);
+	  _initterm (__xc_a, __xc_z);
 	  __native_startup_state = __initialized;
 	}
       if (! nested)
@@ -125,7 +126,7 @@ WINBOOL WINAPI _CRT_INIT (HANDLE hDllHandle, DWORD dwReason, LPVOID lpreserved)
 	{
 	  Sleep(1000);
 	}
-      if(__native_startup_state!=__initialized)
+      if (__native_startup_state != __initialized)
 	{
 	  _amsg_exit (31);
 	}
@@ -190,7 +191,7 @@ __DllMainCRTStartup (HANDLE hDllHandle, DWORD dwReason, LPVOID lpreserved)
   if (retcode && dwReason == DLL_PROCESS_ATTACH)
     __main ();
   retcode = DllMain(hDllHandle,dwReason,lpreserved);
-  if ((dwReason == DLL_PROCESS_ATTACH) && ! retcode)
+  if (dwReason == DLL_PROCESS_ATTACH && ! retcode)
     {
 	DllMain (hDllHandle, DLL_PROCESS_DETACH, lpreserved);
 	_CRT_INIT (hDllHandle, DLL_PROCESS_DETACH, lpreserved);
