@@ -56,46 +56,45 @@ clean:
 	dh_testdir
 	dh_testroot
 	dh_clean
-	rm -rf $(stampdir) $(build_dir) $(upstream_dir) autotools_files series
+	rm -rf $(stampdir) $(build_dir) $(upstream_dir) autotools_files series tmp
 
 CONFFLAGS = --prefix=/usr
-CFLAGS += -I$(top_dir)/mingw-w64-headers/include
 
-configure-stamp: $(patsubst %,configure-stamp-%,$(subprojects))
-	touch $@
-
-configure-stamp-headers:
+configure: $(patsubst %,$(stampdir)/configure-stamp-%,$(subprojects))
+$(stampdir)/configure-stamp-headers:
 	dh_testdir
 	for target in $(targets); do \
 		mkdir -p $(build_dir)/$$target/headers && \
 		cd $(build_dir)/$$target/headers && \
-		$(top_dir)/mingw-w64-headers/configure $(CONFFLAGS) --host=$$target --with-sdk=all; \
+		$(top_dir)/mingw-w64-headers/configure $(CONFFLAGS) --host=$$target --enable-sdk=all; \
 	done
+	mkdir -p $(stampdir)
 	touch $@
-
-configure-stamp-crt:
+$(stampdir)/configure-stamp-crt: $(stampdir)/install-tmp-stamp-headers
 	dh_testdir
 	for target in $(targets); do \
 		mkdir -p $(build_dir)/$$target/crt && \
 		cd $(build_dir)/$$target/crt && \
-		$(top_dir)/mingw-w64-crt/configure $(CONFFLAGS) --host=$$target $$(if [ "$${target/-w64-mingw32/}" == "i686" ]; then echo --enable-lib32 --disable-lib64; else echo --disable-lib32 --enable-lib64; fi); \
+		CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/tmp/usr/$$target/include" $(top_dir)/mingw-w64-crt/configure $(CONFFLAGS) --host=$$target $$(if [ "$${target/-w64-mingw32/}" == "i686" ]; then echo --enable-lib32 --disable-lib64; else echo --disable-lib32 --enable-lib64; fi); \
 	done
+	mkdir -p $(stampdir)
 	touch $@
 
 build: build-indep
-build-indep: build-stamp
-build-stamp: configure-stamp
+build-indep: $(patsubst %,$(stampdir)/build-stamp-%,$(subprojects))
+# Build whichever variant is requested
+$(stampdir)/build-stamp-%: $(stampdir)/configure-stamp-%
 	dh_testdir
 	for target in $(targets); do \
-		for subproject in $(subprojects); do \
-			cd $(build_dir)/$$target/$$subproject && \
-			$(MAKE) $(NJOBS); \
-		done; \
+		cd $(build_dir)/$$target/$(patsubst $(stampdir)/build-stamp-%,%,$@) && \
+		$(MAKE) $(NJOBS); \
 	done
+	mkdir -p $(stampdir)
 	touch $@
 
-install: install-stamp
-install-stamp: build-stamp
+# install is done in one shot to avoid calling dh_prep twice...
+install: $(stampdir)/install-debian-stamp
+$(stampdir)/install-debian-stamp: $($(patsubst %,$(stampdir)/build-stamp-%,$(subprojects))
 	dh_testdir
 	dh_testroot
 	dh_prep
@@ -106,7 +105,20 @@ install-stamp: build-stamp
 			$(MAKE) install DESTDIR=$(top_dir)/debian/$(package); \
 		done; \
 	done
-	rmdir $(top_dir)/debian/$(package)/usr/include
+	if [ -d $(top_dir)/debian/$(package)/usr/include ]; then \
+		rmdir $(top_dir)/debian/$(package)/usr/include; \
+	fi
+	mkdir -p $(stampdir)
+	touch $@
+# Temporary install (used to install headers for crt)
+$(stampdir)/install-tmp-stamp-%: $(stampdir)/build-stamp-%
+	dh_testdir
+	for target in $(targets); do \
+		mkdir -p $(top_dir)/tmp && \
+		cd $(build_dir)/$$target/$(patsubst $(stampdir)/install-tmp-stamp-%,%,$@) && \
+		$(MAKE) install DESTDIR=$(top_dir)/tmp; \
+	done
+	mkdir -p $(stampdir)
 	touch $@
 
 binary-indep: build-indep install

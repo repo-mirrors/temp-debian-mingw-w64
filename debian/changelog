@@ -1,9 +1,14 @@
-mingw-w64 (1.0+20110723-1) unstable; urgency=low
+mingw-w64 (2.0~rc1-1) unstable; urgency=low
 
-  * New upstream snapshot.
-  * Import wctime fix from upstream.
+  * New upstream release candidate.
+  * mingw-w64 now provides __uuidof() where necessary. (Closes: #625497.)
+  * Removed patches:
+    - 01-guiddef-svn-3715.patch, originally taken from upstream;
+    - 02-get_codepage.patch, fixed differently;
+    - 03-gcc-4.6-float.patch, no longer relevant (mingw-w64 no longer
+      ships float.h).
 
- -- Stephen Kitt <steve@sk2.org>  Sun, 07 Aug 2011 09:36:55 +0200
+ -- Stephen Kitt <steve@sk2.org>  Sun, 07 Aug 2011 23:02:01 +0200
 
 mingw-w64 (1.0+20110523-1) unstable; urgency=low
 
