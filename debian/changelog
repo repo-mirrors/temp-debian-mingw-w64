@@ -7,6 +7,7 @@ mingw-w64 (2.0~rc1-1) unstable; urgency=low
     - 02-get_codepage.patch, fixed differently;
     - 03-gcc-4.6-float.patch, no longer relevant (mingw-w64 no longer
       ships float.h).
+  * Add empty build-arch target (policy 4.9).
 
  -- Stephen Kitt <steve@sk2.org>  Sun, 07 Aug 2011 23:02:01 +0200
 

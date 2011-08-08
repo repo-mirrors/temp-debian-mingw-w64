@@ -82,6 +82,7 @@ $(stampdir)/configure-stamp-crt: $(stampdir)/install-tmp-stamp-headers
 
 build: build-indep
 build-indep: $(patsubst %,$(stampdir)/build-stamp-%,$(subprojects))
+build-arch:
 # Build whichever variant is requested
 $(stampdir)/build-stamp-%: $(stampdir)/configure-stamp-%
 	dh_testdir
@@ -141,4 +142,4 @@ binary-arch:
 
 binary: binary-indep
 
-.PHONY: binary-indep binary-arch binary clean build-indep build install
+.PHONY: binary-indep binary-arch binary clean build-indep build-arch build install
