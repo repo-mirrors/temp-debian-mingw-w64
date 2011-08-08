@@ -585,6 +585,7 @@ _mbsnicoll
 _mbsnicoll_l
 _mbsninc
 _mbsninc_l
+_mbsnlen
 _mbsnlen_l
 _mbsnset
 _mbsnset_l
@@ -614,6 +615,7 @@ _mbstowcs_l
 _mbstowcs_s_l
 _mbstrlen
 _mbstrlen_l
+_mbstrnlen
 _mbstrnlen_l
 _mbsupr
 _mbsupr_l
@@ -1110,7 +1112,7 @@ iswupper
 iswxdigit
 isxdigit
 labs
-ldexp
+ldexp DATA
 ldiv
 localeconv
 localtime DATA
@@ -1250,6 +1252,8 @@ wcsncat_s
 wcsncmp
 wcsncpy
 wcsncpy_s
+; We provide replacement implementation in libmingwex
+wcsnlen DATA
 wcspbrk
 wcsrchr
 wcsrtombs_s

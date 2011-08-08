@@ -6,6 +6,8 @@
 #ifndef _WINCON_
 #define _WINCON_
 
+#include <_mingw_unicode.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -175,47 +177,25 @@ extern "C" {
 #define ENABLE_PROCESSED_OUTPUT 0x1
 #define ENABLE_WRAP_AT_EOL_OUTPUT 0x2
 
-#ifdef UNICODE
-#define PeekConsoleInput PeekConsoleInputW
-#define ReadConsoleInput ReadConsoleInputW
-#define WriteConsoleInput WriteConsoleInputW
-#define ReadConsoleOutput ReadConsoleOutputW
-#define WriteConsoleOutput WriteConsoleOutputW
-#define ReadConsoleOutputCharacter ReadConsoleOutputCharacterW
-#define WriteConsoleOutputCharacter WriteConsoleOutputCharacterW
-#define FillConsoleOutputCharacter FillConsoleOutputCharacterW
-#define ScrollConsoleScreenBuffer ScrollConsoleScreenBufferW
-#define GetConsoleTitle GetConsoleTitleW
-#define SetConsoleTitle SetConsoleTitleW
-#define ReadConsole ReadConsoleW
-#define WriteConsole WriteConsoleW
-#define AddConsoleAlias AddConsoleAliasW
-#define GetConsoleAlias GetConsoleAliasW
-#define GetConsoleAliasesLength GetConsoleAliasesLengthW
-#define GetConsoleAliasExesLength GetConsoleAliasExesLengthW
-#define GetConsoleAliases GetConsoleAliasesW
-#define GetConsoleAliasExes GetConsoleAliasExesW
-#else
-#define PeekConsoleInput PeekConsoleInputA
-#define ReadConsoleInput ReadConsoleInputA
-#define WriteConsoleInput WriteConsoleInputA
-#define ReadConsoleOutput ReadConsoleOutputA
-#define WriteConsoleOutput WriteConsoleOutputA
-#define ReadConsoleOutputCharacter ReadConsoleOutputCharacterA
-#define WriteConsoleOutputCharacter WriteConsoleOutputCharacterA
-#define FillConsoleOutputCharacter FillConsoleOutputCharacterA
-#define ScrollConsoleScreenBuffer ScrollConsoleScreenBufferA
-#define GetConsoleTitle GetConsoleTitleA
-#define SetConsoleTitle SetConsoleTitleA
-#define ReadConsole ReadConsoleA
-#define WriteConsole WriteConsoleA
-#define AddConsoleAlias AddConsoleAliasA
-#define GetConsoleAlias GetConsoleAliasA
-#define GetConsoleAliasesLength GetConsoleAliasesLengthA
-#define GetConsoleAliasExesLength GetConsoleAliasExesLengthA
-#define GetConsoleAliases GetConsoleAliasesA
-#define GetConsoleAliasExes GetConsoleAliasExesA
-#endif
+#define PeekConsoleInput __MINGW_NAME_AW(PeekConsoleInput)
+#define ReadConsoleInput __MINGW_NAME_AW(ReadConsoleInput)
+#define WriteConsoleInput __MINGW_NAME_AW(WriteConsoleInput)
+#define ReadConsoleOutput __MINGW_NAME_AW(ReadConsoleOutput)
+#define WriteConsoleOutput __MINGW_NAME_AW(WriteConsoleOutput)
+#define ReadConsoleOutputCharacter __MINGW_NAME_AW(ReadConsoleOutputCharacter)
+#define WriteConsoleOutputCharacter __MINGW_NAME_AW(WriteConsoleOutputCharacter)
+#define FillConsoleOutputCharacter __MINGW_NAME_AW(FillConsoleOutputCharacter)
+#define ScrollConsoleScreenBuffer __MINGW_NAME_AW(ScrollConsoleScreenBuffer)
+#define GetConsoleTitle __MINGW_NAME_AW(GetConsoleTitle)
+#define SetConsoleTitle __MINGW_NAME_AW(SetConsoleTitle)
+#define ReadConsole __MINGW_NAME_AW(ReadConsole)
+#define WriteConsole __MINGW_NAME_AW(WriteConsole)
+#define AddConsoleAlias __MINGW_NAME_AW(AddConsoleAlias)
+#define GetConsoleAlias __MINGW_NAME_AW(GetConsoleAlias)
+#define GetConsoleAliasesLength __MINGW_NAME_AW(GetConsoleAliasesLength)
+#define GetConsoleAliasExesLength __MINGW_NAME_AW(GetConsoleAliasExesLength)
+#define GetConsoleAliases __MINGW_NAME_AW(GetConsoleAliases)
+#define GetConsoleAliasExes __MINGW_NAME_AW(GetConsoleAliasExes)
 
   WINBASEAPI WINBOOL WINAPI PeekConsoleInputA(HANDLE hConsoleInput,PINPUT_RECORD lpBuffer,DWORD nLength,LPDWORD lpNumberOfEventsRead);
   WINBASEAPI WINBOOL WINAPI PeekConsoleInputW(HANDLE hConsoleInput,PINPUT_RECORD lpBuffer,DWORD nLength,LPDWORD lpNumberOfEventsRead);
@@ -298,6 +278,90 @@ extern "C" {
   WINBASEAPI DWORD WINAPI GetConsoleAliasesW(LPWSTR AliasBuffer,DWORD AliasBufferLength,LPWSTR ExeName);
   WINBASEAPI DWORD WINAPI GetConsoleAliasExesA(LPSTR ExeNameBuffer,DWORD ExeNameBufferLength);
   WINBASEAPI DWORD WINAPI GetConsoleAliasExesW(LPWSTR ExeNameBuffer,DWORD ExeNameBufferLength);
+
+#if (_WIN32_WINNT >= 0x0600)
+#ifndef LF_FACESIZE
+#define LF_FACESIZE 32
+#endif
+
+typedef struct _CONSOLE_FONT_INFOEX {
+  ULONG cbSize;
+  DWORD nFont;
+  COORD dwFontSize;
+  UINT  FontFamily;
+  UINT  FontWeight;
+  WCHAR FaceName[LF_FACESIZE];
+} CONSOLE_FONT_INFOEX, *PCONSOLE_FONT_INFOEX;
+
+typedef struct _CONSOLE_HISTORY_INFO {
+  UINT  cbSize;
+  UINT  HistoryBufferSize;
+  UINT  NumberOfHistoryBuffers;
+  DWORD dwFlags;
+} CONSOLE_HISTORY_INFO, *PCONSOLE_HISTORY_INFO;
+
+typedef struct _CONSOLE_READCONSOLE_CONTROL {
+  ULONG nLength;
+  ULONG nInitialChars;
+  ULONG dwCtrlWakeupMask;
+  ULONG dwControlKeyState;
+} CONSOLE_READCONSOLE_CONTROL, *PCONSOLE_READCONSOLE_CONTROL;
+
+typedef struct _CONSOLE_SCREEN_BUFFER_INFOEX {
+  ULONG      cbSize;
+  COORD      dwSize;
+  COORD      dwCursorPosition;
+  WORD       wAttributes;
+  SMALL_RECT srWindow;
+  COORD      dwMaximumWindowSize;
+  WORD       wPopupAttributes;
+  BOOL       bFullscreenSupported;
+  COLORREF   ColorTable[16];
+} CONSOLE_SCREEN_BUFFER_INFOEX, *PCONSOLE_SCREEN_BUFFER_INFOEX;
+
+WINBOOL WINAPI GetConsoleHistoryInfo(
+  PCONSOLE_HISTORY_INFO lpConsoleHistoryInfo
+);
+
+#define GetConsoleOriginalTitle __MINGW_NAME_AW(GetConsoleOriginalTitle)
+
+WINBASEAPI DWORD WINAPI GetConsoleOriginalTitleA(
+  LPSTR lpConsoleTitle,
+  DWORD nSize
+);
+
+WINBASEAPI DWORD WINAPI GetConsoleOriginalTitleW(
+  LPWSTR lpConsoleTitle,
+  DWORD nSize
+);
+
+WINBASEAPI WINBOOL WINAPI GetConsoleScreenBufferInfoEx(
+  HANDLE hConsoleOutput,
+  PCONSOLE_SCREEN_BUFFER_INFOEX lpConsoleScreenBufferInfoEx
+);
+
+WINBASEAPI WINBOOL WINAPI GetCurrentConsoleFontEx(
+  HANDLE hConsoleOutput,
+  WINBOOL bMaximumWindow,
+  PCONSOLE_FONT_INFOEX lpConsoleCurrentFontEx
+);
+
+WINBASEAPI WINBOOL WINAPI SetConsoleHistoryInfo(
+  PCONSOLE_HISTORY_INFO lpConsoleHistoryInfo
+);
+
+WINBASEAPI WINBOOL WINAPI SetConsoleScreenBufferInfoEx(
+  HANDLE hConsoleOutput,
+  PCONSOLE_SCREEN_BUFFER_INFOEX lpConsoleScreenBufferInfoEx
+);
+
+WINBASEAPI WINBOOL WINAPI SetCurrentConsoleFontEx(
+  HANDLE hConsoleOutput,
+  WINBOOL bMaximumWindow,
+  PCONSOLE_FONT_INFOEX lpConsoleCurrentFontEx
+);
+
+#endif /* (_WIN32_WINNT >= 0x0600) */
 
 #ifdef __cplusplus
 }

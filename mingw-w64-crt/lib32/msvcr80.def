@@ -601,7 +601,7 @@ iswupper
 iswxdigit
 isxdigit
 labs
-ldexp
+ldexp DATA
 ldiv
 localeconv
 localtime DATA
@@ -632,6 +632,7 @@ putwchar
 qsort
 raise
 rand
+rand_s
 realloc
 remove
 rename

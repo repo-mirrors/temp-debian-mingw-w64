@@ -717,15 +717,15 @@ typedef struct {
 } KSAUDIO_POSITION,*PKSAUDIO_POSITION;
 
 typedef struct _DS3DVECTOR {
-  __MINGW_EXTENSION union {
+  __C89_NAMELESS union {
     FLOAT x;
     FLOAT dvX;
   };
-  __MINGW_EXTENSION union {
+  __C89_NAMELESS union {
     FLOAT y;
     FLOAT dvY;
   };
-  __MINGW_EXTENSION union {
+  __C89_NAMELESS union {
     FLOAT z;
     FLOAT dvZ;
   };
@@ -2456,7 +2456,10 @@ typedef struct tag_KS_TRUECOLORINFO {
 #define KS__DIBSIZE(bi)		(KS_DIBWIDTHBYTES(bi) *(DWORD)(bi).biHeight)
 #define KS_DIBSIZE(bi)		((bi).biHeight < 0 ? (-1)*(KS__DIBSIZE(bi)) : KS__DIBSIZE(bi))
 
+#ifndef __REFERENCE_TIME_DEFINED
+#define __REFERENCE_TIME_DEFINED
 typedef LONGLONG REFERENCE_TIME;
+#endif /*__REFERENCE_TIME_DEFINED*/
 
 typedef struct tagKS_VIDEOINFOHEADER {
   RECT rcSource;
@@ -2474,7 +2477,7 @@ typedef struct tagKS_VIDEOINFO {
   DWORD dwBitErrorRate;
   REFERENCE_TIME AvgTimePerFrame;
   KS_BITMAPINFOHEADER bmiHeader;
-  __MINGW_EXTENSION union {
+  __C89_NAMELESS union {
     KS_RGBQUAD bmiColors[KS_iPALETTE_COLORS];
     DWORD dwBitMasks[KS_iMASK_COLORS];
     KS_TRUECOLORINFO TrueColorInfo;
@@ -4156,29 +4159,29 @@ typedef struct _DDPIXELFORMAT
   DWORD dwSize;
   DWORD dwFlags;
   DWORD dwFourCC;
-  __MINGW_EXTENSION union
+  __C89_NAMELESS union
   {
     DWORD dwRGBBitCount;
     DWORD dwYUVBitCount;
     DWORD dwZBufferBitDepth;
     DWORD dwAlphaBitDepth;
   };
-  __MINGW_EXTENSION union
+  __C89_NAMELESS union
   {
     DWORD dwRBitMask;
     DWORD dwYBitMask;
   };
-  __MINGW_EXTENSION union
+  __C89_NAMELESS union
   {
     DWORD dwGBitMask;
     DWORD dwUBitMask;
   };
-  __MINGW_EXTENSION union
+  __C89_NAMELESS union
   {
     DWORD dwBBitMask;
     DWORD dwVBitMask;
   };
-  __MINGW_EXTENSION union
+  __C89_NAMELESS union
   {
     DWORD dwRGBAlphaBitMask;
     DWORD dwYUVAlphaBitMask;
@@ -4439,6 +4442,14 @@ typedef enum {
   VariableBitRatePeak
 } VIDEOENCODER_BITRATE_MODE;
 #endif /* __ENCODER_API_DEFINES__ */
+
+#if (_WIN32_WINNT >= 0x0601)
+typedef enum _TunerDecoderLockType {
+  Tuner_LockType_None                        = 0x00,
+  Tuner_LockType_Within_Scan_Sensing_Range   = 0x01,
+  Tuner_LockType_Locked                      = 0x02 
+} TunerLockType;
+#endif /*(_WIN32_WINNT >= 0x0601)*/
 
 #endif /* _KSMEDIA_ */
 

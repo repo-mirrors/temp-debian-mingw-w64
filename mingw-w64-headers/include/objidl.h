@@ -2187,7 +2187,7 @@ extern "C" {
 
   typedef struct tagSTGMEDIUM {
     DWORD tymed;
-    __MINGW_EXTENSION union {
+    __C89_NAMELESS union {
       HBITMAP hBitmap;
       HMETAFILEPICT hMetaFilePict;
       HENHMETAFILE hEnhMetaFile;
@@ -5080,6 +5080,31 @@ extern "C" {
   HRESULT WINAPI AsyncIAdviseSink2_Begin_OnLinkSrcChange_Stub(AsyncIAdviseSink2 *This,IMoniker *pmk);
   void WINAPI AsyncIAdviseSink2_Finish_OnLinkSrcChange_Proxy(AsyncIAdviseSink2 *This);
   HRESULT WINAPI AsyncIAdviseSink2_Finish_OnLinkSrcChange_Stub(AsyncIAdviseSink2 *This);
+
+#if (_WIN32_WINNT >= 0x0600)
+typedef struct tagBIND_OPTS3 {
+  DWORD        cbStruct;
+  DWORD        grfFlags;
+  DWORD        grfMode;
+  DWORD        dwTickCountDeadline;
+  DWORD        dwTrackFlags;
+  DWORD        dwClassContext;
+  LCID         locale;
+  COSERVERINFO *pServerInfo;
+  HWND         hwnd;
+} BIND_OPTS3, *LPBIND_OPTS3;
+#endif /*(_WIN32_WINNT >= 0x0600)*/
+
+#if (_WIN32_WINNT >= 0x0601)
+typedef enum _APTTYPEQUALIFIER {
+  APTTYPEQUALIFIER_NONE                 = 0,
+  APTTYPEQUALIFIER_IMPLICIT_MTA         = 1,
+  APTTYPEQUALIFIER_NA_ON_MTA            = 2,
+  APTTYPEQUALIFIER_NA_ON_STA            = 3,
+  APTTYPEQUALIFIER_NA_ON_IMPLICIT_MTA   = 4,
+  APTTYPEQUALIFIER_NA_ON_MAINSTA        = 5 
+} APTTYPEQUALIFIER;
+#endif /*(_WIN32_WINNT >= 0x0601)*/
 
 #ifdef __cplusplus
 }

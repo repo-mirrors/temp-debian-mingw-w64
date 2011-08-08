@@ -10,7 +10,6 @@
 #undef CRTDLL
 #endif
 
-#include <internal.h>
 #include <sect_attribs.h>
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -18,8 +17,19 @@
 #endif
 #include <windows.h>
 
+#include <stdio.h>
+#include <memory.h>
 #include <malloc.h>
-#include <crtdbg.h>
+#ifndef _WIN64
+#include <stdlib.h> /* for _winmajor */
+#endif
+
+#ifndef __INTERNAL_FUNC_DEFINED
+#define __INTERNAL_FUNC_DEFINED
+typedef void (__cdecl *_PVFV)(void);
+typedef int (__cdecl *_PIFV)(void);
+typedef void (__cdecl *_PVFI)(int);
+#endif
 
 extern WINBOOL __mingw_TLScallback (HANDLE hDllHandle, DWORD reason, LPVOID reserved);
 
@@ -66,6 +76,16 @@ static __CRT_THREAD TlsDtorNode dtor_list_head;
 
 extern int _CRT_MT;
 
+#ifndef _WIN64
+#define MINGWM10_DLL "mingwm10.dll"
+typedef int (*fMTRemoveKeyDtor)(DWORD key);
+typedef int (*fMTKeyDtor)(DWORD key, void (*dtor)(void *));
+fMTRemoveKeyDtor __mingw_gMTRemoveKeyDtor;
+fMTKeyDtor __mingw_gMTKeyDtor;
+int __mingw_usemthread_dll;
+static HANDLE __mingw_mthread_hdll;
+#endif
+
 BOOL WINAPI __dyn_tls_init (HANDLE, DWORD, LPVOID);
 
 BOOL WINAPI
@@ -74,6 +94,30 @@ __dyn_tls_init (HANDLE hDllHandle, DWORD dwReason, LPVOID lpreserved)
   _PVFV *pfunc;
   uintptr_t ps;
 
+#ifndef _WIN64
+  if (_winmajor < 4)
+  {
+    __mingw_usemthread_dll = 1;
+    __mingw_mthread_hdll = LoadLibrary (MINGWM10_DLL);
+    if (__mingw_mthread_hdll != NULL)
+    {
+      __mingw_gMTRemoveKeyDtor = (fMTRemoveKeyDtor) GetProcAddress (__mingw_mthread_hdll, "__mingwthr_remove_key_dtor");
+      __mingw_gMTKeyDtor = (fMTKeyDtor)  GetProcAddress (__mingw_mthread_hdll, "__mingwthr_key_dtor");
+    }
+    if (__mingw_mthread_hdll == NULL || !__mingw_gMTRemoveKeyDtor || !__mingw_gMTKeyDtor)
+      {
+	__mingw_gMTKeyDtor = NULL;
+	__mingw_gMTRemoveKeyDtor = NULL;
+	if (__mingw_mthread_hdll)
+	  FreeLibrary (__mingw_mthread_hdll);
+	__mingw_mthread_hdll = NULL;
+	_CRT_MT = 0;
+	return TRUE;
+      }
+    _CRT_MT = 1;
+    return TRUE;
+  }
+#endif
   /* We don't let us trick here.  */
   if (_CRT_MT != 2)
    _CRT_MT = 2;

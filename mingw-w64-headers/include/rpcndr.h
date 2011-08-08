@@ -78,7 +78,7 @@ extern "C" {
 #ifdef _WIN64
   __MINGW_EXTENSION typedef __int64 ssize_t;
 #else
-  typedef int ssize_t;
+  typedef long ssize_t;
 #endif
 #endif
 
@@ -94,8 +94,8 @@ extern "C" {
 
 #ifndef __MIDL_user_allocate_free_DEFINED__
 #define __MIDL_user_allocate_free_DEFINED__
-  void *__RPC_API MIDL_user_allocate(size_t);
-  void __RPC_API MIDL_user_free(void *);
+  void *__RPC_USER MIDL_user_allocate(SIZE_T);
+  void __RPC_USER MIDL_user_free(void *);
 #endif
 
 #define RPC_VAR_ENTRY __cdecl
@@ -747,7 +747,7 @@ typedef unsigned long error_status_t;
 
   typedef struct _NDR_USER_MARSHAL_INFO {
     unsigned long InformationLevel;
-    __MINGW_EXTENSION union {
+    __C89_NAMELESS union {
       NDR_USER_MARSHAL_INFO_LEVEL1 Level1;
     };
   } NDR_USER_MARSHAL_INFO;

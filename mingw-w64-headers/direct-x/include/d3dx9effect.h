@@ -1,3 +1,5 @@
+#include <_mingw_unicode.h>
+#undef INTERFACE
 /*
  * Copyright 2010 Christian Costa
  *
@@ -20,6 +22,16 @@
 
 #ifndef __D3DX9EFFECT_H__
 #define __D3DX9EFFECT_H__
+
+#define D3DXFX_DONOTSAVESTATE (1 << 0)
+#define D3DXFX_DONOTSAVESHADERSTATE (1 << 1)
+#define D3DXFX_DONOTSAVESAMPLERSTATE (1 << 2)
+#define D3DXFX_NOT_CLONEABLE (1 << 11)
+#define D3DXFX_LARGEADDRESSAWARE (1 << 17)
+
+#define D3DX_PARAMETER_SHARED       1
+#define D3DX_PARAMETER_LITERAL      2
+#define D3DX_PARAMETER_ANNOTATION   4
 
 typedef struct _D3DXEFFECT_DESC {
     LPCSTR Creator;
@@ -108,10 +120,10 @@ DECLARE_INTERFACE_(ID3DXBaseEffect, IUnknown)
     STDMETHOD_(D3DXHANDLE, GetAnnotationByName)(THIS_ D3DXHANDLE object, LPCSTR name) PURE;
     STDMETHOD(SetValue)(THIS_ D3DXHANDLE parameter, LPCVOID data, UINT bytes) PURE;
     STDMETHOD(GetValue)(THIS_ D3DXHANDLE parameter, LPVOID data, UINT bytes) PURE;
-    STDMETHOD(SetBool)(THIS_ D3DXHANDLE parameter, BOOL b) PURE;
-    STDMETHOD(GetBool)(THIS_ D3DXHANDLE parameter, BOOL* b) PURE;
-    STDMETHOD(SetBoolArray)(THIS_ D3DXHANDLE parameter, CONST BOOL* b, UINT count) PURE;
-    STDMETHOD(GetBoolArray)(THIS_ D3DXHANDLE parameter, BOOL* b, UINT count) PURE;
+    STDMETHOD(SetBool)(THIS_ D3DXHANDLE parameter, WINBOOL b) PURE;
+    STDMETHOD(GetBool)(THIS_ D3DXHANDLE parameter, WINBOOL* b) PURE;
+    STDMETHOD(SetBoolArray)(THIS_ D3DXHANDLE parameter, CONST WINBOOL* b, UINT count) PURE;
+    STDMETHOD(GetBoolArray)(THIS_ D3DXHANDLE parameter, WINBOOL* b, UINT count) PURE;
     STDMETHOD(SetInt)(THIS_ D3DXHANDLE parameter, INT n) PURE;
     STDMETHOD(GetInt)(THIS_ D3DXHANDLE parameter, INT* n) PURE;
     STDMETHOD(SetIntArray)(THIS_ D3DXHANDLE parameter, CONST INT* n, UINT count) PURE;
@@ -162,7 +174,7 @@ DECLARE_INTERFACE_(ID3DXEffectStateManager, IUnknown)
     STDMETHOD(SetTransform)(THIS_ D3DTRANSFORMSTATETYPE state, CONST D3DMATRIX* matrix) PURE;
     STDMETHOD(SetMaterial)(THIS_ CONST D3DMATERIAL9* material) PURE;
     STDMETHOD(SetLight)(THIS_ DWORD index, CONST D3DLIGHT9* light) PURE;
-    STDMETHOD(LightEnable)(THIS_ DWORD index, BOOL enable) PURE;
+    STDMETHOD(LightEnable)(THIS_ DWORD index, WINBOOL enable) PURE;
     STDMETHOD(SetRenderState)(THIS_ D3DRENDERSTATETYPE state, DWORD value) PURE;
     STDMETHOD(SetTexture)(THIS_ DWORD stage, LPDIRECT3DBASETEXTURE9 texture) PURE;
     STDMETHOD(SetTextureStageState)(THIS_ DWORD stage, D3DTEXTURESTAGESTATETYPE type, DWORD value) PURE;
@@ -172,11 +184,11 @@ DECLARE_INTERFACE_(ID3DXEffectStateManager, IUnknown)
     STDMETHOD(SetVertexShader)(THIS_ LPDIRECT3DVERTEXSHADER9 shader) PURE;
     STDMETHOD(SetVertexShaderConstantF)(THIS_ UINT register_index, CONST FLOAT* constant_data, UINT register_count) PURE;
     STDMETHOD(SetVertexShaderConstantI)(THIS_ UINT register_index, CONST INT* constant_data, UINT register_count) PURE;
-    STDMETHOD(SetVertexShaderConstantB)(THIS_ UINT register_index, CONST BOOL* constant_data, UINT register_count) PURE;
+    STDMETHOD(SetVertexShaderConstantB)(THIS_ UINT register_index, CONST WINBOOL* constant_data, UINT register_count) PURE;
     STDMETHOD(SetPixelShader)(THIS_ LPDIRECT3DPIXELSHADER9 shader) PURE;
     STDMETHOD(SetPixelShaderConstantF)(THIS_ UINT register_index, CONST FLOAT* constant_data, UINT register_count) PURE;
     STDMETHOD(SetPixelShaderConstantI)(THIS_ UINT register_index, CONST INT * constant_data, UINT register_count) PURE;
-    STDMETHOD(SetPixelShaderConstantB)(THIS_ UINT register_index, CONST BOOL* constant_data, UINT register_count) PURE;
+    STDMETHOD(SetPixelShaderConstantB)(THIS_ UINT register_index, CONST WINBOOL* constant_data, UINT register_count) PURE;
 };
 
 typedef struct ID3DXEffect *LPD3DXEFFECT;
@@ -212,10 +224,10 @@ DECLARE_INTERFACE_(ID3DXEffect, ID3DXBaseEffect)
     STDMETHOD_(D3DXHANDLE, GetAnnotationByName)(THIS_ D3DXHANDLE object, LPCSTR name) PURE;
     STDMETHOD(SetValue)(THIS_ D3DXHANDLE parameter, LPCVOID data, UINT bytes) PURE;
     STDMETHOD(GetValue)(THIS_ D3DXHANDLE parameter, LPVOID data, UINT bytes) PURE;
-    STDMETHOD(SetBool)(THIS_ D3DXHANDLE parameter, BOOL b) PURE;
-    STDMETHOD(GetBool)(THIS_ D3DXHANDLE parameter, BOOL* b) PURE;
-    STDMETHOD(SetBoolArray)(THIS_ D3DXHANDLE parameter, CONST BOOL* b, UINT count) PURE;
-    STDMETHOD(GetBoolArray)(THIS_ D3DXHANDLE parameter, BOOL* b, UINT count) PURE;
+    STDMETHOD(SetBool)(THIS_ D3DXHANDLE parameter, WINBOOL b) PURE;
+    STDMETHOD(GetBool)(THIS_ D3DXHANDLE parameter, WINBOOL* b) PURE;
+    STDMETHOD(SetBoolArray)(THIS_ D3DXHANDLE parameter, CONST WINBOOL* b, UINT count) PURE;
+    STDMETHOD(GetBoolArray)(THIS_ D3DXHANDLE parameter, WINBOOL* b, UINT count) PURE;
     STDMETHOD(SetInt)(THIS_ D3DXHANDLE parameter, INT n) PURE;
     STDMETHOD(GetInt)(THIS_ D3DXHANDLE parameter, INT* n) PURE;
     STDMETHOD(SetIntArray)(THIS_ D3DXHANDLE parameter, CONST INT* n, UINT count) PURE;
@@ -253,7 +265,7 @@ DECLARE_INTERFACE_(ID3DXEffect, ID3DXBaseEffect)
     STDMETHOD_(D3DXHANDLE, GetCurrentTechnique)(THIS) PURE;
     STDMETHOD(ValidateTechnique)(THIS_ D3DXHANDLE technique) PURE;
     STDMETHOD(FindNextValidTechnique)(THIS_ D3DXHANDLE technique, D3DXHANDLE* next_technique) PURE;
-    STDMETHOD_(BOOL, IsParameterUsed)(THIS_ D3DXHANDLE parameter, D3DXHANDLE technique) PURE;
+    STDMETHOD_(WINBOOL, IsParameterUsed)(THIS_ D3DXHANDLE parameter, D3DXHANDLE technique) PURE;
     STDMETHOD(Begin)(THIS_ UINT *passes, DWORD flags) PURE;
     STDMETHOD(BeginPass)(THIS_ UINT pass) PURE;
     STDMETHOD(CommitChanges)(THIS) PURE;
@@ -305,10 +317,10 @@ DECLARE_INTERFACE_(ID3DXEffectCompiler, ID3DXBaseEffect)
     STDMETHOD_(D3DXHANDLE, GetAnnotationByName)(THIS_ D3DXHANDLE object, LPCSTR name) PURE;
     STDMETHOD(SetValue)(THIS_ D3DXHANDLE parameter, LPCVOID data, UINT bytes) PURE;
     STDMETHOD(GetValue)(THIS_ D3DXHANDLE parameter, LPVOID data, UINT bytes) PURE;
-    STDMETHOD(SetBool)(THIS_ D3DXHANDLE parameter, BOOL b) PURE;
-    STDMETHOD(GetBool)(THIS_ D3DXHANDLE parameter, BOOL* b) PURE;
-    STDMETHOD(SetBoolArray)(THIS_ D3DXHANDLE parameter, CONST BOOL* b, UINT count) PURE;
-    STDMETHOD(GetBoolArray)(THIS_ D3DXHANDLE parameter, BOOL* b, UINT count) PURE;
+    STDMETHOD(SetBool)(THIS_ D3DXHANDLE parameter, WINBOOL b) PURE;
+    STDMETHOD(GetBool)(THIS_ D3DXHANDLE parameter, WINBOOL* b) PURE;
+    STDMETHOD(SetBoolArray)(THIS_ D3DXHANDLE parameter, CONST WINBOOL* b, UINT count) PURE;
+    STDMETHOD(GetBoolArray)(THIS_ D3DXHANDLE parameter, WINBOOL* b, UINT count) PURE;
     STDMETHOD(SetInt)(THIS_ D3DXHANDLE parameter, INT n) PURE;
     STDMETHOD(GetInt)(THIS_ D3DXHANDLE parameter, INT* n) PURE;
     STDMETHOD(SetIntArray)(THIS_ D3DXHANDLE parameter, CONST INT* n, UINT count) PURE;
@@ -341,8 +353,8 @@ DECLARE_INTERFACE_(ID3DXEffectCompiler, ID3DXBaseEffect)
     STDMETHOD(GetVertexShader)(THIS_ D3DXHANDLE parameter, LPDIRECT3DVERTEXSHADER9* vshader) PURE;
     STDMETHOD(SetArrayRange)(THIS_ D3DXHANDLE parameter, UINT start, UINT end) PURE;
     /*** ID3DXEffectCompiler methods ***/
-    STDMETHOD(SetLiteral)(THIS_ D3DXHANDLE parameter, BOOL literal) PURE;
-    STDMETHOD(GetLiteral)(THIS_ D3DXHANDLE parameter, BOOL* literal) PURE;
+    STDMETHOD(SetLiteral)(THIS_ D3DXHANDLE parameter, WINBOOL literal) PURE;
+    STDMETHOD(GetLiteral)(THIS_ D3DXHANDLE parameter, WINBOOL* literal) PURE;
     STDMETHOD(CompileEffect)(THIS_ DWORD flags, LPD3DXBUFFER* effect, LPD3DXBUFFER* error_msgs) PURE;
     STDMETHOD(CompileShader)(THIS_ D3DXHANDLE function, LPCSTR target, DWORD flags, LPD3DXBUFFER* shader,
             LPD3DXBUFFER* error_msgs, LPD3DXCONSTANTTABLE* constant_table) PURE;
@@ -383,6 +395,116 @@ HRESULT WINAPI D3DXCreateEffectCompiler(LPCSTR srcdata,
                                         DWORD flags,
                                         LPD3DXEFFECTCOMPILER* compiler,
                                         LPD3DXBUFFER* parse_errors);
+
+HRESULT WINAPI D3DXCreateEffectFromFileExA(LPDIRECT3DDEVICE9 device,
+                                           LPCSTR srcfile,
+                                           const D3DXMACRO *defines,
+                                           LPD3DXINCLUDE include,
+                                           LPCSTR skipconstants,
+                                           DWORD flags,
+                                           LPD3DXEFFECTPOOL pool,
+                                           LPD3DXEFFECT *effect,
+                                           LPD3DXBUFFER *compilationerrors);
+HRESULT WINAPI D3DXCreateEffectFromFileExW(LPDIRECT3DDEVICE9 device,
+                                           LPCWSTR srcfile,
+                                           const D3DXMACRO *defines,
+                                           LPD3DXINCLUDE include,
+                                           LPCSTR skipconstants,
+                                           DWORD flags,
+                                           LPD3DXEFFECTPOOL pool,
+                                           LPD3DXEFFECT *effect,
+                                           LPD3DXBUFFER *compilationerrors);
+#define D3DXCreateEffectFromFileEx __MINGW_NAME_AW(D3DXCreateEffectFromFileEx)
+
+HRESULT WINAPI D3DXCreateEffectFromFileA(LPDIRECT3DDEVICE9 device,
+                                         LPCSTR srcfile,
+                                         const D3DXMACRO *defines,
+                                         LPD3DXINCLUDE include,
+                                         DWORD flags,
+                                         LPD3DXEFFECTPOOL pool,
+                                         LPD3DXEFFECT *effect,
+                                         LPD3DXBUFFER *compilationerrors);
+HRESULT WINAPI D3DXCreateEffectFromFileW(LPDIRECT3DDEVICE9 device,
+                                         LPCWSTR srcfile,
+                                         const D3DXMACRO *defines,
+                                         LPD3DXINCLUDE include,
+                                         DWORD flags,
+                                         LPD3DXEFFECTPOOL pool,
+                                         LPD3DXEFFECT *effect,
+                                         LPD3DXBUFFER *compilationerrors);
+#define D3DXCreateEffectFromFile __MINGW_NAME_AW(D3DXCreateEffectFromFile)
+
+HRESULT WINAPI D3DXCreateEffectFromResourceExA(LPDIRECT3DDEVICE9 device,
+                                               HMODULE srcmodule,
+                                               LPCSTR srcresource,
+                                               const D3DXMACRO *defines,
+                                               LPD3DXINCLUDE include,
+                                               LPCSTR skipconstants,
+                                               DWORD flags,
+                                               LPD3DXEFFECTPOOL pool,
+                                               LPD3DXEFFECT *effect,
+                                               LPD3DXBUFFER *compilationerrors);
+HRESULT WINAPI D3DXCreateEffectFromResourceExW(LPDIRECT3DDEVICE9 device,
+                                               HMODULE srcmodule,
+                                               LPCWSTR srcresource,
+                                               const D3DXMACRO *defines,
+                                               LPD3DXINCLUDE include,
+                                               LPCSTR skipconstants,
+                                               DWORD flags,
+                                               LPD3DXEFFECTPOOL pool,
+                                               LPD3DXEFFECT *effect,
+                                               LPD3DXBUFFER *compilationerrors);
+#define D3DXCreateEffectFromResourceEx __MINGW_NAME_AW(D3DXCreateEffectFromResourceEx)
+
+HRESULT WINAPI D3DXCreateEffectFromResourceA(LPDIRECT3DDEVICE9 device,
+                                             HMODULE srcmodule,
+                                             LPCSTR srcresource,
+                                             const D3DXMACRO *defines,
+                                             LPD3DXINCLUDE include,
+                                             DWORD flags,
+                                             LPD3DXEFFECTPOOL pool,
+                                             LPD3DXEFFECT *effect,
+                                             LPD3DXBUFFER *compilationerrors);
+HRESULT WINAPI D3DXCreateEffectFromResourceW(LPDIRECT3DDEVICE9 device,
+                                             HMODULE srcmodule,
+                                             LPCWSTR srcresource,
+                                             const D3DXMACRO *defines,
+                                             LPD3DXINCLUDE include,
+                                             DWORD flags,
+                                             LPD3DXEFFECTPOOL pool,
+                                             LPD3DXEFFECT *effect,
+                                             LPD3DXBUFFER *compilationerrors);
+#define D3DXCreateEffectFromResource __MINGW_NAME_AW(D3DXCreateEffectFromResource)
+
+HRESULT WINAPI D3DXCreateEffectCompilerFromFileA(LPCSTR srcfile,
+                                                 const D3DXMACRO *defines,
+                                                 LPD3DXINCLUDE include,
+                                                 DWORD flags,
+                                                 LPD3DXEFFECTCOMPILER *effectcompiler,
+                                                 LPD3DXBUFFER *parseerrors);
+HRESULT WINAPI D3DXCreateEffectCompilerFromFileW(LPCWSTR srcfile,
+                                                 const D3DXMACRO *defines,
+                                                 LPD3DXINCLUDE include,
+                                                 DWORD flags,
+                                                 LPD3DXEFFECTCOMPILER *effectcompiler,
+                                                 LPD3DXBUFFER *parseerrors);
+#define D3DXCreateEffectCompilerFromFile __MINGW_NAME_AW(D3DXCreateEffectCompilerFromFile)
+
+HRESULT WINAPI D3DXCreateEffectCompilerFromResourceA(HMODULE srcmodule,
+                                                     LPCSTR srcresource,
+                                                     const D3DXMACRO *defines,
+                                                     LPD3DXINCLUDE include,
+                                                     DWORD flags,
+                                                     LPD3DXEFFECTCOMPILER *effectcompiler,
+                                                     LPD3DXBUFFER *parseerrors);
+HRESULT WINAPI D3DXCreateEffectCompilerFromResourceW(HMODULE srcmodule,
+                                                     LPCWSTR srcresource,
+                                                     const D3DXMACRO *defines,
+                                                     LPD3DXINCLUDE include,
+                                                     DWORD flags,
+                                                     LPD3DXEFFECTCOMPILER *effectcompiler,
+                                                     LPD3DXBUFFER *parseerrors);
+#define D3DXCreateEffectCompilerFromResource __MINGW_NAME_AW(D3DXCreateEffectCompilerFromResource)
 
 #ifdef __cplusplus
 }

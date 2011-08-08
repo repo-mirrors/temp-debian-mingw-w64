@@ -72,14 +72,14 @@ UPSAPI
 VOID
 NTAPI
 UPSTurnOff(
-  IN DWORD aTurnOffDelay);
+  IN DWORD  aTurnOffDelay);
 
 UPSAPI
 VOID
 NTAPI
 UPSWaitForStateChange(
-  IN DWORD aCurrentState,
-  IN DWORD anInterval);
+  IN DWORD  aCurrentState,
+  IN DWORD  anInterval);
 
 #ifdef __cplusplus
 }

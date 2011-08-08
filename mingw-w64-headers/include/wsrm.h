@@ -89,4 +89,5 @@ typedef struct _RM_FEC_INFO {
   UCHAR FECGroupSize;
   BOOLEAN fFECOnDemandParityEnabled;
 } RM_FEC_INFO;
+
 #endif

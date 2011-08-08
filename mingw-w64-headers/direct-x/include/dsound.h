@@ -1,3 +1,5 @@
+#include <_mingw_unicode.h>
+#undef INTERFACE
 /*
  * Copyright (C) the Wine project
  *
@@ -19,7 +21,6 @@
 #ifndef __DSOUND_INCLUDED__
 #define __DSOUND_INCLUDED__
 
-#include <_mingw_dxhelper.h>
 #ifndef DIRECTSOUND_VERSION
 #define DIRECTSOUND_VERSION 0x0900
 #endif
@@ -233,6 +234,8 @@ typedef const DSCAPS *LPCDSCAPS;
 #define DSBFREQUENCY_MAX            200000
 #define DSBFREQUENCY_ORIGINAL       0
 
+#define DSBNOTIFICATIONS_MAX        100000U
+
 typedef struct _DSBCAPS
 {
     DWORD	dwSize;
@@ -395,18 +398,18 @@ typedef const DSCBCAPS *LPCDSCBCAPS;
 typedef const GUID *LPCGUID;
 #endif
 
-typedef BOOL (CALLBACK *LPDSENUMCALLBACKW)(LPGUID,LPCWSTR,LPCWSTR,LPVOID);
-typedef BOOL (CALLBACK *LPDSENUMCALLBACKA)(LPGUID,LPCSTR,LPCSTR,LPVOID);
-DECL_WINELIB_TYPE_AW(LPDSENUMCALLBACK)
+typedef WINBOOL (CALLBACK *LPDSENUMCALLBACKW)(LPGUID,LPCWSTR,LPCWSTR,LPVOID);
+typedef WINBOOL (CALLBACK *LPDSENUMCALLBACKA)(LPGUID,LPCSTR,LPCSTR,LPVOID);
+__MINGW_TYPEDEF_AW(LPDSENUMCALLBACK)
 
 extern HRESULT WINAPI DirectSoundCreate(LPCGUID lpGUID,LPDIRECTSOUND *ppDS,LPUNKNOWN pUnkOuter);
 extern HRESULT WINAPI DirectSoundEnumerateA(LPDSENUMCALLBACKA, LPVOID);
 extern HRESULT WINAPI DirectSoundEnumerateW(LPDSENUMCALLBACKW, LPVOID);
-#define DirectSoundEnumerate WINELIB_NAME_AW(DirectSoundEnumerate)
+#define DirectSoundEnumerate __MINGW_NAME_AW(DirectSoundEnumerate)
 extern HRESULT WINAPI DirectSoundCaptureCreate(LPCGUID lpGUID, LPDIRECTSOUNDCAPTURE *ppDSC, LPUNKNOWN pUnkOuter);
 extern HRESULT WINAPI DirectSoundCaptureEnumerateA(LPDSENUMCALLBACKA, LPVOID);
 extern HRESULT WINAPI DirectSoundCaptureEnumerateW(LPDSENUMCALLBACKW, LPVOID);
-#define DirectSoundCaptureEnumerate WINELIB_NAME_AW(DirectSoundCaptureEnumerate)
+#define DirectSoundCaptureEnumerate __MINGW_NAME_AW(DirectSoundCaptureEnumerate)
 
 extern HRESULT WINAPI DirectSoundCreate8(LPCGUID lpGUID,LPDIRECTSOUND8 *ppDS8,LPUNKNOWN pUnkOuter);
 extern HRESULT WINAPI DirectSoundCaptureCreate8(LPCGUID lpGUID, LPDIRECTSOUNDCAPTURE8 *ppDSC8, LPUNKNOWN pUnkOuter);
@@ -420,7 +423,6 @@ extern HRESULT WINAPI GetDeviceID(LPCGUID lpGuidSrc, LPGUID lpGuidDest);
 /*****************************************************************************
  * IDirectSound interface
  */
-#undef INTERFACE
 #define INTERFACE IDirectSound
 DECLARE_INTERFACE_(IDirectSound,IUnknown)
 {
@@ -868,8 +870,6 @@ DECLARE_INTERFACE_(IDirectSoundCaptureBuffer8,IDirectSoundCaptureBuffer)
 #define WINE_NOBUFFER                   0x80000000
 
 #define DSBPN_OFFSETSTOP		-1
-
-#define DSBNOTIFICATIONS_MAX		100000UL
 
 #define INTERFACE IDirectSoundNotify
 DECLARE_INTERFACE_(IDirectSoundNotify,IUnknown)

@@ -125,9 +125,10 @@ AS_CASE([$host_cpu],
 
 # Checks for features.
 
+AC_MSG_CHECKING([whether to enable globbing])
 AC_ARG_ENABLE([wildcard],
   [AS_HELP_STRING([--enable-wildcard],
-    [Enable command line globbing @<:@default=no@:>@])],
+    [Enable command line globbing])],
   [],
   [enable_wildcard=no])
 AS_CASE([$enable_wildcard],
@@ -135,6 +136,46 @@ AS_CASE([$enable_wildcard],
   [no],[enable_wildcard_value=0],
   [AC_MSG_ERROR([Please only use --enable-wildcard or --disable-wildcard, without any additional arguments.])])
 AC_DEFINE_UNQUOTED([__ENABLE_GLOBBING],[$enable_wildcard_value],[Define as -1 to enable command line globbing or 0 to disable it.])
+AC_MSG_RESULT([$enable_wildcard])
+
+AC_MSG_CHECKING([whether to enable leading underscores])
+AC_ARG_ENABLE([leading-underscores],
+  [AS_HELP_STRING([--disable-leading-underscores],
+    [Disable leading underscores to match the MSVC calling convention])],
+  [],
+  [enable_leading_underscores=yes])
+AS_CASE([$enable_leading_underscores],
+  [yes],[],
+  [no],[],
+  [AC_MSG_ERROR([Please only use --enable-leading-underscores or --disable-leading-underscores, without any additional arguments.])])
+AM_CONDITIONAL([UNDERSCORES],[test $enable_leading_underscores = yes])
+AC_MSG_RESULT([$enable_leading_underscores])
+
+AC_MSG_CHECKING([whether to enable private exports])
+AC_ARG_ENABLE([private-exports],
+  [AS_HELP_STRING([--enable-private-exports],
+    [Enable exporting private internal functions])],
+  [],
+  [enable_private_exports=no])
+AS_CASE([$enable_private_exports],
+  [yes],[],
+  [no],[],
+  [AC_MSG_ERROR([Please only use --enable-private-exports  or --disable-private-exports, without any additional arguments.])])
+AM_CONDITIONAL([PRIVATE_EXPORTS],[test $enable_private_exports = yes])
+AC_MSG_RESULT([$enable_private_exports])
+
+AC_MSG_CHECKING([whether to enable delay import libs])
+AC_ARG_ENABLE([delay-import-libs],
+  [AS_HELP_STRING([--enable-delay-import-libs],
+    [Enable creation of delay-import libraries])],
+  [],
+  [enable_delay_import_libs=no])
+AS_CASE([$enable_delay_import_libs],
+  [yes],[],
+  [no],[],
+  [AC_MSG_ERROR([Please only use --enable-delay-import-libs  or --disable-delay-import-libs, without any additional arguments.])])
+AM_CONDITIONAL([DELAY_IMPORT_LIBS],[test $enable_delay_import_libs = yes])
+AC_MSG_RESULT([$enable_delay_import_libs])
 
 AC_MSG_CHECKING([whether the compiler supports -municode])
 AC_ARG_ENABLE([tests-unicode],

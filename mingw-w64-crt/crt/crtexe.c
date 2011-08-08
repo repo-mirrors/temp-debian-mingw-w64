@@ -40,8 +40,6 @@ extern void _fpreset (void);
 #define SPACECHAR _T(' ')
 #define DQUOTECHAR _T('\"')
 
-__declspec(dllimport) void __setusermatherr(int (__cdecl *)(struct _exception *));
-
 extern int * __MINGW_IMP_SYMBOL(_fmode);
 extern int * __MINGW_IMP_SYMBOL(_commode);
 
@@ -51,12 +49,6 @@ extern int * __MINGW_IMP_SYMBOL(_commode);
 #define _commode (* __MINGW_IMP_SYMBOL(_commode))
 extern int _dowildcard;
 
-#if defined(__GNUC__)
-int _MINGW_INSTALL_DEBUG_MATHERR __attribute__((weak)) = 0;
-#else
-int _MINGW_INSTALL_DEBUG_MATHERR = 0;
-#endif
-extern int __defaultmatherr;
 extern _CRTIMP void __cdecl _initterm(_PVFV *, _PVFV *);
 
 static int __cdecl check_managed_app (void);
@@ -79,8 +71,8 @@ _TCHAR *__mingw_winmain_lpCmdLine;
 DWORD __mingw_winmain_nShowCmd;
 
 static int argc;
-#ifdef WPRFLAG
 extern void __main(void);
+#ifdef WPRFLAG
 static wchar_t **argv;
 static wchar_t **envp;
 #else
@@ -93,10 +85,10 @@ static int mainret=0;
 static int managedapp;
 static int has_cctor = 0;
 static _startupinfo startinfo;
-static LPTOP_LEVEL_EXCEPTION_FILTER __mingw_oldexcpt_handler = NULL;
+extern LPTOP_LEVEL_EXCEPTION_FILTER __mingw_oldexcpt_handler;
 
 extern void _pei386_runtime_relocator (void);
-static long CALLBACK _gnu_exception_handler (EXCEPTION_POINTERS * exception_data);
+long CALLBACK _gnu_exception_handler (EXCEPTION_POINTERS * exception_data);
 #ifdef WPRFLAG
 static void duplicate_ppstrings (int ac, wchar_t ***av);
 #else
@@ -108,6 +100,8 @@ static void __cdecl pre_cpp_init (void);
 static void __cdecl __mingw_prepare_except_for_msvcr80_and_higher (void);
 _CRTALLOC(".CRT$XIAA") _PIFV mingw_pcinit = pre_c_init;
 _CRTALLOC(".CRT$XCAA") _PVFV mingw_pcppinit = pre_cpp_init;
+
+extern int _MINGW_INSTALL_DEBUG_MATHERR;
 
 static int __cdecl
 pre_c_init (void)
@@ -129,11 +123,7 @@ pre_c_init (void)
 #endif
   if (_MINGW_INSTALL_DEBUG_MATHERR)
     {
-      if (! __defaultmatherr)
-	{
-	  __setusermatherr (_matherr);
-	  __defaultmatherr = 1;
-	}
+      __setusermatherr (_matherr);
     }
 
   if (__globallocalestatus == -1)
@@ -160,9 +150,24 @@ int WinMainCRTStartup (void);
 
 int WinMainCRTStartup (void)
 {
+  int ret = 255;
+#ifdef __SEH__
+  asm ("\t.l_startw:\n"
+    "\t.seh_handler __C_specific_handler, @except\n"
+    "\t.seh_handlerdata\n"
+    "\t.long 1\n"
+    "\t.rva .l_startw, .l_endw, _gnu_exception_handler ,.l_endw\n"
+    "\t.text"
+    );
+#endif
   mingw_app_type = 1;
   __security_init_cookie ();
-  return __tmainCRTStartup ();
+  ret = __tmainCRTStartup ();
+#ifdef __SEH__
+  asm ("\tnop\n"
+    "\t.l_endw: nop\n");
+#endif
+  return ret;
 }
 
 int mainCRTStartup (void);
@@ -173,9 +178,24 @@ int __mingw_init_ehandler (void);
 
 int mainCRTStartup (void)
 {
+  int ret = 255;
+#ifdef __SEH__
+  asm ("\t.l_start:\n"
+    "\t.seh_handler __C_specific_handler, @except\n"
+    "\t.seh_handlerdata\n"
+    "\t.long 1\n"
+    "\t.rva .l_start, .l_end, _gnu_exception_handler ,.l_end\n"
+    "\t.text"
+    );
+#endif
   mingw_app_type = 0;
   __security_init_cookie ();
-  return __tmainCRTStartup ();
+  ret = __tmainCRTStartup ();
+#ifdef __SEH__
+  asm ("\tnop\n"
+    "\t.l_end: nop\n");
+#endif
+  return ret;
 }
 
 static
@@ -276,11 +296,11 @@ __tmainCRTStartup (void)
 				    StartupInfo.wShowWindow : SW_SHOWDEFAULT;
       }
     duplicate_ppstrings (argc, &argv);
+    __main ();
 #ifdef WPRFLAG
     __winitenv = envp;
     /* C++ initialization.
        gcc inserts this call automatically for a function called main, but not for wmain.  */
-    __main ();
     mainret = wmain (argc, argv, envp);
 #else
     __initenv = envp;
@@ -336,97 +356,6 @@ check_managed_app (void)
       return !! pNTHeader64->DataDirectory[IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR].VirtualAddress;
     }
   return 0;
-}
-
-static long CALLBACK
-_gnu_exception_handler (EXCEPTION_POINTERS *exception_data)
-{
-  void (*old_handler) (int);
-  long action = EXCEPTION_CONTINUE_SEARCH;
-  int reset_fpu = 0;
-
-  switch (exception_data->ExceptionRecord->ExceptionCode)
-    {
-    case EXCEPTION_ACCESS_VIOLATION:
-      /* test if the user has set SIGSEGV */
-      old_handler = signal (SIGSEGV, SIG_DFL);
-      if (old_handler == SIG_IGN)
-	{
-	  /* this is undefined if the signal was raised by anything other
-	     than raise ().  */
-	  signal (SIGSEGV, SIG_IGN);
-	  action = EXCEPTION_CONTINUE_EXECUTION;
-	}
-      else if (old_handler != SIG_DFL)
-	{
-	  /* This means 'old' is a user defined function. Call it */
-	  (*old_handler) (SIGSEGV);
-	  action = EXCEPTION_CONTINUE_EXECUTION;
-	}
-      break;
-
-    case EXCEPTION_ILLEGAL_INSTRUCTION:
-    case EXCEPTION_PRIV_INSTRUCTION:
-      /* test if the user has set SIGILL */
-      old_handler = signal (SIGILL, SIG_DFL);
-      if (old_handler == SIG_IGN)
-	{
-	  /* this is undefined if the signal was raised by anything other
-	     than raise ().  */
-	  signal (SIGILL, SIG_IGN);
-	  action = EXCEPTION_CONTINUE_EXECUTION;
-	}
-      else if (old_handler != SIG_DFL)
-	{
-	  /* This means 'old' is a user defined function. Call it */
-	  (*old_handler) (SIGILL);
-	  action = EXCEPTION_CONTINUE_EXECUTION;
-	}
-      break;
-
-    case EXCEPTION_FLT_INVALID_OPERATION:
-    case EXCEPTION_FLT_DIVIDE_BY_ZERO:
-    case EXCEPTION_FLT_DENORMAL_OPERAND:
-    case EXCEPTION_FLT_OVERFLOW:
-    case EXCEPTION_FLT_UNDERFLOW:
-    case EXCEPTION_FLT_INEXACT_RESULT:
-      reset_fpu = 1;
-      /* fall through. */
-
-    case EXCEPTION_INT_DIVIDE_BY_ZERO:
-      /* test if the user has set SIGFPE */
-      old_handler = signal (SIGFPE, SIG_DFL);
-      if (old_handler == SIG_IGN)
-	{
-	  signal (SIGFPE, SIG_IGN);
-	  if (reset_fpu)
-	    _fpreset ();
-	  action = EXCEPTION_CONTINUE_EXECUTION;
-	}
-      else if (old_handler != SIG_DFL)
-	{
-	  /* This means 'old' is a user defined function. Call it */
-	  (*old_handler) (SIGFPE);
-	  action = EXCEPTION_CONTINUE_EXECUTION;
-	}
-      break;
-#ifdef _WIN64
-    case EXCEPTION_DATATYPE_MISALIGNMENT:
-    case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:
-    case EXCEPTION_FLT_STACK_CHECK:
-    case EXCEPTION_INT_OVERFLOW:
-    case EXCEPTION_INVALID_HANDLE:
-    /*case EXCEPTION_POSSIBLE_DEADLOCK: */
-      action = EXCEPTION_CONTINUE_EXECUTION;
-      break;
-#endif
-    default:
-      break;
-    }
-
-  if (action == EXCEPTION_CONTINUE_SEARCH && __mingw_oldexcpt_handler)
-    action = (*__mingw_oldexcpt_handler)(exception_data);
-  return action;
 }
 
 #ifdef WPRFLAG
@@ -491,21 +420,14 @@ __mingw_invalidParameterHandler (const wchar_t * __UNUSED_PARAM_1(expression),
 #endif
 }
 
+HANDLE __mingw_get_msvcrt_handle(void);
+
 static void __cdecl 
 __mingw_prepare_except_for_msvcr80_and_higher (void)
 {
   _invalid_parameter_handler (*fIPH)(_invalid_parameter_handler) = NULL;
-  HMODULE hmsv = GetModuleHandleA ("msvcr80.dll");
-  if(!hmsv)
-    hmsv = GetModuleHandleA ("msvcr70.dll");
-  if (!hmsv)
-    hmsv = GetModuleHandleA ("msvcrt.dll");
-  if (!hmsv)
-    hmsv = LoadLibraryA ("msvcrt.dll");
-  if (!hmsv)
-    return;
-  fIPH = (_invalid_parameter_handler (*)(_invalid_parameter_handler))
-    GetProcAddress (hmsv, "_set_invalid_parameter_handler");
+
+  fIPH = (void*)GetProcAddress (__mingw_get_msvcrt_handle(), "_set_invalid_parameter_handler");
   if (fIPH)
     (*fIPH)(__mingw_invalidParameterHandler);
 }
