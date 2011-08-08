@@ -729,7 +729,7 @@ iswupper
 iswxdigit
 isxdigit
 labs
-ldexp
+ldexp DATA
 ldiv
 localeconv
 localtime DATA
@@ -738,6 +738,7 @@ log
 log10
 log10f
 logf
+longjmp DATA
 malloc
 mblen
 mbstowcs
@@ -763,6 +764,7 @@ putwchar
 qsort
 raise
 rand
+rand_s
 realloc
 remove
 rename

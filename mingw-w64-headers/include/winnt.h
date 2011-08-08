@@ -6,6 +6,8 @@
 #ifndef _WINNT_
 #define _WINNT_
 
+#include <_mingw_unicode.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -260,10 +262,14 @@ extern "C" {
 #define STDAPI_(type) EXTERN_C type WINAPI
 #define STDMETHODIMP HRESULT WINAPI
 #define STDMETHODIMP_(type) type WINAPI
+#define IFACEMETHODIMP STDMETHODIMP
+#define IFACEMETHODIMP_(type) STDMETHODIMP_(type)
 #define STDAPIV EXTERN_C HRESULT STDAPIVCALLTYPE
 #define STDAPIV_(type) EXTERN_C type STDAPIVCALLTYPE
 #define STDMETHODIMPV HRESULT STDMETHODVCALLTYPE
 #define STDMETHODIMPV_(type) type STDMETHODVCALLTYPE
+#define IFACEMETHODIMPV STDMETHODIMPV
+#define IFACEMETHODIMPV_(type) STDMETHODIMPV_(type)
 
   typedef char CCHAR;
 #ifndef _LCID_DEFINED
@@ -302,8 +308,11 @@ typedef DWORD LCID;
 
   typedef LONGLONG USN;
 
+#ifndef _LARGE_INTEGER_DEFINED
+#define _LARGE_INTEGER_DEFINED
+
   typedef union _LARGE_INTEGER {
-    __MINGW_EXTENSION struct {
+    __C89_NAMELESS struct {
       DWORD LowPart;
       LONG HighPart;
     } DUMMYSTRUCTNAME;
@@ -317,7 +326,7 @@ typedef DWORD LCID;
   typedef LARGE_INTEGER *PLARGE_INTEGER;
 
   typedef union _ULARGE_INTEGER {
-    __MINGW_EXTENSION struct {
+    __C89_NAMELESS struct {
       DWORD LowPart;
       DWORD HighPart;
     } DUMMYSTRUCTNAME;
@@ -334,6 +343,8 @@ typedef DWORD LCID;
     DWORD LowPart;
     LONG HighPart;
   } LUID,*PLUID;
+
+#endif /* _LARGE_INTEGER_DEFINED */
 
 #define _DWORDLONG_
   typedef ULONGLONG DWORDLONG;
@@ -412,6 +423,9 @@ typedef DWORD LCID;
 #endif
   typedef BOOLEAN *PBOOLEAN;
 
+#ifndef _LIST_ENTRY_DEFINED
+#define _LIST_ENTRY_DEFINED
+
   typedef struct _LIST_ENTRY {
     struct _LIST_ENTRY *Flink;
     struct _LIST_ENTRY *Blink;
@@ -432,6 +446,8 @@ typedef DWORD LCID;
     ULONGLONG Blink;
   } LIST_ENTRY64;
   typedef LIST_ENTRY64 *PLIST_ENTRY64;
+
+#endif /* _LIST_ENTRY_DEFINED */
 
 #include <guiddef.h>
 
@@ -477,6 +493,21 @@ typedef DWORD LCID;
 #define RTL_CONST_CAST(type) const_cast<type>
 #else
 #define RTL_CONST_CAST(type) (type)
+#endif
+
+#ifdef __cplusplus
+#define DEFINE_ENUM_FLAG_OPERATORS(ENUMTYPE) \
+extern "C++" { \
+inline ENUMTYPE operator | (ENUMTYPE a, ENUMTYPE b) { return ENUMTYPE(((int)a) | ((int)b)); } \
+inline ENUMTYPE &operator |= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((int &)a) |= ((int)b)); } \
+inline ENUMTYPE operator & (ENUMTYPE a, ENUMTYPE b) { return ENUMTYPE(((int)a) & ((int)b)); } \
+inline ENUMTYPE &operator &= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((int &)a) &= ((int)b)); } \
+inline ENUMTYPE operator ~ (ENUMTYPE a) { return ENUMTYPE(~((int)a)); } \
+inline ENUMTYPE operator ^ (ENUMTYPE a, ENUMTYPE b) { return ENUMTYPE(((int)a) ^ ((int)b)); } \
+inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((int &)a) ^= ((int)b)); } \
+}
+#else
+#define DEFINE_ENUM_FLAG_OPERATORS(ENUMTYPE) /* */
 #endif
 
 #define RTL_BITS_OF(sizeOfArg) (sizeof(sizeOfArg) *8)
@@ -1012,16 +1043,21 @@ typedef DWORD LCID;
 #define DBG_TERMINATE_THREAD ((DWORD)0x40010003L)
 #define DBG_TERMINATE_PROCESS ((DWORD)0x40010004L)
 #define DBG_CONTROL_C ((DWORD)0x40010005L)
+#define DBG_PRINTEXCEPTION_C ((DWORD)0x40010006L)
+#define DBG_RIPEXCEPTION ((DWORD)0x40010007L)
 #define DBG_CONTROL_BREAK ((DWORD)0x40010008L)
 #define DBG_COMMAND_EXCEPTION ((DWORD)0x40010009L)
 #define STATUS_GUARD_PAGE_VIOLATION ((DWORD)0x80000001L)
 #define STATUS_DATATYPE_MISALIGNMENT ((DWORD)0x80000002L)
 #define STATUS_BREAKPOINT ((DWORD)0x80000003L)
 #define STATUS_SINGLE_STEP ((DWORD)0x80000004L)
+#define STATUS_LONGJUMP ((DWORD)0x80000026L)    
+#define STATUS_UNWIND_CONSOLIDATE ((DWORD)0x80000029L)    
 #define DBG_EXCEPTION_NOT_HANDLED ((DWORD)0x80010001L)
 #define STATUS_ACCESS_VIOLATION ((DWORD)0xC0000005L)
 #define STATUS_IN_PAGE_ERROR ((DWORD)0xC0000006L)
 #define STATUS_INVALID_HANDLE ((DWORD)0xC0000008L)
+#define STATUS_INVALID_PARAMETER ((DWORD)0xC000000DL)
 #define STATUS_NO_MEMORY ((DWORD)0xC0000017L)
 #define STATUS_ILLEGAL_INSTRUCTION ((DWORD)0xC000001DL)
 #define STATUS_NONCONTINUABLE_EXCEPTION ((DWORD)0xC0000025L)
@@ -1038,10 +1074,17 @@ typedef DWORD LCID;
 #define STATUS_INTEGER_OVERFLOW ((DWORD)0xC0000095L)
 #define STATUS_PRIVILEGED_INSTRUCTION ((DWORD)0xC0000096L)
 #define STATUS_STACK_OVERFLOW ((DWORD)0xC00000FDL)
+#define STATUS_DLL_NOT_FOUND ((DWORD)0xC0000135L)
+#define STATUS_ORDINAL_NOT_FOUND ((DWORD)0xC0000138L)
+#define STATUS_ENTRYPOINT_NOT_FOUND ((DWORD)0xC0000139L)
 #define STATUS_CONTROL_C_EXIT ((DWORD)0xC000013AL)
+#define STATUS_DLL_INIT_FAILED ((DWORD)0xC0000142L)
 #define STATUS_FLOAT_MULTIPLE_FAULTS ((DWORD)0xC00002B4L)
 #define STATUS_FLOAT_MULTIPLE_TRAPS ((DWORD)0xC00002B5L)
 #define STATUS_REG_NAT_CONSUMPTION ((DWORD)0xC00002C9L)
+#define STATUS_STACK_BUFFER_OVERRUN ((DWORD)0xC0000409L)
+#define STATUS_INVALID_CRUNTIME_PARAMETER ((DWORD)0xC0000417L)
+#define STATUS_ASSERTION_FAILURE ((DWORD)0xC0000420L)
 #define STATUS_SXS_EARLY_DEACTIVATION ((DWORD)0xC015000FL)
 #define STATUS_SXS_INVALID_DEACTIVATION ((DWORD)0xC0150010L)
 #endif
@@ -1310,29 +1353,6 @@ typedef DWORD LCID;
       __asm__ __volatile__("lock ; xorl %0,%1"
 	: : "r"(Value),"m"(*Destination) : "memory");
       return *Destination;
-    }
-    __CRT_INLINE LONG InterlockedIncrement(LONG volatile *Addend) {
-      LONG ret = 1;
-      __asm__ __volatile__ ("lock\n\t"
-	       "xaddl %0,%1"
-	       : "+r" (ret), "+m" (*Addend)
-	       : : "memory");
-      return ret + 1;
-    }
-    __CRT_INLINE LONG InterlockedDecrement(LONG volatile *Addend) {
-      LONG ret = -1;
-      __asm__ __volatile__ ("lock\n\t"
-	       "xaddl %0,%1"
-	       : "+r" (ret), "+m" (*Addend)
-	       : : "memory");
-      return ret - 1;
-    }
-    __CRT_INLINE LONG InterlockedExchange(LONG volatile *Target,LONG Value) {
-      __asm__ __volatile__ ("lock ; xchgl %0,%1"
-	: "=r"(Value)
-	: "m"(*Target),"0"(Value)
-	: "memory");
-      return Value;
     }
     __CRT_INLINE LONG64 InterlockedAnd64(LONG64 volatile *Destination,LONG64 Value) {
       __asm__ __volatile__("lock ; andq %0,%1"
@@ -1690,10 +1710,10 @@ typedef DWORD LCID;
     DWORD64 R14;
     DWORD64 R15;
     DWORD64 Rip;
-    __MINGW_EXTENSION union {
+    __C89_NAMELESS union {
       XMM_SAVE_AREA32 FltSave;
       XMM_SAVE_AREA32 FloatSave;
-      __MINGW_EXTENSION struct {
+      __C89_NAMELESS struct {
 	M128A Header[2];
 	M128A Legacy[8];
 	M128A Xmm0;
@@ -1942,6 +1962,32 @@ typedef DWORD LCID;
     typedef CONTEXT *PCONTEXT;
 
 #endif /* end of _X86_ */
+
+#if defined(__MINGW_INTRIN_INLINE) && (defined(__i386__) || defined(__x86_64))
+  __MINGW_INTRIN_INLINE LONG WINAPI InterlockedIncrement(LONG volatile *Addend) {
+    LONG ret = 1;
+    __asm__ __volatile__ ("lock\n\t"
+        "xaddl %0,%1"
+	: "+r" (ret), "+m" (*Addend)
+	: : "memory");
+    return ret + 1;
+  }
+  __MINGW_INTRIN_INLINE LONG WINAPI InterlockedDecrement(LONG volatile *Addend) {
+    LONG ret = -1;
+    __asm__ __volatile__ ("lock\n\t"
+        "xaddl %0,%1"
+        : "+r" (ret), "+m" (*Addend)
+        : : "memory");
+    return ret - 1;
+  }
+  __MINGW_INTRIN_INLINE LONG WINAPI InterlockedExchange(LONG volatile *Target,LONG Value) {
+    __asm__ __volatile__ ("lock ; xchgl %0,%1"
+        : "=r"(Value)
+        : "m"(*Target),"0"(Value)
+        : "memory");
+    return Value;
+  }
+#endif
 
 #ifndef _LDT_ENTRY_DEFINED
 #define _LDT_ENTRY_DEFINED
@@ -2294,7 +2340,17 @@ typedef DWORD LCID;
     VOID __jump_unwind(ULONGLONG TargetMsFrame,ULONGLONG TargetBsFrame,ULONGLONG TargetPc);
 #endif /* end of _IA64_ */
 
+/* http://www.nynaeve.net/?p=99 */
+
 #define EXCEPTION_NONCONTINUABLE 0x1
+#define EXCEPTION_UNWINDING	   0x2
+#define EXCEPTION_EXIT_UNWIND      0x4
+#define EXCEPTION_STACK_INVALID    0x8
+#define EXCEPTION_NESTED_CALL      0x10
+#define EXCEPTION_TARGET_UNWIND    0x20
+#define EXCEPTION_COLLIDED_UNWIND  0x40
+#define EXCEPTION_UNWIND           0x66
+
 #define EXCEPTION_MAXIMUM_PARAMETERS 15
 
     typedef struct _EXCEPTION_RECORD {
@@ -2331,6 +2387,74 @@ typedef DWORD LCID;
       PEXCEPTION_RECORD ExceptionRecord;
       PCONTEXT ContextRecord;
     } EXCEPTION_POINTERS,*PEXCEPTION_POINTERS;
+
+#ifdef __x86_64__
+/* http://msdn.microsoft.com/en-us/library/ms680597(VS.85).aspx */
+
+#define UNWIND_HISTORY_TABLE_SIZE 12
+
+  typedef struct _UNWIND_HISTORY_TABLE_ENTRY {
+    ULONG64 ImageBase;
+    PRUNTIME_FUNCTION FunctionEntry;
+  } UNWIND_HISTORY_TABLE_ENTRY, *PUNWIND_HISTORY_TABLE_ENTRY;
+
+#define UNWIND_HISTORY_TABLE_NONE    0
+#define UNWIND_HISTORY_TABLE_GLOBAL  1
+#define UNWIND_HISTORY_TABLE_LOCAL   2
+
+  typedef struct _UNWIND_HISTORY_TABLE {
+    ULONG Count;
+    UCHAR Search;
+    ULONG64 LowAddress;
+    ULONG64 HighAddress;
+    UNWIND_HISTORY_TABLE_ENTRY Entry[UNWIND_HISTORY_TABLE_SIZE];
+  } UNWIND_HISTORY_TABLE, *PUNWIND_HISTORY_TABLE;
+
+  NTSYSAPI PRUNTIME_FUNCTION NTAPI RtlLookupFunctionEntry(ULONG64 ControlPc, PULONG64 ImageBase, PUNWIND_HISTORY_TABLE HistoryTable);
+
+  /* http://msdn.microsoft.com/en-us/library/b6sf5kbd(VS.80).aspx */
+
+  struct _DISPATCHER_CONTEXT;
+  typedef struct _DISPATCHER_CONTEXT DISPATCHER_CONTEXT;
+  typedef struct _DISPATCHER_CONTEXT *PDISPATCHER_CONTEXT;
+
+#ifndef __PEXCEPTION_ROUTINE_DEFINED
+#define __PEXCEPTION_ROUTINE_DEFINED
+
+  typedef EXCEPTION_DISPOSITION (NTAPI *PEXCEPTION_ROUTINE)
+    (PEXCEPTION_RECORD ExceptionRecord,
+     ULONG64 EstablisherFrame,
+     PCONTEXT ContextRecord,
+     PDISPATCHER_CONTEXT DispatcherContext);
+#endif /* __PEXCEPTION_ROUTINE_DEFINED */
+
+  struct _DISPATCHER_CONTEXT {
+    ULONG64 ControlPc;
+    ULONG64 ImageBase;
+    PRUNTIME_FUNCTION FunctionEntry;
+    ULONG64 EstablisherFrame;
+    ULONG64 TargetIp;
+    PCONTEXT ContextRecord;
+    PEXCEPTION_ROUTINE LanguageHandler;
+    PVOID HandlerData;
+    /* http://www.nynaeve.net/?p=99 */
+    PUNWIND_HISTORY_TABLE HistoryTable;
+    ULONG ScopeIndex;
+    ULONG Fill0;
+  };
+
+  /* http://msdn.microsoft.com/en-us/library/ms680617(VS.85).aspx */
+
+  typedef struct _KNONVOLATILE_CONTEXT_POINTERS
+  {
+    PM128A FloatingContext[16];
+    PULONG64 IntegerContext[16];
+  } KNONVOLATILE_CONTEXT_POINTERS, *PKNONVOLATILE_CONTEXT_POINTERS;
+
+  NTSYSAPI VOID NTAPI RtlUnwindEx(PVOID TargetFrame, ULONG64 TargetIp, PEXCEPTION_RECORD ExceptionRecord, PVOID ReturnValue, PCONTEXT OriginalContext, PUNWIND_HISTORY_TABLE HistoryTable);
+  NTSYSAPI PEXCEPTION_ROUTINE NTAPI RtlVirtualUnwind(ULONG HandlerType, ULONG64 ImageBase, ULONG64 ControlPc, PRUNTIME_FUNCTION FunctionEntry, PCONTEXT ContextRecord,PVOID *HandlerData, PULONG64 EstablisherFrame,PKNONVOLATILE_CONTEXT_POINTERS ContextPointers);
+#endif /* defined(__x86_64__) */
+
     typedef PVOID PACCESS_TOKEN;
     typedef PVOID PSECURITY_DESCRIPTOR;
     typedef PVOID PSID;
@@ -2400,6 +2524,9 @@ typedef DWORD LCID;
 #define SID_REVISION (1)
 #define SID_MAX_SUB_AUTHORITIES (15)
 #define SID_RECOMMENDED_SUB_AUTHORITIES (1)
+#if (_WIN32_WINNT >= 0x0600)
+#define SID_HASH_SIZE 32
+#endif
 
 #define SECURITY_MAX_SID_SIZE (sizeof(SID) - sizeof(DWORD) + (SID_MAX_SUB_AUTHORITIES *sizeof(DWORD)))
 
@@ -2414,6 +2541,15 @@ typedef DWORD LCID;
 
     typedef SID_AND_ATTRIBUTES SID_AND_ATTRIBUTES_ARRAY[ANYSIZE_ARRAY];
     typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
+
+#if (_WIN32_WINNT >= 0x0600)
+    typedef ULONG_PTR SID_HASH_ENTRY, *PSID_HASH_ENTRY;
+    typedef struct _SID_AND_ATTRIBUTES_HASH {
+      DWORD SidCount;
+      PSID_AND_ATTRIBUTES SidAttr;
+      SID_HASH_ENTRY Hash[SID_HASH_SIZE];
+    } SID_AND_ATTRIBUTES_HASH, *PSID_AND_ATTRIBUTES_HASH;
+#endif
 
 #define SECURITY_NULL_SID_AUTHORITY {0,0,0,0,0,0}
 #define SECURITY_WORLD_SID_AUTHORITY {0,0,0,0,0,1}
@@ -2658,6 +2794,18 @@ typedef DWORD LCID;
     } SYSTEM_ALARM_ACE;
     typedef SYSTEM_ALARM_ACE *PSYSTEM_ALARM_ACE;
 
+    typedef struct _SYSTEM_MANDATORY_LABEL_ACE {
+      ACE_HEADER Header;
+      ACCESS_MASK Mask;
+      DWORD SidStart;
+    } SYSTEM_MANDATORY_LABEL_ACE, *PSYSTEM_MANDATORY_LABEL_ACE;
+
+#define SYSTEM_MANDATORY_LABEL_NO_WRITE_UP 0x1
+#define SYSTEM_MANDATORY_LABEL_NO_READ_UP 0x2
+#define SYSTEM_MANDATORY_LABEL_NO_EXECUTE_UP 0x4
+
+#define SYSTEM_MANDATORY_LABEL_VALID_MASK (SYSTEM_MANDATORY_LABEL_NO_WRITE_UP | SYSTEM_MANDATORY_LABEL_NO_READ_UP | SYSTEM_MANDATORY_LABEL_NO_EXECUTE_UP)
+
     typedef struct _ACCESS_ALLOWED_OBJECT_ACE {
       ACE_HEADER Header;
       ACCESS_MASK Mask;
@@ -2852,6 +3000,8 @@ typedef DWORD LCID;
 #define SE_PRIVILEGE_REMOVED (0X00000004L)
 #define SE_PRIVILEGE_USED_FOR_ACCESS (0x80000000L)
 
+#define SE_PRIVILEGE_VALID_ATTRIBUTES (SE_PRIVILEGE_ENABLED_BY_DEFAULT | SE_PRIVILEGE_ENABLED | SE_PRIVILEGE_REMOVED | SE_PRIVILEGE_USED_FOR_ACCESS)
+
 #define PRIVILEGE_SET_ALL_NECESSARY (1)
 
     typedef struct _PRIVILEGE_SET {
@@ -2890,6 +3040,11 @@ typedef DWORD LCID;
 #define SE_MANAGE_VOLUME_NAME TEXT("SeManageVolumePrivilege")
 #define SE_IMPERSONATE_NAME TEXT("SeImpersonatePrivilege")
 #define SE_CREATE_GLOBAL_NAME TEXT("SeCreateGlobalPrivilege")
+#define SE_TRUSTED_CREDMAN_ACCESS_NAME TEXT("SeTrustedCredManAccessPrivilege")
+#define SE_RELABEL_NAME TEXT("SeRelabelPrivilege")
+#define SE_INC_WORKING_SET_NAME TEXT("SeIncreaseWorkingSetPrivilege")
+#define SE_TIME_ZONE_NAME TEXT("SeTimeZonePrivilege")
+#define SE_CREATE_SYMBOLIC_LINK_NAME TEXT("SeCreateSymbolicLinkPrivilege")
 
     typedef enum _SECURITY_IMPERSONATION_LEVEL {
       SecurityAnonymous,SecurityIdentification,SecurityImpersonation,SecurityDelegation
@@ -2923,6 +3078,12 @@ typedef DWORD LCID;
     } TOKEN_TYPE;
     typedef TOKEN_TYPE *PTOKEN_TYPE;
 
+    typedef enum _TOKEN_ELEVATION_TYPE {
+      TokenElevationTypeDefault   = 1,
+      TokenElevationTypeFull,
+      TokenElevationTypeLimited 
+    } TOKEN_ELEVATION_TYPE, *PTOKEN_ELEVATION_TYPE;
+
     typedef enum _TOKEN_INFORMATION_CLASS {
       TokenUser = 1,
       TokenGroups,
@@ -2941,6 +3102,17 @@ typedef DWORD LCID;
       TokenSandBoxInert,
       TokenAuditPolicy,
       TokenOrigin,
+      TokenElevationType,
+      TokenLinkedToken,
+      TokenElevation,
+      TokenHasRestrictions,
+      TokenAccessInformation,
+      TokenVirtualizationAllowed,
+      TokenVirtualizationEnabled,
+      TokenIntegrityLevel,
+      TokenUIAccess,
+      TokenMandatoryPolicy,
+      TokenLogonSid,
       MaxTokenInfoClass
     } TOKEN_INFORMATION_CLASS,*PTOKEN_INFORMATION_CLASS;
 
@@ -2983,26 +3155,11 @@ typedef DWORD LCID;
       LUID AuthenticationId;
     } TOKEN_GROUPS_AND_PRIVILEGES,*PTOKEN_GROUPS_AND_PRIVILEGES;
 
-#define TOKEN_AUDIT_SUCCESS_INCLUDE 0x1
-#define TOKEN_AUDIT_SUCCESS_EXCLUDE 0x2
-#define TOKEN_AUDIT_FAILURE_INCLUDE 0x4
-#define TOKEN_AUDIT_FAILURE_EXCLUDE 0x8
-
-#define VALID_AUDIT_POLICY_BITS (TOKEN_AUDIT_SUCCESS_INCLUDE | TOKEN_AUDIT_SUCCESS_EXCLUDE | TOKEN_AUDIT_FAILURE_INCLUDE | TOKEN_AUDIT_FAILURE_EXCLUDE)
-#define VALID_TOKEN_AUDIT_POLICY_ELEMENT(P) ((((P).PolicyMask & ~VALID_AUDIT_POLICY_BITS)==0) && ((P).Category <= AuditEventMaxType))
-
-    typedef struct _TOKEN_AUDIT_POLICY_ELEMENT {
-      DWORD Category;
-      DWORD PolicyMask;
-    } TOKEN_AUDIT_POLICY_ELEMENT,*PTOKEN_AUDIT_POLICY_ELEMENT;
+#define POLICY_AUDIT_SUBCATEGORY_COUNT (53)
 
     typedef struct _TOKEN_AUDIT_POLICY {
-      DWORD PolicyCount;
-      TOKEN_AUDIT_POLICY_ELEMENT Policy[ANYSIZE_ARRAY];
-    } TOKEN_AUDIT_POLICY,*PTOKEN_AUDIT_POLICY;
-
-#define PER_USER_AUDITING_POLICY_SIZE(p) (sizeof(TOKEN_AUDIT_POLICY) + (((p)->PolicyCount > ANYSIZE_ARRAY) ? (sizeof(TOKEN_AUDIT_POLICY_ELEMENT) *((p)->PolicyCount - ANYSIZE_ARRAY)) : 0))
-#define PER_USER_AUDITING_POLICY_SIZE_BY_COUNT(C) (sizeof(TOKEN_AUDIT_POLICY) + (((C) > ANYSIZE_ARRAY) ? (sizeof(TOKEN_AUDIT_POLICY_ELEMENT) *((C) - ANYSIZE_ARRAY)) : 0))
+      UCHAR PerUserPolicy[((POLICY_AUDIT_SUBCATEGORY_COUNT) >> 1) + 1];
+    } TOKEN_AUDIT_POLICY, *PTOKEN_AUDIT_POLICY;
 
 #define TOKEN_SOURCE_LENGTH 8
 
@@ -3035,6 +3192,40 @@ typedef DWORD LCID;
       LUID OriginatingLogonSession;
     } TOKEN_ORIGIN,*PTOKEN_ORIGIN;
 
+#if (_WIN32_WINNT >= 0x0600)
+    typedef struct _TOKEN_LINKED_TOKEN {
+      HANDLE LinkedToken;
+    } TOKEN_LINKED_TOKEN, *PTOKEN_LINKED_TOKEN;
+
+    typedef struct _TOKEN_MANDATORY_LABEL {
+      SID_AND_ATTRIBUTES Label;
+    } TOKEN_MANDATORY_LABEL, *PTOKEN_MANDATORY_LABEL;
+
+#define TOKEN_MANDATORY_POLICY_OFF 0x0
+#define TOKEN_MANDATORY_POLICY_NO_WRITE_UP 0x1
+#define TOKEN_MANDATORY_POLICY_NEW_PROCESS_MIN 0x2
+#define TOKEN_MANDATORY_POLICY_VALID_MASK 0x3
+
+    typedef struct _TOKEN_MANDATORY_POLICY {
+      DWORD Policy;
+    } TOKEN_MANDATORY_POLICY, *PTOKEN_MANDATORY_POLICY;
+
+    typedef struct _TOKEN_ELEVATION {
+      DWORD TokenIsElevated;
+    } TOKEN_ELEVATION, *PTOKEN_ELEVATION;
+
+    typedef struct _TOKEN_ACCESS_INFORMATION {
+      PSID_AND_ATTRIBUTES_HASH SidHash;
+      PSID_AND_ATTRIBUTES_HASH RestrictedSidHash;
+      PTOKEN_PRIVILEGES Privileges;
+      LUID AuthenticationId;
+      TOKEN_TYPE TokenType;
+      SECURITY_IMPERSONATION_LEVEL ImpersonationLevel;
+      TOKEN_MANDATORY_POLICY MandatoryPolicy;
+      DWORD Flags;
+    } TOKEN_ACCESS_INFORMATION, *PTOKEN_ACCESS_INFORMATION;
+#endif
+
 #define SECURITY_DYNAMIC_TRACKING (TRUE)
 #define SECURITY_STATIC_TRACKING (FALSE)
 
@@ -3056,6 +3247,8 @@ typedef DWORD LCID;
 
 #define DISABLE_MAX_PRIVILEGE 0x1
 #define SANDBOX_INERT 0x2
+#define LUA_TOKEN 0x4
+#define WRITE_RESTRICTED 0x8
 
     typedef DWORD SECURITY_INFORMATION,*PSECURITY_INFORMATION;
 
@@ -3063,6 +3256,7 @@ typedef DWORD LCID;
 #define GROUP_SECURITY_INFORMATION (0x00000002L)
 #define DACL_SECURITY_INFORMATION (0x00000004L)
 #define SACL_SECURITY_INFORMATION (0x00000008L)
+#define LABEL_SECURITY_INFORMATION (0x00000010L)
 
 #define PROTECTED_DACL_SECURITY_INFORMATION (0x80000000L)
 #define PROTECTED_SACL_SECURITY_INFORMATION (0x40000000L)
@@ -3081,6 +3275,7 @@ typedef DWORD LCID;
 #define PROCESS_SET_INFORMATION (0x0200)
 #define PROCESS_QUERY_INFORMATION (0x0400)
 #define PROCESS_SUSPEND_RESUME (0x0800)
+#define PROCESS_QUERY_LIMITED_INFORMATION (0x1000)
 #define PROCESS_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | 0xFFF)
 
 #ifdef _WIN64
@@ -3098,6 +3293,8 @@ typedef DWORD LCID;
 #define THREAD_SET_THREAD_TOKEN (0x0080)
 #define THREAD_IMPERSONATE (0x0100)
 #define THREAD_DIRECT_IMPERSONATION (0x0200)
+#define THREAD_SET_LIMITED_INFORMATION (0x0400)
+#define THREAD_QUERY_LIMITED_INFORMATION (0x0800)
 
 #define THREAD_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | 0x3FF)
 
@@ -3119,12 +3316,12 @@ typedef DWORD LCID;
 
 #ifndef _NT_TIB_DEFINED
 #define _NT_TIB_DEFINED
-    __MINGW_EXTENSION typedef struct _NT_TIB {
+    __C89_NAMELESS typedef struct _NT_TIB {
       struct _EXCEPTION_REGISTRATION_RECORD *ExceptionList;
       PVOID StackBase;
       PVOID StackLimit;
       PVOID SubSystemTib;
-      __MINGW_EXTENSION union {
+      __C89_NAMELESS union {
 	PVOID FiberData;
 	DWORD Version;
       };
@@ -3134,12 +3331,12 @@ typedef DWORD LCID;
     typedef NT_TIB *PNT_TIB;
 #endif /* _NT_TIB_DEFINED */
 
-    __MINGW_EXTENSION typedef struct _NT_TIB32 {
+    __C89_NAMELESS typedef struct _NT_TIB32 {
       DWORD ExceptionList;
       DWORD StackBase;
       DWORD StackLimit;
       DWORD SubSystemTib;
-      __MINGW_EXTENSION union {
+      __C89_NAMELESS union {
 	DWORD FiberData;
 	DWORD Version;
       };
@@ -3147,12 +3344,12 @@ typedef DWORD LCID;
       DWORD Self;
     } NT_TIB32,*PNT_TIB32;
 
-    __MINGW_EXTENSION typedef struct _NT_TIB64 {
+    __C89_NAMELESS typedef struct _NT_TIB64 {
       DWORD64 ExceptionList;
       DWORD64 StackBase;
       DWORD64 StackLimit;
       DWORD64 SubSystemTib;
-      __MINGW_EXTENSION union {
+      __C89_NAMELESS union {
 	DWORD64 FiberData;
 	DWORD Version;
       };
@@ -3182,6 +3379,15 @@ typedef DWORD LCID;
 #define QUOTA_LIMITS_HARDWS_MIN_DISABLE 0x00000002
 #define QUOTA_LIMITS_HARDWS_MAX_ENABLE 0x00000004
 #define QUOTA_LIMITS_HARDWS_MAX_DISABLE 0x00000008
+#define QUOTA_LIMITS_USE_DEFAULT_LIMITS 0x00000010
+
+    typedef union _RATE_QUOTA_LIMIT {
+      DWORD RateData;
+      __C89_NAMELESS struct {
+        DWORD RatePercent : 7;
+        DWORD Reserved0   : 25;
+      } DUMMYSTRUCTNAME;
+    } RATE_QUOTA_LIMIT, *PRATE_QUOTA_LIMIT;
 
     typedef struct _QUOTA_LIMITS_EX {
       SIZE_T PagedPoolLimit;
@@ -3190,12 +3396,12 @@ typedef DWORD LCID;
       SIZE_T MaximumWorkingSetSize;
       SIZE_T PagefileLimit;
       LARGE_INTEGER TimeLimit;
-      SIZE_T Reserved1;
+      SIZE_T WorkingSetLimit;
       SIZE_T Reserved2;
       SIZE_T Reserved3;
       SIZE_T Reserved4;
       DWORD Flags;
-      DWORD Reserved5;
+      RATE_QUOTA_LIMIT CpuRateLimit;
     } QUOTA_LIMITS_EX,*PQUOTA_LIMITS_EX;
 
     typedef struct _IO_COUNTERS {
@@ -3207,6 +3413,14 @@ typedef DWORD LCID;
       ULONGLONG OtherTransferCount;
     } IO_COUNTERS;
     typedef IO_COUNTERS *PIO_COUNTERS;
+
+#define MAX_HW_COUNTERS 16
+#define THREAD_PROFILING_FLAG_DISPATCH 0x1
+
+    typedef enum _HARDWARE_COUNTER_TYPE {
+      PMCCounter,
+      MaxHardwareCounterType
+    } HARDWARE_COUNTER_TYPE, *PHARDWARE_COUNTER_TYPE;
 
     typedef struct _JOBOBJECT_BASIC_ACCOUNTING_INFORMATION {
       LARGE_INTEGER TotalUserTime;
@@ -3305,7 +3519,7 @@ typedef DWORD LCID;
 #define JOB_OBJECT_LIMIT_SILENT_BREAKAWAY_OK 0x00001000
 #define JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE 0x00002000
 
-#define JOB_OBJECT_LIMIT_RESERVED2 0x00004000
+#define JOB_OBJECT_LIMIT_SUBSET_AFFINITY 0x00004000
 #define JOB_OBJECT_LIMIT_RESERVED3 0x00008000
 #define JOB_OBJECT_LIMIT_RESERVED4 0x00010000
 #define JOB_OBJECT_LIMIT_RESERVED5 0x00020000
@@ -3314,7 +3528,7 @@ typedef DWORD LCID;
 #define JOB_OBJECT_LIMIT_VALID_FLAGS 0x0007ffff
 
 #define JOB_OBJECT_BASIC_LIMIT_VALID_FLAGS 0x000000ff
-#define JOB_OBJECT_EXTENDED_LIMIT_VALID_FLAGS 0x00003fff
+#define JOB_OBJECT_EXTENDED_LIMIT_VALID_FLAGS 0x00007fff
 #define JOB_OBJECT_RESERVED_LIMIT_VALID_FLAGS 0x0007ffff
 
 #define JOB_OBJECT_UILIMIT_NONE 0x00000000
@@ -3345,6 +3559,7 @@ typedef DWORD LCID;
       JobObjectSecurityLimitInformation, JobObjectEndOfJobTimeInformation,
       JobObjectAssociateCompletionPortInformation, JobObjectBasicAndIoAccountingInformation,
       JobObjectExtendedLimitInformation, JobObjectJobSetInformation,
+      JobObjectGroupInformation,
       MaxJobObjectInfoClass
     } JOBOBJECTINFOCLASS;
 
@@ -3367,7 +3582,8 @@ typedef DWORD LCID;
 #define TIME_ZONE_ID_DAYLIGHT 2
 
     typedef enum _LOGICAL_PROCESSOR_RELATIONSHIP {
-      RelationProcessorCore,RelationNumaNode,RelationCache
+      RelationProcessorCore,RelationNumaNode,RelationCache,
+      RelationProcessorPackage,RelationGroup,RelationAll=0xffff
     } LOGICAL_PROCESSOR_RELATIONSHIP;
 
 #define LTP_PC_SMT 0x1
@@ -3389,7 +3605,7 @@ typedef DWORD LCID;
     typedef struct _SYSTEM_LOGICAL_PROCESSOR_INFORMATION {
       ULONG_PTR ProcessorMask;
       LOGICAL_PROCESSOR_RELATIONSHIP Relationship;
-      __MINGW_EXTENSION union {
+      __C89_NAMELESS union {
 	struct {
 	  BYTE Flags;
 	} ProcessorCore;
@@ -3452,6 +3668,11 @@ typedef DWORD LCID;
 #define PF_XMMI64_INSTRUCTIONS_AVAILABLE 10
 #define PF_SSE_DAZ_MODE_AVAILABLE 11
 #define PF_NX_ENABLED 12
+#define PF_SSE3_INSTRUCTIONS_AVAILABLE 13
+#define PF_COMPARE_EXCHANGE128 14
+#define PF_COMPARE64_EXCHANGE128 15
+#define PF_CHANNELS_ENABLED 16
+#define PF_XSAVE_ENABLED 17
 
     typedef struct _MEMORY_BASIC_INFORMATION {
       PVOID BaseAddress;
@@ -3494,6 +3715,11 @@ typedef DWORD LCID;
 
 #define SECTION_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SECTION_QUERY| SECTION_MAP_WRITE | SECTION_MAP_READ | SECTION_MAP_EXECUTE | SECTION_EXTEND_SIZE)
 
+#define SESSION_QUERY_ACCESS 0x1
+#define SESSION_MODIFY_ACCESS 0x2
+
+#define SESSION_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED | SESSION_QUERY_ACCESS | SESSION_MODIFY_ACCESS)
+
 #define PAGE_NOACCESS 0x01
 #define PAGE_READONLY 0x02
 #define PAGE_READWRITE 0x04
@@ -3516,13 +3742,16 @@ typedef DWORD LCID;
 #define MEM_TOP_DOWN 0x100000
 #define MEM_WRITE_WATCH 0x200000
 #define MEM_PHYSICAL 0x400000
+#define MEM_ROTATE 0x800000
 #define MEM_LARGE_PAGES 0x20000000
 #define MEM_4MB_PAGES 0x80000000
 #define SEC_FILE 0x800000
 #define SEC_IMAGE 0x1000000
+#define SEC_PROTECTED_IMAGE 0x2000000
 #define SEC_RESERVE 0x4000000
 #define SEC_COMMIT 0x8000000
 #define SEC_NOCACHE 0x10000000
+#define SEC_WRITECOMBINE 0x40000000
 #define SEC_LARGE_PAGES 0x80000000
 #define MEM_IMAGE SEC_IMAGE
 #define WRITE_WATCH_FLAG_RESET 0x01
@@ -3572,6 +3801,7 @@ typedef DWORD LCID;
 #define FILE_ATTRIBUTE_OFFLINE 0x00001000
 #define FILE_ATTRIBUTE_NOT_CONTENT_INDEXED 0x00002000
 #define FILE_ATTRIBUTE_ENCRYPTED 0x00004000
+#define FILE_ATTRIBUTE_VIRTUAL 0x00010000
 #define FILE_NOTIFY_CHANGE_FILE_NAME 0x00000001
 #define FILE_NOTIFY_CHANGE_DIR_NAME 0x00000002
 #define FILE_NOTIFY_CHANGE_ATTRIBUTES 0x00000004
@@ -3603,6 +3833,10 @@ typedef DWORD LCID;
 #define FILE_READ_ONLY_VOLUME 0x00080000
 #define FILE_SEQUENTIAL_WRITE_ONCE 0x00100000
 #define FILE_SUPPORTS_TRANSACTIONS 0x00200000
+#define FILE_SUPPORTS_HARD_LINKS 0x00400000
+#define FILE_SUPPORTS_EXTENDED_ATTRIBUTES 0x00800000
+#define FILE_SUPPORTS_OPEN_BY_FILE_ID 0x01000000
+#define FILE_SUPPORTS_USN_JOURNAL 0x02000000
 
     typedef struct _FILE_NOTIFY_INFORMATION {
       DWORD NextEntryOffset;
@@ -3640,9 +3874,15 @@ typedef DWORD LCID;
 
 #define IO_REPARSE_TAG_MOUNT_POINT (0xA0000003L)
 #define IO_REPARSE_TAG_HSM (0xC0000004L)
+#define IO_REPARSE_TAG_HSM2 (0x80000006L)
 #define IO_REPARSE_TAG_SIS (0x80000007L)
+#define IO_REPARSE_TAG_WIM (0x80000008L)
+#define IO_REPARSE_TAG_CSV (0x80000009L)
 #define IO_REPARSE_TAG_DFS (0x8000000AL)
 #define IO_REPARSE_TAG_FILTER_MANAGER (0x8000000BL)
+#define IO_REPARSE_TAG_DFSR (0x80000012L)
+#define IO_REPARSE_TAG_SYMLINK (0xA000000CL)
+
 #define IO_COMPLETION_MODIFY_STATE 0x0002
 #define IO_COMPLETION_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3)
 #define DUPLICATE_CLOSE_SOURCE 0x00000001
@@ -3667,16 +3907,33 @@ typedef DWORD LCID;
     PoHot = 2,
     PoConditionMaximum = 3
   } SYSTEM_POWER_CONDITION, *PSYSTEM_POWER_CONDITION;
-#endif
+
+  typedef enum _POWER_PLATFORM_ROLE {
+    PlatformRoleUnspecified         = 0,
+    PlatformRoleDesktop             = 1,
+    PlatformRoleMobile              = 2,
+    PlatformRoleWorkstation         = 3,
+    PlatformRoleEnterpriseServer    = 4,
+    PlatformRoleSOHOServer          = 5,
+    PlatformRoleAppliancePC         = 6,
+    PlatformRolePerformanceServer   = 7,
+    PlatformRoleMaximum             = 8
+  } POWER_PLATFORM_ROLE;
+#endif /* (_WIN32_WINNT >= 0x0600) */
 
   typedef enum _DEVICE_POWER_STATE {
     PowerDeviceUnspecified = 0, PowerDeviceD0, PowerDeviceD1, PowerDeviceD2, PowerDeviceD3,
     PowerDeviceMaximum
   } DEVICE_POWER_STATE,*PDEVICE_POWER_STATE;
 
+  typedef enum _MONITOR_DISPLAY_STATE {
+    PowerMonitorOff = 0, PowerMonitorOn, PowerMonitorDim
+  } MONITOR_DISPLAY_STATE, *PMONITOR_DISPLAY_STATE;
+
 #define ES_SYSTEM_REQUIRED ((DWORD)0x00000001)
 #define ES_DISPLAY_REQUIRED ((DWORD)0x00000002)
 #define ES_USER_PRESENT ((DWORD)0x00000004)
+#define ES_AWAYMODE_REQUIRED ((DWORD)0x00000040)
 #define ES_CONTINUOUS ((DWORD)0x80000000)
 
   typedef DWORD EXECUTION_STATE;
@@ -3724,6 +3981,7 @@ typedef DWORD LCID;
 #define POWER_ACTION_QUERY_ALLOWED 0x00000001
 #define POWER_ACTION_UI_ALLOWED 0x00000002
 #define POWER_ACTION_OVERRIDE_APPS 0x00000004
+#define POWER_ACTION_PSEUDO_TRANSITION 0x08000000
 #define POWER_ACTION_LIGHTEST_FIRST 0x10000000
 #define POWER_ACTION_LOCK_CONSOLE 0x20000000
 #define POWER_ACTION_DISABLE_WAKES 0x40000000
@@ -3734,6 +3992,7 @@ typedef DWORD LCID;
 #define POWER_LEVEL_USER_NOTIFY_EXEC 0x00000004
 #define POWER_USER_NOTIFY_BUTTON 0x00000008
 #define POWER_USER_NOTIFY_SHUTDOWN 0x00000010
+#define POWER_USER_NOTIFY_FORCED_SHUTDOWN 0x00000020
 #define POWER_FORCE_TRIGGER_RESET 0x80000000
 
     typedef struct {
@@ -3834,7 +4093,8 @@ typedef DWORD LCID;
       BOOLEAN ProcessorThrottle;
       BYTE ProcessorMinThrottle;
       BYTE ProcessorMaxThrottle;
-      BYTE spare2[4];
+      BOOLEAN FastSystemS4;
+      BYTE spare2[3];
       BOOLEAN DiskSpinDown;
       BYTE spare3[8];
       BOOLEAN SystemBatteriesPresent;
@@ -4192,7 +4452,11 @@ typedef DWORD LCID;
 #define IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER 12
 #define IMAGE_SUBSYSTEM_EFI_ROM 13
 #define IMAGE_SUBSYSTEM_XBOX 14
+#define IMAGE_SUBSYSTEM_WINDOWS_BOOT_APPLICATION 16
 
+#define IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE 0x0040
+#define IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY 0x0080
+#define IMAGE_DLLCHARACTERISTICS_NX_COMPAT 0x0100
 #define IMAGE_DLLCHARACTERISTICS_NO_ISOLATION 0x0200
 #define IMAGE_DLLCHARACTERISTICS_NO_SEH 0x0400
 #define IMAGE_DLLCHARACTERISTICS_NO_BIND 0x0800
@@ -4316,6 +4580,7 @@ typedef DWORD LCID;
 #define IMAGE_SYM_ABSOLUTE (SHORT)-1
 #define IMAGE_SYM_DEBUG (SHORT)-2
 #define IMAGE_SYM_SECTION_MAX 0xFEFF
+#define IMAGE_SYM_SECTION_MAX_EX MAXLONG
 
 #define IMAGE_SYM_TYPE_NULL 0x0000
 #define IMAGE_SYM_TYPE_VOID 0x0001
@@ -4468,7 +4733,7 @@ typedef DWORD LCID;
 #define IMAGE_WEAK_EXTERN_SEARCH_ALIAS 3
 
     typedef struct _IMAGE_RELOCATION {
-      __MINGW_EXTENSION union {
+      __C89_NAMELESS union {
 	DWORD VirtualAddress;
 	DWORD RelocCount;
       } DUMMYUNIONNAME;
@@ -4695,6 +4960,12 @@ typedef DWORD LCID;
 #define IMAGE_REL_M32R_SECTION 0x000C
 #define IMAGE_REL_M32R_SECREL32 0x000D
 #define IMAGE_REL_M32R_TOKEN 0x000E
+
+#define IMAGE_REL_EBC_ABSOLUTE 0x0000
+#define IMAGE_REL_EBC_ADDR32NB 0x0001
+#define IMAGE_REL_EBC_REL32 0x0002
+#define IMAGE_REL_EBC_SECTION 0x0003
+#define IMAGE_REL_EBC_SECREL 0x0004
 
 #define EXT_IMM64(Value,Address,Size,InstPos,ValPos) Value |= (((ULONGLONG)((*(Address) >> InstPos) & (((ULONGLONG)1 << Size) - 1))) << ValPos)
 #define INS_IMM64(Value,Address,Size,InstPos,ValPos) *(PDWORD)Address = (*(PDWORD)Address & ~(((1 << Size) - 1) << InstPos)) | ((DWORD)((((ULONGLONG)Value >> ValPos) & (((ULONGLONG)1 << Size) - 1))) << InstPos)
@@ -4932,7 +5203,7 @@ typedef DWORD LCID;
 #endif /* _WIN64 */
 
     typedef struct _IMAGE_IMPORT_DESCRIPTOR {
-      __MINGW_EXTENSION union {
+      __C89_NAMELESS union {
 	DWORD Characteristics;
 	DWORD OriginalFirstThunk;
       } DUMMYUNIONNAME;
@@ -4969,17 +5240,17 @@ typedef DWORD LCID;
 #define IMAGE_RESOURCE_DATA_IS_DIRECTORY 0x80000000
 
     typedef struct _IMAGE_RESOURCE_DIRECTORY_ENTRY {
-      __MINGW_EXTENSION union {
-	__MINGW_EXTENSION struct {
+      __C89_NAMELESS union {
+	__C89_NAMELESS struct {
 	  DWORD NameOffset:31;
 	  DWORD NameIsString:1;
 	} DUMMYSTRUCTNAME;
 	DWORD Name;
 	WORD Id;
       } DUMMYUNIONNAME;
-      __MINGW_EXTENSION union {
+      __C89_NAMELESS union {
 	DWORD OffsetToData;
-	__MINGW_EXTENSION struct {
+	__C89_NAMELESS struct {
 	  DWORD OffsetToDirectory:31;
 	  DWORD DataIsDirectory:1;
 	} DUMMYSTRUCTNAME2;
@@ -5166,7 +5437,7 @@ typedef DWORD LCID;
     typedef struct _IMAGE_FUNCTION_ENTRY64 {
       ULONGLONG StartingAddress;
       ULONGLONG EndingAddress;
-      __MINGW_EXTENSION union {
+      __C89_NAMELESS union {
 	ULONGLONG EndOfPrologue;
 	ULONGLONG UnwindInfoAddress;
       } DUMMYUNIONNAME;
@@ -5231,7 +5502,7 @@ typedef DWORD LCID;
       WORD Machine;
       DWORD TimeDateStamp;
       DWORD SizeOfData;
-      __MINGW_EXTENSION union {
+      __C89_NAMELESS union {
 	WORD Ordinal;
 	WORD Hint;
       };
@@ -5304,7 +5575,7 @@ typedef DWORD LCID;
 
     typedef union _SLIST_HEADER {
       ULONGLONG Alignment;
-      __MINGW_EXTENSION struct {
+      __C89_NAMELESS struct {
 	SLIST_ENTRY Next;
 	WORD Depth;
 	WORD Sequence;
@@ -5336,6 +5607,7 @@ typedef DWORD LCID;
 #define HEAP_TAG_SHIFT 18
 #define HEAP_MAKE_TAG_FLAGS(b,o) ((DWORD)((b) + ((o) << 18)))
 
+    NTSYSAPI WORD NTAPI RtlCaptureStackBackTrace(DWORD FramesToSkip, DWORD FramesToCapture, PVOID *BackTrace, PDWORD BackTraceHash);
     NTSYSAPI VOID NTAPI RtlCaptureContext(PCONTEXT ContextRecord);
 
 #define IS_TEXT_UNICODE_ASCII16 0x0001
@@ -5444,15 +5716,9 @@ typedef DWORD LCID;
       WCHAR szCSDVersion[128];
     } OSVERSIONINFOW,*POSVERSIONINFOW,*LPOSVERSIONINFOW,RTL_OSVERSIONINFOW,*PRTL_OSVERSIONINFOW;
 
-#ifdef UNICODE
-    typedef OSVERSIONINFOW OSVERSIONINFO;
-    typedef POSVERSIONINFOW POSVERSIONINFO;
-    typedef LPOSVERSIONINFOW LPOSVERSIONINFO;
-#else
-    typedef OSVERSIONINFOA OSVERSIONINFO;
-    typedef POSVERSIONINFOA POSVERSIONINFO;
-    typedef LPOSVERSIONINFOA LPOSVERSIONINFO;
-#endif
+    __MINGW_TYPEDEF_AW(OSVERSIONINFO)
+    __MINGW_TYPEDEF_AW(POSVERSIONINFO)
+    __MINGW_TYPEDEF_AW(LPOSVERSIONINFO)
 
     typedef struct _OSVERSIONINFOEXA {
       DWORD dwOSVersionInfoSize;
@@ -5481,15 +5747,10 @@ typedef DWORD LCID;
       BYTE wProductType;
       BYTE wReserved;
     } OSVERSIONINFOEXW,*POSVERSIONINFOEXW,*LPOSVERSIONINFOEXW,RTL_OSVERSIONINFOEXW,*PRTL_OSVERSIONINFOEXW;
-#ifdef UNICODE
-    typedef OSVERSIONINFOEXW OSVERSIONINFOEX;
-    typedef POSVERSIONINFOEXW POSVERSIONINFOEX;
-    typedef LPOSVERSIONINFOEXW LPOSVERSIONINFOEX;
-#else
-    typedef OSVERSIONINFOEXA OSVERSIONINFOEX;
-    typedef POSVERSIONINFOEXA POSVERSIONINFOEX;
-    typedef LPOSVERSIONINFOEXA LPOSVERSIONINFOEX;
-#endif
+
+    __MINGW_TYPEDEF_AW(OSVERSIONINFOEX)
+    __MINGW_TYPEDEF_AW(POSVERSIONINFOEX)
+    __MINGW_TYPEDEF_AW(LPOSVERSIONINFOEX)
 
 #define VER_EQUAL 1
 #define VER_GREATER 2
@@ -5530,11 +5791,21 @@ typedef DWORD LCID;
       LIST_ENTRY ProcessLocksList;
       DWORD EntryCount;
       DWORD ContentionCount;
-      DWORD Spare[2];
+      DWORD Flags;
+      WORD CreatorBackTraceIndexHigh;
+      WORD SpareWORD;
     } RTL_CRITICAL_SECTION_DEBUG,*PRTL_CRITICAL_SECTION_DEBUG,RTL_RESOURCE_DEBUG,*PRTL_RESOURCE_DEBUG;
 
 #define RTL_CRITSECT_TYPE 0
 #define RTL_RESOURCE_TYPE 1
+
+#define RTL_CRITICAL_SECTION_FLAG_NO_DEBUG_INFO 0x01000000
+#define RTL_CRITICAL_SECTION_FLAG_DYNAMIC_SPIN 0x02000000
+#define RTL_CRITICAL_SECTION_FLAG_STATIC_INIT 0x04000000
+#define RTL_CRITICAL_SECTION_ALL_FLAG_BITS 0xFF000000
+#define RTL_CRITICAL_SECTION_FLAG_RESERVED (RTL_CRITICAL_SECTION_ALL_FLAG_BITS & (~(RTL_CRITICAL_SECTION_FLAG_NO_DEBUG_INFO | RTL_CRITICAL_SECTION_FLAG_DYNAMIC_SPIN | RTL_CRITICAL_SECTION_FLAG_STATIC_INIT)))
+
+#define RTL_CRITICAL_SECTION_DEBUG_FLAG_STATIC_INIT 0x00000001
 
     typedef struct _RTL_CRITICAL_SECTION {
       PRTL_CRITICAL_SECTION_DEBUG DebugInfo;
@@ -5693,7 +5964,8 @@ typedef DWORD LCID;
 #define SEF_DEFAULT_GROUP_FROM_PARENT 0x40
 
     typedef enum _HEAP_INFORMATION_CLASS {
-      HeapCompatibilityInformation
+      HeapCompatibilityInformation,
+      HeapEnableTerminationOnCorruption
     } HEAP_INFORMATION_CLASS;
 
     NTSYSAPI DWORD NTAPI RtlSetHeapInformation(PVOID HeapHandle,HEAP_INFORMATION_CLASS HeapInformationClass,PVOID HeapInformation,SIZE_T HeapInformationLength);
@@ -6151,7 +6423,304 @@ typedef DWORD LCID;
       return *(PVOID *)GetCurrentFiber();
     }
 #endif /* !__CRT__NO_INLINE */
-#endif
+#endif /* __x86_64 */
+
+#if (_WIN32_WINNT >= 0x0600)
+/* FIXME: Opaque structs !!! */
+/* FIXME: Also see winbase.h */
+typedef PVOID RTL_CONDITION_VARIABLE;
+typedef PVOID RTL_SRWLOCK;
+
+#ifndef _RTL_RUN_ONCE_DEF
+#define _RTL_RUN_ONCE_DEF 1
+typedef PVOID RTL_RUN_ONCE, *PRTL_RUN_ONCE;
+typedef DWORD (WINAPI *PRTL_RUN_ONCE_INIT_FN)(PRTL_RUN_ONCE, PVOID, PVOID *);
+#define RTL_RUN_ONCE_INIT 0
+#define RTL_RUN_ONCE_CHECK_ONLY 1UL
+#define RTL_RUN_ONCE_ASYNC 2UL
+#define RTL_RUN_ONCE_INIT_FAILED 4UL
+#define RTL_RUN_ONCE_CTX_RESERVED_BITS 2
+#endif /* _RTL_RUN_ONCE_DEF */
+#define RTL_SRWLOCK_INIT 0
+#define RTL_CONDITION_VARIABLE_INIT 0
+#define RTL_CONDITION_VARIABLE_LOCKMODE_SHARED 1
+
+#define CONDITION_VARIABLE_INIT RTL_CONDITION_VARIABLE_INIT
+#define CONDITION_VARIABLE_LOCKMODE_SHARED RTL_CONDITION_VARIABLE_LOCKMODE_SHARED
+#define SRWLOCK_INIT RTL_SRWLOCK_INIT
+
+
+#include <ktmtypes.h>
+
+#define TRANSACTIONMANAGER_QUERY_INFORMATION 0x00001
+#define TRANSACTIONMANAGER_SET_INFORMATION 0x00002
+#define TRANSACTIONMANAGER_RECOVER 0x00004
+#define TRANSACTIONMANAGER_RENAME 0x00008
+#define TRANSACTIONMANAGER_CREATE_RM 0x00010
+#define TRANSACTIONMANAGER_BIND_TRANSACTION 0x00020
+#define TRANSACTIONMANAGER_GENERIC_READ 0x20001
+#define TRANSACTIONMANAGER_GENERIC_WRITE 0x2001E
+#define TRANSACTIONMANAGER_GENERIC_EXECUTE 0x20000
+#define TRANSACTIONMANAGER_ALL_ACCESS 0xF003F
+
+  typedef enum _TRANSACTION_OUTCOME {
+    TransactionOutcomeUndetermined  = 1,
+    TransactionOutcomeCommitted     = 2,
+    TransactionOutcomeAborted       = 3
+  } TRANSACTION_OUTCOME;
+
+  typedef enum _TRANSACTION_STATE {
+    TransactionStateNormal          = 1,
+    TransactionStateIndoubt         = 2,
+    TransactionStateCommittedNotify = 3
+  } TRANSACTION_STATE;
+
+  typedef struct _TRANSACTION_BASIC_INFORMATION {
+    GUID  TransactionId;
+    ULONG State;
+    ULONG Outcome;
+  } TRANSACTION_BASIC_INFORMATION, *PTRANSACTION_BASIC_INFORMATION;
+
+#define ENLISTMENT_QUERY_INFORMATION 0x00001
+#define ENLISTMENT_SET_INFORMATION 0x00002
+#define ENLISTMENT_RECOVER 0x00004
+#define ENLISTMENT_SUBORDINATE_RIGHTS 0x00008
+#define ENLISTMENT_SUPERIOR_RIGHTS 0x00010
+#define ENLISTMENT_GENERIC_READ 0x20001
+#define ENLISTMENT_GENERIC_WRITE 0x2001E
+#define ENLISTMENT_GENERIC_EXECUTE 0x2001C
+#define ENLISTMENT_ALL_ACCESS 0xF001F
+
+
+  typedef enum ACTCTX_REQUESTED_RUN_LEVEL {
+    ACTCTX_RUN_LEVEL_UNSPECIFIED         = 0,
+    ACTCTX_RUN_LEVEL_AS_INVOKER,
+    ACTCTX_RUN_LEVEL_HIGHEST_AVAILABLE,
+    ACTCTX_RUN_LEVEL_REQUIRE_ADMIN,
+    ACTCTX_RUN_LEVEL_NUMBERS
+  } ACTCTX_REQUESTED_RUN_LEVEL, ACTCTX_REQUESTED_RUN_LEVEL_INFORMATION;
+
+  typedef struct _ACTIVATION_CONTEXT_RUN_LEVEL_INFORMATION {
+    ULONG ulFlags;
+    ACTCTX_REQUESTED_RUN_LEVEL_INFORMATION RunLevel;
+    ULONG UiAccess;
+  } ACTIVATION_CONTEXT_RUN_LEVEL_INFORMATION, *PACTIVATION_CONTEXT_RUN_LEVEL_INFORMATION;
+
+  typedef VOID (CALLBACK *PTP_CLEANUP_GROUP_CANCEL_CALLBACK)(
+    PVOID ObjectContext,
+    PVOID CleanupContext
+  );
+
+DEFINE_GUID(NO_SUBGROUP_GUID,0xfea3413e,0x7e05,0x4911,0x9a,0x71,0x70,0x03,0x31,0xf1,0xc2,0x94);
+DEFINE_GUID(GUID_DISK_SUBGROUP,0x0012ee47,0x9041,0x4b5d,0x9b,0x77,0x53,0x5f,0xba,0x8b,0x14,0x42);
+DEFINE_GUID(GUID_SYSTEM_BUTTON_SUBGROUP,0x4f971e89,0xeebd,0x4455,0xa8,0xde,0x9e,0x59,0x04,0x0e,0x73,0x47);
+DEFINE_GUID(GUID_PROCESSOR_SETTINGS_SUBGROUP,0x54533251,0x82be,0x4824,0x96,0xc1,0x47,0xb6,0x0b,0x74,0x0d,0x00);
+DEFINE_GUID(GUID_VIDEO_SUBGROUP,0x7516b95f,0xf776,0x4464,0x8c,0x53,0x06,0x16,0x7f,0x40,0xcc,0x99);
+DEFINE_GUID(GUID_BATTERY_SUBGROUP,0xe73a048d,0xbf27,0x4f12,0x97,0x31,0x8b,0x20,0x76,0xe8,0x89,0x1f);
+DEFINE_GUID(GUID_SLEEP_SUBGROUP,0x238C9FA8,0x0AAD,0x41ED,0x83,0xF4,0x97,0xBE,0x24,0x2C,0x8F,0x20);
+DEFINE_GUID(GUID_PCIEXPRESS_SETTINGS_SUBGROUP,0x501a4d13,0x42af,0x4429,0x9f,0xd1,0xa8,0x21,0x8c,0x26,0x8e,0x20);
+
+/* Field Names From (See _fields_ section)
+ * FIXME: Verify these against documentation
+ * -- These documentation describes Win32 Constants and Structures in Python --
+ * Constants - http://packages.python.org/winappdbg/winappdbg.win32.context_i386-pysrc.html
+ * WOW64_FLOATING_SAVE_AREA - http://packages.python.org/winappdbg/winappdbg.win32.context_amd64.WOW64_FLOATING_SAVE_AREA-class.html
+ * WOW64_CONTEXT - http://packages.python.org/winappdbg/winappdbg.win32.context_amd64.WOW64_CONTEXT-class.html
+ */
+
+#define WOW64_CONTEXT_i386 0x00010000
+#define WOW64_CONTEXT_i486 0x00010000
+#define WOW64_CONTEXT_CONTROL (WOW64_CONTEXT_i386 | 0x00000001L)
+#define WOW64_CONTEXT_INTEGER (WOW64_CONTEXT_i386 | 0x00000002L)
+#define WOW64_CONTEXT_SEGMENTS (WOW64_CONTEXT_i386 | 0x00000004L)
+#define WOW64_CONTEXT_FLOATING_POINT (WOW64_CONTEXT_i386 | 0x00000008L)
+#define WOW64_CONTEXT_DEBUG_REGISTERS (WOW64_CONTEXT_i386 | 0x00000010L)
+#define WOW64_CONTEXT_EXTENDED_REGISTERS (WOW64_CONTEXT_i386 | 0x00000020L)
+#define WOW64_CONTEXT_FULL (WOW64_CONTEXT_CONTROL | WOW64_CONTEXT_INTEGER | WOW64_CONTEXT_SEGMENTS)
+#define WOW64_CONTEXT_ALL (WOW64_CONTEXT_CONTROL | WOW64_CONTEXT_INTEGER | WOW64_CONTEXT_SEGMENTS | WOW64_CONTEXT_FLOATING_POINT | WOW64_CONTEXT_DEBUG_REGISTERS | WOW64_CONTEXT_EXTENDED_REGISTERS)
+#define WOW64_SIZE_OF_80387_REGISTERS 80
+#define WOW64_MAXIMUM_SUPPORTED_EXTENSION 512
+
+typedef struct _WOW64_FLOATING_SAVE_AREA {
+  DWORD   ControlWord;
+  DWORD   StatusWord;
+  DWORD   TagWord;
+  DWORD   ErrorOffset;
+  DWORD   ErrorSelector;
+  DWORD   DataOffset;
+  DWORD   DataSelector;
+  BYTE    RegisterArea[WOW64_SIZE_OF_80387_REGISTERS];
+  DWORD   Cr0NpxState;
+} WOW64_FLOATING_SAVE_AREA, *PWOW64_FLOATING_SAVE_AREA;
+
+typedef struct _WOW64_CONTEXT {
+  DWORD ContextFlags;
+  DWORD Dr0;
+  DWORD Dr1;
+  DWORD Dr2;
+  DWORD Dr3;
+  DWORD Dr6;
+  DWORD Dr7;
+  WOW64_FLOATING_SAVE_AREA FloatSave;
+  DWORD SegGs;
+  DWORD SegFs;
+  DWORD SegEs;
+  DWORD SegDs;
+  DWORD Edi;
+  DWORD Esi;
+  DWORD Ebx;
+  DWORD Edx;
+  DWORD Ecx;
+  DWORD Eax;
+  DWORD Ebp;
+  DWORD Eip;
+  DWORD SegCs;
+  DWORD EFlags;
+  DWORD Esp;
+  DWORD SegSs;
+  BYTE ExtendedRegisters[WOW64_MAXIMUM_SUPPORTED_EXTENSION];
+} WOW64_CONTEXT, *PWOW64_CONTEXT;
+
+#endif /*(_WIN32_WINNT >= 0x0600)*/
+
+#if (_WIN32_WINNT >= 0x0601)
+
+typedef enum  {
+  ACTCX_COMPATIBILITY_ELEMENT_TYPE_UNKNOWN   = 0,
+  ACTCX_COMPATIBILITY_ELEMENT_TYPE_OS 
+} ACTCTX_COMPATIBILITY_ELEMENT_TYPE;
+
+typedef struct _COMPATIBILITY_CONTEXT_ELEMENT {
+  GUID                              Id;
+  ACTCTX_COMPATIBILITY_ELEMENT_TYPE Type;
+} COMPATIBILITY_CONTEXT_ELEMENT, *PCOMPATIBILITY_CONTEXT_ELEMENT;
+
+/*Vista: {e2011457-1546-43c5-a5fe-008deee3d3f0}*/
+/*Seven: {35138b9a-5d96-4fbd-8e2d-a2440225f93a}*/
+
+typedef struct _ACTIVATION_CONTEXT_COMPATIBILITY_INFORMATION {
+  DWORD                         ElementCount;
+  COMPATIBILITY_CONTEXT_ELEMENT Elements[];
+} ACTIVATION_CONTEXT_COMPATIBILITY_INFORMATION, *PACTIVATION_CONTEXT_COMPATIBILITY_INFORMATION;
+
+typedef struct _PROCESSOR_NUMBER {
+  WORD Group;
+  BYTE Number;
+  BYTE Reserved;
+} PROCESSOR_NUMBER, *PPROCESSOR_NUMBER;
+
+typedef struct _PROCESSOR_GROUP_INFO {
+  BYTE      MaximumProcessorCount;
+  BYTE      ActiveProcessorCount;
+  BYTE      Reserved[38];
+  KAFFINITY ActiveProcessorMask;
+} PROCESSOR_GROUP_INFO, *PPROCESSOR_GROUP_INFO;
+
+typedef struct _GROUP_RELATIONSHIP {
+  WORD                 MaximumGroupCount;
+  WORD                 ActiveGroupCount;
+  BYTE                 Reserved[20];
+  PROCESSOR_GROUP_INFO GroupInfo[];
+} GROUP_RELATIONSHIP, *PGROUP_RELATIONSHIP;
+
+typedef struct _GROUP_AFFINITY {
+  KAFFINITY Mask;
+  WORD      Group;
+  WORD      Reserved[3];
+} GROUP_AFFINITY, *PGROUP_AFFINITY;
+
+typedef struct _CACHE_RELATIONSHIP {
+  BYTE                 Level;
+  BYTE                 Associativity;
+  WORD                 LineSize;
+  DWORD                CacheSize;
+  PROCESSOR_CACHE_TYPE Type;
+  BYTE                 Reserved[20];
+  GROUP_AFFINITY       GroupMask;
+} CACHE_RELATIONSHIP, *PCACHE_RELATIONSHIP;
+
+typedef struct _NUMA_NODE_RELATIONSHIP {
+  DWORD          NodeNumber;
+  BYTE           Reserved[20];
+  GROUP_AFFINITY GroupMask;
+} NUMA_NODE_RELATIONSHIP, *PNUMA_NODE_RELATIONSHIP;
+
+typedef struct _PROCESSOR_RELATIONSHIP {
+  BYTE           Flags;
+  BYTE           Reserved[21];
+  WORD           GroupCount;
+  GROUP_AFFINITY GroupMask[];
+} PROCESSOR_RELATIONSHIP, *PPROCESSOR_RELATIONSHIP;
+
+typedef struct _SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX {
+  LOGICAL_PROCESSOR_RELATIONSHIP Relationship;
+  DWORD                          Size;
+  __C89_NAMELESS union {
+    PROCESSOR_RELATIONSHIP Processor;
+    NUMA_NODE_RELATIONSHIP NumaNode;
+    CACHE_RELATIONSHIP     Cache;
+    GROUP_RELATIONSHIP     Group;
+  };
+} SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX, *PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX;
+
+typedef struct _UMS_CREATE_THREAD_ATTRIBUTES {
+  DWORD UmsVersion;
+  PVOID UmsContext;
+  PVOID UmsCompletionList;
+} UMS_CREATE_THREAD_ATTRIBUTES, *PUMS_CREATE_THREAD_ATTRIBUTES;
+
+typedef struct _WOW64_LDT_ENTRY {
+  WORD  LimitLow;
+  WORD  BaseLow;
+  __C89_NAMELESS union {
+    struct {
+      BYTE BaseMid;
+      BYTE Flags1;
+      BYTE Flags2;
+      BYTE BaseHi;
+    } Bytes;
+    struct {
+      DWORD BaseMid  :8;
+      DWORD Type  :5;
+      DWORD Dpl  :2;
+      DWORD Pres  :1;
+      DWORD LimitHi  :4;
+      DWORD Sys  :1;
+      DWORD Reserved_0  :1;
+      DWORD Default_Big  :1;
+      DWORD Granularity  :1;
+      DWORD BaseHi  :8;
+    } Bits;
+  } HighWord;
+} WOW64_LDT_ENTRY, *PWOW64_LDT_ENTRY;
+
+/* Retrieved from: https://kdlib.googlecode.com/svn/trunk/imports/c/windows/winnt.d */
+typedef struct _SYSTEM_PROCESSOR_CYCLE_TIME_INFORMATION {
+  DWORD64 CycleTime;
+} SYSTEM_PROCESSOR_CYCLE_TIME_INFORMATION, *PSYSTEM_PROCESSOR_CYCLE_TIME_INFORMATION;
+
+typedef struct _HARDWARE_COUNTER_DATA {
+  HARDWARE_COUNTER_TYPE Type;
+  DWORD                 Reserved;
+  DWORD64               Value;
+} HARDWARE_COUNTER_DATA, *PHARDWARE_COUNTER_DATA;
+
+#define MAX_HW_COUNTERS 16
+/* Fixme: PERFORMANCE_DATA_VERSION define is missing */
+
+typedef struct _PERFORMANCE_DATA {
+  WORD                  Size;
+  BYTE                  Version;
+  BYTE                  HwCountersCount;
+  DWORD                 ContextSwitchCount;
+  DWORD64               WaitReasonBitMap;
+  DWORD64               CycleTime;
+  DWORD                 RetryCount;
+  DWORD                 Reserved;
+  HARDWARE_COUNTER_DATA HwCounters[MAX_HW_COUNTERS];
+} PERFORMANCE_DATA, *PPERFORMANCE_DATA;
+
+#endif /*(_WIN32_WINNT >= 0x0601)*/
 
 #define ACTIVATION_CONTEXT_SECTION_ASSEMBLY_INFORMATION (1)
 #define ACTIVATION_CONTEXT_SECTION_DLL_REDIRECTION (2)

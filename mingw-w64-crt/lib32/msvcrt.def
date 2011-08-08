@@ -600,7 +600,7 @@ iswupper
 iswxdigit
 isxdigit
 labs
-ldexp
+ldexp DATA
 ldiv
 localeconv
 localtime DATA
@@ -725,7 +725,9 @@ _fstat64
 _ftime64
 _futime64
 _gmtime64
+_localtime32_s
 _localtime64
+_localtime64_s
 _mkgmtime DATA
 ;_mkgmtime32 = _mkgmtime
 _mkgmtime64
@@ -961,6 +963,7 @@ _mbsnextc_l
 _mbsnicmp_l
 _mbsnicoll_l
 _mbsninc_l
+_mbsnlen
 _mbsnlen_l
 _mbsnset_l
 _mbsnset_s
@@ -980,6 +983,7 @@ _mbstok_s_l
 _mbstowcs_l
 _mbstowcs_s_l
 _mbstrlen_l
+_mbstrnlen
 _mbstrnlen_l
 _mbsupr_l
 _mbsupr_s
@@ -1200,6 +1204,8 @@ wcscat_s
 wcscpy_s
 wcsncat_s
 wcsncpy_s
+; For backward compatibility we provide this function in libmingwex
+wcsnlen DATA
 wcsrtombs_s
 wcstok_s
 wcstombs_s

@@ -1,54 +1,48 @@
-/**
- * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
- * No warranty is given; refer to the file DISCLAIMER.PD within this package.
- */
-#include <math.h>
-#include <complex.h>
+/*
+ This Software is provided under the Zope Public License (ZPL) Version 2.1.
 
-float complex  csqrtf (float complex Z)
-{
-  float complex Res;
-  float r;
-  float x = __real__ Z;
-  float y = __imag__ Z;
+ Copyright (c) 2009, 2010 by the mingw-w64 project
 
-  if (y == 0.0f)
-    {
-      if (x < 0.0f)
-        {
- 	  __real__ Res = 0.0f;
-	  __imag__ Res = sqrtf (-x);
-        }
-      else
-        {
- 	  __real__ Res = sqrtf (x);
-	  __imag__ Res = 0.0f;
-        }
-    }
+ See the AUTHORS file for the list of contributors to the mingw-w64 project.
 
-  else if (x == 0.0f)
-    {
-      r = sqrtf(0.5f * fabsf (y));
-      __real__ Res = r;
-      __imag__ Res = y > 0 ? r : -r;
-    }
+ This license has been certified as open source. It has also been designated
+ as GPL compatible by the Free Software Foundation (FSF).
 
-  else
-    {
-      float t = sqrtf (2 * (_hypot (__real__ Z, __imag__ Z) + fabsf (x)));
-      float u = t / 2.0f;
-      if ( x > 0.0f)
-        {	
-          __real__ Res = u;
-          __imag__ Res = y / t;
-        }
-      else
-        {
-	  __real__ Res = fabsf (y / t);
-	  __imag__ Res = y < 0 ? -u : u;
-        }
-    }
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
 
-  return Res;
-}
+   1. Redistributions in source code must retain the accompanying copyright
+      notice, this list of conditions, and the following disclaimer.
+   2. Redistributions in binary form must reproduce the accompanying
+      copyright notice, this list of conditions, and the following disclaimer
+      in the documentation and/or other materials provided with the
+      distribution.
+   3. Names of the copyright holders must not be used to endorse or promote
+      products derived from this software without prior written permission
+      from the copyright holders.
+   4. The right to distribute this software or to use it for any purpose does
+      not give you the right to use Servicemarks (sm) or Trademarks (tm) of
+      the copyright holders.  Use of them is covered by separate agreement
+      with the copyright holders.
+   5. If any files are modified, you must cause the modified files to carry
+      prominent notices stating that you changed the files and the date of
+      any change.
+
+ Disclaimer
+
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY EXPRESSED
+ OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+ EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+/* Float version of the functions.  */
+#define  _NEW_COMPLEX_FLOAT 1
+#include "complex_internal.h"
+#include "csqrt.def.h"

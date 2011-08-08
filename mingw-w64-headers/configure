@@ -172,7 +172,8 @@ test x\$exitcode = x0 || exit 1"
   as_suggested="  as_lineno_1=";as_suggested=$as_suggested$LINENO;as_suggested=$as_suggested" as_lineno_1a=\$LINENO
   as_lineno_2=";as_suggested=$as_suggested$LINENO;as_suggested=$as_suggested" as_lineno_2a=\$LINENO
   eval 'test \"x\$as_lineno_1'\$as_run'\" != \"x\$as_lineno_2'\$as_run'\" &&
-  test \"x\`expr \$as_lineno_1'\$as_run' + 1\`\" = \"x\$as_lineno_2'\$as_run'\"' || exit 1"
+  test \"x\`expr \$as_lineno_1'\$as_run' + 1\`\" = \"x\$as_lineno_2'\$as_run'\"' || exit 1
+test \$(( 1 + 1 )) = 2 || exit 1"
   if (eval "$as_required") 2>/dev/null; then :
   as_have_required=yes
 else
@@ -556,18 +557,24 @@ PACKAGE_STRING='mingw-w64-headers 1.0b'
 PACKAGE_BUGREPORT='mingw-w64-public@lists.sourceforge.net'
 PACKAGE_URL=''
 
-ac_unique_file="include/_mingw.h"
+ac_unique_file="crt/_mingw.h.in"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+MINGW_HAS_SECURE_API
+IDLHEAD_LIST
+MINGW_HAS_DDK
 DDKHEAD_LIST
+MINGW_HAS_DX
 DXHEAD_LIST
-SDKSHEAD_LIST
 SECSYSHEAD_LIST
 SECHEAD_LIST
 SYSHEAD_LIST
 MINGWHELPERHEAD_LIST
 GLHEAD_LIST
 BASEHEAD_LIST
+ENABLE_CRT_FALSE
+ENABLE_CRT_TRUE
+SED
 host_os
 host_vendor
 host_cpu
@@ -644,7 +651,9 @@ ac_subst_files=''
 ac_user_opts='
 enable_option_checking
 enable_maintainer_mode
-with_sdk
+enable_crt
+enable_sdk
+enable_secure_api
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1271,12 +1280,10 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-maintainer-mode  enable make rules and dependencies not useful
 			  (and sometimes confusing) to the casual installer
-
-Optional Packages:
-  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
-  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-sdk=ARG          Add the desired SDK, where ARG can be one of ddk,
-                          directx, or all
+  --disable-crt           Do not use the default crt headers
+  --enable-sdk=ARG        Add the desired SDK, where ARG can be one of ddk,
+                          directx, idl or all
+  --enable-secure-api     Enable secure API by default
 
 Report bugs to <mingw-w64-public@lists.sourceforge.net>.
 _ACEOF
@@ -2307,20 +2314,113 @@ case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
 
 
 # Checks for programs.
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for a sed that does not truncate output" >&5
+$as_echo_n "checking for a sed that does not truncate output... " >&6; }
+if test "${ac_cv_path_SED+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+            ac_script=s/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb/
+     for ac_i in 1 2 3 4 5 6 7; do
+       ac_script="$ac_script$as_nl$ac_script"
+     done
+     echo "$ac_script" 2>/dev/null | sed 99q >conftest.sed
+     { ac_script=; unset ac_script;}
+     if test -z "$SED"; then
+  ac_path_SED_found=false
+  # Loop through the user's path and test for each of PROGNAME-LIST
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_prog in sed gsed; do
+    for ac_exec_ext in '' $ac_executable_extensions; do
+      ac_path_SED="$as_dir/$ac_prog$ac_exec_ext"
+      { test -f "$ac_path_SED" && $as_test_x "$ac_path_SED"; } || continue
+# Check for GNU ac_path_SED and select it if it is found.
+  # Check for GNU $ac_path_SED
+case `"$ac_path_SED" --version 2>&1` in
+*GNU*)
+  ac_cv_path_SED="$ac_path_SED" ac_path_SED_found=:;;
+*)
+  ac_count=0
+  $as_echo_n 0123456789 >"conftest.in"
+  while :
+  do
+    cat "conftest.in" "conftest.in" >"conftest.tmp"
+    mv "conftest.tmp" "conftest.in"
+    cp "conftest.in" "conftest.nl"
+    $as_echo '' >> "conftest.nl"
+    "$ac_path_SED" -f conftest.sed < "conftest.nl" >"conftest.out" 2>/dev/null || break
+    diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
+    as_fn_arith $ac_count + 1 && ac_count=$as_val
+    if test $ac_count -gt ${ac_path_SED_max-0}; then
+      # Best one so far, save it but keep looking for a better one
+      ac_cv_path_SED="$ac_path_SED"
+      ac_path_SED_max=$ac_count
+    fi
+    # 10*(2^10) chars as input seems more than enough
+    test $ac_count -gt 10 && break
+  done
+  rm -f conftest.in conftest.tmp conftest.nl conftest.out;;
+esac
+
+      $ac_path_SED_found && break 3
+    done
+  done
+  done
+IFS=$as_save_IFS
+  if test -z "$ac_cv_path_SED"; then
+    as_fn_error "no acceptable sed could be found in \$PATH" "$LINENO" 5
+  fi
+else
+  ac_cv_path_SED=$SED
+fi
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_path_SED" >&5
+$as_echo "$ac_cv_path_SED" >&6; }
+ SED="$ac_cv_path_SED"
+  rm -f conftest.sed
+
 
 # Checks for libraries.
 
 # Checks for header files.
 
-BASEHEAD_LIST=$srcdir/include/*.h
+BASEHEAD_LIST="crt/_mingw.h "$srcdir/include/*.h
 for i in dlg h16 hxx rh ver; do
   BASEHEAD_LIST="$BASEHEAD_LIST "$srcdir/include/*.$i
 done
 #FIXME: Add in base directx
 
-SYSHEAD_LIST=$srcdir/include/sys/*.h
-SECHEAD_LIST=$srcdir/include/sec_api/*.h
-SECSYSHEAD_LIST=$srcdir/include/sec_api/sys/*.h
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for c-runtime headers" >&5
+$as_echo_n "checking for c-runtime headers... " >&6; }
+# Check whether --enable-crt was given.
+if test "${enable_crt+set}" = set; then :
+  enableval=$enable_crt;
+else
+  enable_crt=yes
+fi
+
+ if test x$enable_crt=xyes; then
+  ENABLE_CRT_TRUE=
+  ENABLE_CRT_FALSE='#'
+else
+  ENABLE_CRT_TRUE='#'
+  ENABLE_CRT_FALSE=
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_crt" >&5
+$as_echo "$enable_crt" >&6; }
+if test "x$enable_crt" = x""yes; then :
+
+  BASEHEAD_LIST="$BASEHEAD_LIST "$srcdir/crt/*.h
+  SYSHEAD_LIST=$srcdir/crt/sys/*.h
+  SECHEAD_LIST=$srcdir/crt/sec_api/*.h
+  SECSYSHEAD_LIST=$srcdir/crt/sec_api/sys/*.h
+
+fi
 GLHEAD_LIST=$srcdir/include/GL/*.h
 MINGWHELPERHEAD_LIST=$srcdir/include/psdk_inc/*.h
 
@@ -2330,63 +2430,95 @@ MINGWHELPERHEAD_LIST=$srcdir/include/psdk_inc/*.h
 
 
 
+enable_directx=no
+enable_ddk=no
+enable_idl=no
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for optional sdk headers" >&5
 $as_echo_n "checking for optional sdk headers... " >&6; }
-
-# Check whether --with-sdk was given.
-if test "${with_sdk+set}" = set; then :
-  withval=$with_sdk;
+# Check whether --enable-sdk was given.
+if test "${enable_sdk+set}" = set; then :
+  enableval=$enable_sdk;
 else
-  with_sdk=no
+  enable_sdk=no
 fi
 
-case $with_sdk in #(
+case $enable_sdk in #(
   all|yes) :
 
-    with_sdk="ddk,directx"
-    with_ddk=yes
-    with_directx=yes ;; #(
+    enable_sdk="ddk,directx,idl"
+    enable_ddk=yes
+    enable_directx=yes ;; #(
   ddk) :
 
-    with_ddk=yes
-    with_directx=no ;; #(
+    enable_ddk=yes ;; #(
   directx) :
 
-    with_ddk=no
-    with_directx=yes ;; #(
+    enable_directx=yes ;; #(
+  idl) :
+
+    enable_idl=yes ;; #(
   no) :
-
-    with_ddk=no
-    with_directx=no ;; #(
+     ;; #(
   *) :
-    as_fn_error "Invalid option: $with_sdk.  Please choose one of ddk, directx, or all." "$LINENO" 5 ;;
+    as_fn_error "Invalid option: $enable_sdk.  Please choose one of ddk, directx, idl or all." "$LINENO" 5 ;;
 esac
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $with_sdk" >&5
-$as_echo "$with_sdk" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_sdk" >&5
+$as_echo "$enable_sdk" >&6; }
 
-if test $with_directx = yes; then :
+if test "x$enable_directx" = x""yes; then :
 
-  DXHEAD_LIST=$srcdir/direct-x/include/*.[hi]*
-  SDKSHEAD_LIST=$srcdir/direct-x/include/sdks/*.h
+    DXHEAD_LIST=$srcdir/direct-x/include/*.[hi]*
+    MINGW_HAS_DX=1
+
 else
-  SDKSHEAD_LIST=$srcdir/include/sdks/*.h
+
+    MINGW_HAS_DX=0
+
 fi
 
 
-if test $with_ddk = yes; then :
 
-  DDKHEAD_LIST=$srcdir/ddk/include/ddk/*.h
-  SDKSHEAD_LIST="$SDKSHEAD_LIST "$srcdir/ddk/include/sdks/*.h
+if test "x$enable_ddk" = x""yes; then :
+
+    DDKHEAD_LIST=$srcdir/ddk/include/ddk/*.h
+    MINGW_HAS_DDK=1
+
+else
+
+    MINGW_HAS_DDK=0
+
 fi
 
+
+
+if test "x$enable_idl" = x""yes; then :
+
+    IDLHEAD_LIST=$srcdir/idl/*.idl
+fi
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable the secure API" >&5
+$as_echo_n "checking whether to enable the secure API... " >&6; }
+# Check whether --enable-secure-api was given.
+if test "${enable_secure_api+set}" = set; then :
+  enableval=$enable_secure_api; enable_secure_api=yes
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_secure_api" >&5
+$as_echo "$enable_secure_api" >&6; }
+if test "x$enable_secure_api" = x""yes; then :
+  MINGW_HAS_SECURE_API="#define MINGW_HAS_SECURE_API 1"
+else
+  MINGW_HAS_SECURE_API=""
+fi
 
 
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for library functions.
 
-ac_config_files="$ac_config_files Makefile"
+ac_config_files="$ac_config_files Makefile crt/_mingw.h"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -2488,6 +2620,10 @@ LTLIBOBJS=$ac_ltlibobjs
 
 if test -z "${MAINTAINER_MODE_TRUE}" && test -z "${MAINTAINER_MODE_FALSE}"; then
   as_fn_error "conditional \"MAINTAINER_MODE\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${ENABLE_CRT_TRUE}" && test -z "${ENABLE_CRT_FALSE}"; then
+  as_fn_error "conditional \"ENABLE_CRT\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 
@@ -3080,6 +3216,7 @@ do
   case $ac_config_target in
     "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+    "crt/_mingw.h") CONFIG_FILES="$CONFIG_FILES crt/_mingw.h" ;;
 
   *) as_fn_error "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

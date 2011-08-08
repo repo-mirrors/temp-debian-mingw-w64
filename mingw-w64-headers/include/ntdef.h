@@ -21,6 +21,12 @@
 #ifndef _NTDEF_
 #define _NTDEF_
 
+#ifdef _WINNT_
+/* FIXME: In version two, warn about including both ntdef.h and winnt.h
+ * #warning Including winnt.h and ntdef.h is deprecated and will be removed in a future release.  Please use winternl.h
+ */
+#endif
+
 #include <_mingw.h>
 
 #if defined(__x86_64) && \
@@ -43,7 +49,7 @@
 #include <excpt.h>
 #include <sdkddkver.h>
 
-// FIXME: Shouldn't be included!
+/* FIXME: Shouldn't be included!  */
 #include <stdarg.h>
 #include <string.h>
 
@@ -307,11 +313,12 @@ typedef int WINBOOL;
 #pragma push_macro("BOOL")
 #undef BOOL
 #if !defined(__OBJC__) && !defined(__OBJC_BOOL) && !defined(__objc_INCLUDE_GNU)
-typedef WINBOOL BOOL;
+typedef int BOOL;
 #endif
+#define BOOL WINBOOL
+typedef BOOL *PBOOL;
+typedef BOOL *LPBOOL;
 #pragma pop_macro("BOOL")
-typedef WINBOOL *PBOOL;
-typedef WINBOOL *LPBOOL;
 #endif /* _DEF_WINBOOL_ */
 
 #ifndef _HRESULT_DEFINED
@@ -369,18 +376,20 @@ typedef USHORT LANGID;
 
 /* Used to store a non-float 8 byte aligned structure */
 typedef struct _QUAD {
-  __MINGW_EXTENSION union {
+  __C89_NAMELESS union {
     __MINGW_EXTENSION __int64 UseThisFieldToCopy;
     double DoNotUseThisField;
   } DUMMYUNIONNAME;
 } QUAD, *PQUAD, UQUAD, *PUQUAD;
 
+#ifndef _LARGE_INTEGER_DEFINED
+#define _LARGE_INTEGER_DEFINED
 /* Large Integer Unions */
 #if defined(MIDL_PASS)
 typedef struct _LARGE_INTEGER {
 #else
 typedef union _LARGE_INTEGER {
-  __MINGW_EXTENSION struct {
+  __C89_NAMELESS struct {
     ULONG LowPart;
     LONG HighPart;
   } DUMMYSTRUCTNAME;
@@ -396,7 +405,7 @@ typedef union _LARGE_INTEGER {
 typedef struct _ULARGE_INTEGER {
 #else
 typedef union _ULARGE_INTEGER {
-  __MINGW_EXTENSION struct {
+  __C89_NAMELESS struct {
     ULONG LowPart;
     ULONG HighPart;
   } DUMMYSTRUCTNAME;
@@ -417,6 +426,8 @@ typedef struct _LUID {
   LONG HighPart;
 } LUID, *PLUID;
 
+#endif /* _LARGE_INTEGER_DEFINED */
+
 /* Native API Return Value Macros */
 #define NT_SUCCESS(Status)              (((NTSTATUS)(Status)) >= 0)
 #define NT_INFORMATION(Status)          ((((ULONG)(Status)) >> 30) == 1)
@@ -424,12 +435,16 @@ typedef struct _LUID {
 #define NT_ERROR(Status)                ((((ULONG)(Status)) >> 30) == 3)
 
 /* String Types */
+#ifndef __UNICODE_STRING_DEFINED
+#define __UNICODE_STRING_DEFINED
 typedef struct _UNICODE_STRING {
   USHORT Length;
   USHORT MaximumLength;
   PWSTR  Buffer;
 } UNICODE_STRING, *PUNICODE_STRING;
+#endif
 typedef const UNICODE_STRING* PCUNICODE_STRING;
+
 #define UNICODE_NULL ((WCHAR)0)
 
 typedef struct _CSTRING {
@@ -439,11 +454,14 @@ typedef struct _CSTRING {
 } CSTRING, *PCSTRING;
 #define ANSI_NULL ((CHAR)0)
 
+#ifndef __STRING_DEFINED
+#define __STRING_DEFINED
 typedef struct _STRING {
   USHORT Length;
   USHORT MaximumLength;
   PCHAR  Buffer;
 } STRING, *PSTRING;
+#endif
 
 typedef STRING ANSI_STRING;
 typedef PSTRING PANSI_STRING;
@@ -540,6 +558,9 @@ typedef enum _WAIT_TYPE {
   WaitAny
 } WAIT_TYPE;
 
+#ifndef _LIST_ENTRY_DEFINED
+#define _LIST_ENTRY_DEFINED
+
 /* Doubly Linked Lists */
 typedef struct _LIST_ENTRY {
   struct _LIST_ENTRY *Flink;
@@ -561,6 +582,8 @@ typedef struct _SINGLE_LIST_ENTRY {
   struct _SINGLE_LIST_ENTRY *Next;
 } SINGLE_LIST_ENTRY, *PSINGLE_LIST_ENTRY;
 
+#endif /* _LIST_ENTRY_DEFINED */
+
 typedef struct _PROCESSOR_NUMBER {
   USHORT Group;
   UCHAR Number;
@@ -570,12 +593,15 @@ typedef struct _PROCESSOR_NUMBER {
 struct _CONTEXT;
 struct _EXCEPTION_RECORD;
 
+#ifndef __PEXCEPTION_ROUTINE_DEFINED
+#define __PEXCEPTION_ROUTINE_DEFINED
 typedef EXCEPTION_DISPOSITION
 (NTAPI *PEXCEPTION_ROUTINE)(
   struct _EXCEPTION_RECORD *ExceptionRecord,
   PVOID EstablisherFrame,
   struct _CONTEXT *ContextRecord,
   PVOID DispatcherContext);
+#endif /* __PEXCEPTION_ROUTINE_DEFINED */
 
 typedef struct _GROUP_AFFINITY {
   KAFFINITY Mask;

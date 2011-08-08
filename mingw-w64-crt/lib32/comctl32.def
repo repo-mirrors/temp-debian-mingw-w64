@@ -57,6 +57,7 @@ FreeMRUList@4
 GetEffectiveClientRect@12
 GetMUILanguage@0
 GetSize@4
+GetWindowSubclass@16
 ImageList_Add@12
 ImageList_AddIcon@8
 ImageList_AddMasked@12

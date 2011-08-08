@@ -545,7 +545,7 @@ extern "C" {
 #define _tagCY_DEFINED
 #define _CY_DEFINED
   typedef union tagCY {
-    __MINGW_EXTENSION struct {
+    __C89_NAMELESS struct {
       unsigned long Lo;
       long Hi;
     } DUMMYSTRUCTNAME;
@@ -557,16 +557,16 @@ extern "C" {
 
   typedef struct tagDEC {
     USHORT wReserved;
-    __MINGW_EXTENSION union {
-      __MINGW_EXTENSION struct {
+    __C89_NAMELESS union {
+      __C89_NAMELESS struct {
 	BYTE scale;
 	BYTE sign;
       } DUMMYSTRUCTNAME;
       USHORT signscale;
     } DUMMYUNIONNAME;
     ULONG Hi32;
-    __MINGW_EXTENSION union {
-      __MINGW_EXTENSION struct {
+    __C89_NAMELESS union {
+      __C89_NAMELESS struct {
 	ULONG Lo32;
 	ULONG Mid32;
       } DUMMYSTRUCTNAME2;
@@ -693,6 +693,11 @@ extern "C" {
 
   extern RPC_IF_HANDLE __MIDL_itf_wtypes_0003_v0_0_c_ifspec;
   extern RPC_IF_HANDLE __MIDL_itf_wtypes_0003_v0_0_s_ifspec;
+
+typedef struct _PROPERTYKEY {
+  GUID  fmtid;
+  DWORD pid;
+} PROPERTYKEY;
 
 #ifdef __cplusplus
 }

@@ -98,17 +98,7 @@ extern "C" {
 #define POINTER_ALIGNMENT
 #endif
 
-/* Helper macro to enable gcc's extension.  */
-#ifndef __GNU_EXTENSION
-#ifdef __GNUC__
-#define __GNU_EXTENSION __extension__
-#else
-#define __GNU_EXTENSION
-#endif
-#endif
-
 #if defined(_MSC_VER)
-
 /* Disable some warnings */
 #pragma warning(disable:4115) /* Named type definition in parentheses */
 #pragma warning(disable:4201) /* Nameless unions and structs */
@@ -125,7 +115,7 @@ extern "C" {
 #define ALLOC_DATA_PRAGMA 1
 #endif
 
-#endif
+#endif /* _MSC_VER */
 
 #if defined(_WIN64)
 #if !defined(USE_DMA_MACROS) && !defined(_NTHAL_)
@@ -170,7 +160,7 @@ typedef struct _DMA_ADAPTER *PADAPTER_OBJECT;
 #elif defined(_WDM_INCLUDED_)
 typedef struct _DMA_ADAPTER *PADAPTER_OBJECT;
 #else
-typedef struct _ADAPTER_OBJECT *PADAPTER_OBJECT;
+typedef struct _ADAPTER_OBJECT *PADAPTER_OBJECT; 
 #endif
 
 #ifndef DEFINE_GUIDEX
@@ -191,7 +181,7 @@ typedef struct _ADAPTER_OBJECT *PADAPTER_OBJECT;
 #ifdef __cplusplus
 inline int IsEqualGUIDAligned(REFGUID guid1, REFGUID guid2)
 {
-    return ( (*(PLONGLONG)(&guid1) == *(PLONGLONG)(&guid2)) &&
+    return ( (*(PLONGLONG)(&guid1) == *(PLONGLONG)(&guid2)) && 
              (*((PLONGLONG)(&guid1) + 1) == *((PLONGLONG)(&guid2) + 1)) );
 }
 #else
@@ -2277,6 +2267,7 @@ typedef struct _SE_ADT_PARAMETER_ARRAY {
 
 #endif /* !_NTLSA_AUDIT_ */
 #endif /* !_NTLSA_IFS_ */
+
 /******************************************************************************
  *                            Power Management Support Types                  *
  ******************************************************************************/
@@ -3694,10 +3685,10 @@ typedef enum _CM_ERROR_CONTROL_TYPE {
                                          CM_SERVICE_VIRTUAL_DISK_BOOT_LOAD |  \
                                          CM_SERVICE_USB_DISK_BOOT_LOAD)
 
+
 /******************************************************************************
  *                         I/O Manager Types                                  *
  ******************************************************************************/
-
 
 #define STATUS_CONTINUE_COMPLETION      STATUS_SUCCESS
 
@@ -5609,16 +5600,20 @@ typedef struct _IO_ERROR_LOG_MESSAGE {
 } IO_ERROR_LOG_MESSAGE, *PIO_ERROR_LOG_MESSAGE;
 
 #define ERROR_LOG_LIMIT_SIZE               240
+
 #define IO_ERROR_LOG_MESSAGE_HEADER_LENGTH (sizeof(IO_ERROR_LOG_MESSAGE) - \
-                                            sizeof(IO_ERROR_LOG_PACKET) + \
+                                            sizeof(IO_ERROR_LOG_PACKET) +  \
                                             (sizeof(WCHAR) * 40))
-#define ERROR_LOG_MESSAGE_LIMIT_SIZE                                          \
+
+#define ERROR_LOG_MESSAGE_LIMIT_SIZE                                       \
     (ERROR_LOG_LIMIT_SIZE + IO_ERROR_LOG_MESSAGE_HEADER_LENGTH)
-#define IO_ERROR_LOG_MESSAGE_LENGTH                                           \
-    ((PORT_MAXIMUM_MESSAGE_LENGTH > ERROR_LOG_MESSAGE_LIMIT_SIZE) ?           \
-        ERROR_LOG_MESSAGE_LIMIT_SIZE :                                        \
+
+#define IO_ERROR_LOG_MESSAGE_LENGTH                                        \
+    ((PORT_MAXIMUM_MESSAGE_LENGTH > ERROR_LOG_MESSAGE_LIMIT_SIZE) ?        \
+        ERROR_LOG_MESSAGE_LIMIT_SIZE :                                     \
         PORT_MAXIMUM_MESSAGE_LENGTH)
-#define ERROR_LOG_MAXIMUM_SIZE (IO_ERROR_LOG_MESSAGE_LENGTH -                 \
+
+#define ERROR_LOG_MAXIMUM_SIZE (IO_ERROR_LOG_MESSAGE_LENGTH -              \
                                 IO_ERROR_LOG_MESSAGE_HEADER_LENGTH)
 
 #ifdef _WIN64
@@ -7719,8 +7714,6 @@ KeMemoryBarrier(VOID)
 #endif
 }
 
-#define KeMemoryBarrierWithoutFence() _ReadWriteBarrier()
-
 NTHALAPI
 KIRQL
 NTAPI
@@ -7828,9 +7821,6 @@ _KeQueryTickCount(
 #define KeQueryTickCount(CurrentCount) _KeQueryTickCount(CurrentCount)
 
 
-
-
-
 #elif defined(_M_AMD64)
 /** Kernel definitions for AMD64 **/
 
@@ -7878,21 +7868,6 @@ typedef XSAVE_FORMAT XMM_SAVE_AREA32, *PXMM_SAVE_AREA32;
 #define KeGetDcacheFillSize() 1L
 
 #define YieldProcessor _mm_pause
-#define FastFence __faststorefence
-#define LoadFence _mm_lfence
-#define MemoryFence _mm_mfence
-#define StoreFence _mm_sfence
-#define LFENCE_ACQUIRE() LoadFence()
-
-FORCEINLINE
-VOID
-KeMemoryBarrier(VOID)
-{
-  FastFence();
-  LFENCE_ACQUIRE();
-}
-
-#define KeMemoryBarrierWithoutFence() _ReadWriteBarrier()
 
 FORCEINLINE
 KIRQL
@@ -8168,10 +8143,10 @@ KeRaiseIrqlToSynchLevel(VOID);
 #error Unknown Architecture
 #endif
 
+
 /******************************************************************************
  *                         Runtime Library Functions                          *
  ******************************************************************************/
-
 
 #if !defined(MIDL_PASS) && !defined(SORTPP_PASS)
 
@@ -9035,8 +9010,6 @@ RtlHashUnicodeString(
   IN ULONG HashAlgorithm,
   OUT PULONG HashValue);
 
-
-
 #endif /* (NTDDI_VERSION >= NTDDI_WINXP) */
 
 
@@ -9091,7 +9064,6 @@ RtlCmEncodeMemIoResource(
   IN ULONGLONG Length,
   IN ULONGLONG Start);
 
-
 #endif /* (NTDDI_VERSION >= NTDDI_VISTA) */
 
 #if (NTDDI_VERSION >= NTDDI_WIN7)
@@ -9121,7 +9093,6 @@ ULONG64
 NTAPI
 RtlGetEnabledExtendedFeatures(
   IN ULONG64 FeatureMask);
-
 
 #endif /* (NTDDI_VERSION >= NTDDI_WIN7) */
 
@@ -9273,7 +9244,6 @@ RtlInitEmptyUnicodeString(
 
 #if defined(_AMD64_) || defined(_IA64_)
 
-
 static __inline
 LARGE_INTEGER
 NTAPI_INLINE
@@ -9300,8 +9270,6 @@ RtlExtendedLargeIntegerDivide(
     *Remainder = (ULONG)(Dividend.QuadPart % Divisor);
   return ret;
 }
-
-
 
 #endif /* defined(_AMD64_) || defined(_IA64_) */
 
@@ -9790,8 +9758,8 @@ KeInitializeSpinLock(IN PKSPIN_LOCK SpinLock)
 }
 #endif
 
-//DECLSPEC_NORETURN
 NTKERNELAPI
+DECLSPEC_NORETURN
 VOID
 NTAPI
 KeBugCheckEx(
@@ -10217,6 +10185,7 @@ KeTestSpinLock(
   IN PKSPIN_LOCK SpinLock);
 
 #endif /* (NTDDI_VERSION >= NTDDI_WS03) */
+
 #if (NTDDI_VERSION >= NTDDI_WS03SP1)
 
 NTKERNELAPI
@@ -10938,6 +10907,7 @@ MmAddVerifierThunks(
   IN ULONG ThunkBufferSize);
 
 #endif /* (NTDDI_VERSION >= NTDDI_WINXP) */
+
 #if (NTDDI_VERSION >= NTDDI_WS03)
 NTKERNELAPI
 LOGICAL
@@ -11057,7 +11027,6 @@ NTAPI
 SeLockSubjectContext(
   IN PSECURITY_SUBJECT_CONTEXT SubjectContext);
 
-
 #endif /* (NTDDI_VERSION >= NTDDI_WIN2K) */
 
 #if (NTDDI_VERSION >= NTDDI_WS03SP1)
@@ -11098,6 +11067,7 @@ SeGetWorldRights(
   OUT PACCESS_MASK GrantedAccess);
 #endif /* SE_NTFS_WORLD_CACHE */
 #endif /* (NTDDI_VERSION >= NTDDI_VISTA) */
+
 /******************************************************************************
  *                         Configuration Manager Functions                    *
  ******************************************************************************/
@@ -12362,7 +12332,6 @@ NTAPI
 IoSetTopLevelIrp(
   IN PIRP Irp OPTIONAL);
 
-
 #endif /* (NTDDI_VERSION >= NTDDI_WIN2K) */
 
 
@@ -13308,14 +13277,14 @@ ExInterlockedFlushSList(
 #if defined(_WIN2K_COMPAT_SLIST_USAGE) && defined(_X86_)
 
 NTKERNELAPI
-PSINGLE_LIST_ENTRY
+PSINGLE_LIST_ENTRY 
 FASTCALL
 ExInterlockedPopEntrySList(
   IN PSLIST_HEADER ListHead,
   IN PKSPIN_LOCK Lock);
 
 NTKERNELAPI
-PSINGLE_LIST_ENTRY
+PSINGLE_LIST_ENTRY 
 FASTCALL
 ExInterlockedPushEntrySList(
   IN PSLIST_HEADER ListHead,
@@ -14979,11 +14948,11 @@ typedef enum _ENLISTMENT_INFORMATION_CLASS {
 } ENLISTMENT_INFORMATION_CLASS;
 
 typedef struct _TRANSACTION_LIST_ENTRY {
-#if defined(__cplusplus)
-  ::UOW UOW;
-#else
-  UOW UOW;
-#endif
+/* UOW is typedef'ed as GUID just above.  Changed type of UOW
+ * member from UOW to GUID for C++ compat.  Using ::UOW for C++
+ * works too but we were reported some problems in corner cases
+ */
+  GUID UOW;
 } TRANSACTION_LIST_ENTRY, *PTRANSACTION_LIST_ENTRY;
 
 typedef struct _TRANSACTION_LIST_INFORMATION {
@@ -15376,10 +15345,10 @@ NtPropagationFailed(
 #endif /* NTDDI_VERSION >= NTDDI_VISTA */
 
 #endif /* !_NTTMAPI_ */
+
 /******************************************************************************
  *                            ZwXxx Functions                                 *
  ******************************************************************************/
-
 
 /* Constants */
 #define NtCurrentProcess() ( (HANDLE)(LONG_PTR) -1 )
@@ -15991,8 +15960,8 @@ ZwSinglePhaseReject(
   IN HANDLE EnlistmentHandle,
   IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
 #endif /* (NTDDI_VERSION >= NTDDI_VISTA) */
-#if (NTDDI_VERSION >= NTDDI_WIN7)
 
+#if (NTDDI_VERSION >= NTDDI_WIN7)
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -16057,7 +16026,6 @@ ZwSetInformationKey(
   IN ULONG KeySetInformationLength);
 
 #endif /* (NTDDI_VERSION >= NTDDI_WIN7) */
-
 
 #ifdef __cplusplus
 }
