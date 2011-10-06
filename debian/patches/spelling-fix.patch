@@ -1,0 +1,14 @@
+Description: trivial spelling fix
+Author: Stephen Kitt <steve@sk2.org>
+
+--- mingw-w64.orig/mingw-w64-tools/gendef/src/gendef.c
++++ mingw-w64/mingw-w64-tools/gendef/src/gendef.c
+@@ -120,7 +120,7 @@
+     {
+       if (!next)
+         {
+-	  fprintf (stderr, "Error: %s expects path as next arguement.", opts);
++	  fprintf (stderr, "Error: %s expects path as next argument.", opts);
+ 	  return 0;
+         }
+       gendef_addpath_def (next);

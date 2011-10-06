@@ -10,6 +10,7 @@ mingw-w64 (2.0~rc2-1) unstable; urgency=low
     libpseh).
   * Correct debian/copyright ("Upstream-Name" instead of "Name", correct
     license for mingw-w64-headers/ddk/include/ddk/csq.h).
+  * Add spelling-fix.patch to fix small spelling mistake in gendef.
 
  -- Stephen Kitt <steve@sk2.org>  Thu, 06 Oct 2011 00:25:32 +0200
 
