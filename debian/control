@@ -30,3 +30,14 @@ Description: Development environment targetting 32- and 64-bit Windows
  .
  This metapackage provides the full MinGW-w64 development
  environment.
+
+Package: mingw-w64-tools
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Development tools for 32- and 64-bit Windows
+ MinGW-w64 provides a development and runtime environment for 32- and
+ 64bit Windows applications using the GNU Compiler Collection (gcc).
+ .
+ This package contains the gendef and genidl tools, used to extract
+ respectively DLL exports and IDL information from Windows
+ executables.
