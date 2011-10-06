@@ -5,6 +5,7 @@ mingw-w64 (2.0~rc2-1) unstable; urgency=low
   * Simplify debian/rules.
   * Add "Architecture: any" mingw-w64-tools package to ship gendef and
     genidl.
+  * Provide manpages for gendef and genidl.
   * Ship libmangle and libpseh in mingw-w64-dev (32-bit only for
     libpseh).
 
