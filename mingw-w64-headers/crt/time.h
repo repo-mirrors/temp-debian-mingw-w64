@@ -67,7 +67,7 @@ extern "C" {
 #ifdef _WIN64
   __MINGW_EXTENSION typedef __int64 ssize_t;
 #else
-  typedef long ssize_t;
+  typedef int ssize_t;
 #endif
 #endif
 
@@ -275,6 +275,7 @@ struct timezone {
 
 /* Adding timespec definition.  */
 #include <sys/timeb.h>
+#include <pthread_time.h>
 
 #endif /* End _TIME_H_ */
 

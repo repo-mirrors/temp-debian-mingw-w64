@@ -33,6 +33,8 @@ extern "C" {
 #endif
 #endif /* _IA64_ */
 
+#include <sdkddkver.h>
+
 #define RESTRICTED_POINTER
 
 #undef  UNALIGNED	/* avoid redefinition warnings vs _mingw.h */
@@ -145,14 +147,10 @@ extern "C" {
 #endif /* DECLSPEC_NOINLINE */
 
 #ifndef FORCEINLINE
-#if defined(_MSC_VER) && (_MSC_VER >= 1200)
+#if !defined(_MSC_VER) || (_MSC_VER >=1200)
 #define FORCEINLINE __forceinline
-#elif defined(_MSC_VER)
+#else
 #define FORCEINLINE __inline
-#elif defined(__cplusplus) /* __GNUG__ */
-#define FORCEINLINE inline __attribute__((always_inline))
-#else /* __GNUC__ */
-#define FORCEINLINE extern __inline__ __attribute__((always_inline))
 #endif
 #endif /* FORCEINLINE */
 
@@ -1443,7 +1441,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 
 #include <intrin.h>
 
-#define FastFence __faststorefence		/* FIXME: implement proprely */
+#define FastFence __faststorefence
 #define LoadFence _mm_lfence
 #define MemoryFence _mm_mfence
 #define StoreFence _mm_sfence
@@ -1455,7 +1453,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #endif
 
 #define YieldProcessor _mm_pause
-#define MemoryBarrier __faststorefence		/* FIXME: implement proprely */
+#define MemoryBarrier __faststorefence
 #define PreFetchCacheLine(l,a) _mm_prefetch((CHAR CONST *) a,l)
 #define PrefetchForWrite(p) _m_prefetchw(p)
 #define ReadForWriteAccess(p) (_m_prefetchw(p),*(p))
@@ -1542,11 +1540,11 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
     DWORD64 ShiftLeft128(DWORD64 LowPart,DWORD64 HighPart,BYTE Shift);
     DWORD64 ShiftRight128(DWORD64 LowPart,DWORD64 HighPart,BYTE Shift);
 
-#define Multiply128 _mul128			/* FIXME: implement proprely */
+#define Multiply128 _mul128
 
     LONG64 Multiply128(LONG64 Multiplier,LONG64 Multiplicand,LONG64 *HighProduct);
 
-#define UnsignedMultiply128 _umul128		/* FIXME: implement proprely */
+#define UnsignedMultiply128 _umul128
 
     DWORD64 UnsignedMultiply128(DWORD64 Multiplier,DWORD64 Multiplicand,DWORD64 *HighProduct);
 

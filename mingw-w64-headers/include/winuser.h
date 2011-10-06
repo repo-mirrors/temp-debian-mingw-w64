@@ -2474,11 +2474,40 @@ extern "C" {
 #define SM_MEDIACENTER 87
 #define SM_STARTER 88
 #define SM_SERVERR2 89
+
+#if (_WIN32_WINNT < 0x0600)
 #define SM_CMETRICS 90
+#endif
+
 #define SM_REMOTESESSION 0x1000
 #define SM_SHUTTINGDOWN 0x2000
 #define SM_REMOTECONTROL 0x2001
 #define SM_CARETBLINKINGENABLED 0x2002
+
+#if (_WIN32_WINNT >= 0x0600)
+#define SM_MOUSEHORIZONTALWHEELPRESENT 91
+#define SM_CXPADDEDBORDER 92
+# if (_WIN32_WINNT < 0x0601)
+# define SM_CMETRICS 93
+# endif
+#endif
+
+#if (_WIN32_WINNT >= 0x0601)
+#define SM_DIGITIZER 94
+#define SM_MAXIMUMTOUCHES 95
+/**/
+# define SM_CMETRICS 96
+#endif
+
+#if (_WIN32_WINNT >= 0x0601)
+/* flags for SM_DIGITIZER: */
+#define NID_INTEGRATED_TOUCH	0x01
+#define NID_EXTERNAL_TOUCH	0x02
+#define NID_INTEGRATED_PEN	0x04
+#define NID_EXTERNAL_PEN	0x08
+#define NID_MULTI_INPUT		0x40
+#define NID_READY		0x80
+#endif
 
   WINUSERAPI int WINAPI GetSystemMetrics(int nIndex);
 #endif
@@ -5284,6 +5313,12 @@ extern "C" {
 #define TOUCHEVENTMASKF_EXTRAINFO       0x0002
 #define TOUCHEVENTMASKF_CONTACTAREA     0x0004
 
+#define MAPVK_VK_TO_VSC    0
+#define MAPVK_VSC_TO_VK    1
+#define MAPVK_VK_TO_CHAR   2
+#define MAPVK_VSC_TO_VK_EX 3
+#define MAPVK_VK_TO_VSC_EX 4
+
   typedef struct _TOUCHINPUT {
     LONG x;
     LONG y;
@@ -5323,6 +5358,7 @@ typedef struct _AUDIODESCRIPTION {
   LCID Locale;
 } AUDIODESCRIPTION, *PAUDIODESCRIPTION;
 
+#ifndef NOGDI
 #define CreateDesktopEx __MINGW_NAME_AW(CreateDesktopEx)
 
 WINUSERAPI HDESK WINAPI CreateDesktopExA(
@@ -5346,6 +5382,7 @@ WINUSERAPI HDESK WINAPI CreateDesktopExW(
   ULONG ulHeapSize,
   PVOID pvoid
 );
+#endif	/* NOGDI */
 
 WINUSERAPI WINBOOL WINAPI ShutdownBlockReasonCreate(
   HWND hWnd,
