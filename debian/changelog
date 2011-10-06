@@ -1,5 +1,7 @@
-mingw-w64 (2.0~rc1-2) unstable; urgency=low
+mingw-w64 (2.0~rc2-1) unstable; urgency=low
 
+  * New upstream release candidate.
+    - Includes fixed d2d1.h. (Closes: #638620.)
   * Simplify debian/rules.
   * Add "Architecture: any" mingw-w64-tools package to ship gendef and
     genidl.
