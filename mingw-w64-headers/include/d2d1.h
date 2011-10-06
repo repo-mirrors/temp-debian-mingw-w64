@@ -1518,7 +1518,7 @@ typedef struct ID2D1FactoryVtbl {
     STDMETHOD(CreateWicBitmapRenderTarget)(ID2D1Factory *This, IWICBitmap *target, const D2D1_RENDER_TARGET_PROPERTIES *renderTargetProperties, ID2D1RenderTarget **renderTarget) PURE;
     STDMETHOD(CreateHwndRenderTarget)(ID2D1Factory *This, const D2D1_RENDER_TARGET_PROPERTIES *renderTargetProperties, const D2D1_HWND_RENDER_TARGET_PROPERTIES *hwndRenderTargetProperties, ID2D1HwndRenderTarget **hwndRenderTarget) PURE;
     STDMETHOD(CreateDxgiSurfaceRenderTarget)(ID2D1Factory *This, IDXGISurface *dxgiSurface, const D2D1_RENDER_TARGET_PROPERTIES *renderTargetProperties, ID2D1RenderTarget **renderTarget) PURE;
-    STDMETHOD(CreateDCRenderTarget)(D2D1Factory *This, const D2D1_RENDER_TARGET_PROPERTIES *renderTargetProperties, ID2D1DCRenderTarget **dcRenderTarget) PURE;
+    STDMETHOD(CreateDCRenderTarget)(ID2D1Factory *This, const D2D1_RENDER_TARGET_PROPERTIES *renderTargetProperties, ID2D1DCRenderTarget **dcRenderTarget) PURE;
 } ID2D1FactoryVtbl;
 
 interface ID2D1Factory {
@@ -1659,7 +1659,7 @@ typedef struct ID2D1GeometrySinkVtbl {
     ID2D1SimplifiedGeometrySinkVtbl Base;
 
     STDMETHOD_(void, AddLine)(ID2D1GeometrySink *This, D2D1_POINT_2F point) PURE;
-    STDMETHOD_(void, AddBezier)(ID2D1GeometrySink *This, cosnt D2D1_BEZIER_SEGMENT *bezier) PURE;
+    STDMETHOD_(void, AddBezier)(ID2D1GeometrySink *This, const D2D1_BEZIER_SEGMENT *bezier) PURE;
     STDMETHOD_(void, AddQuadraticBezier)(ID2D1GeometrySink *This, const D2D1_QUADRATIC_BEZIER_SEGMENT *bezier) PURE;
     STDMETHOD_(void, AddQuadraticBeziers)(ID2D1GeometrySink *This, const D2D1_QUADRATIC_BEZIER_SEGMENT *beziers, UINT beziersCount) PURE;
     STDMETHOD_(void, AddArc)(ID2D1GeometrySink *This, const D2D1_ARC_SEGMENT *arc) PURE;
