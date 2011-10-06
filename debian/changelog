@@ -8,6 +8,8 @@ mingw-w64 (2.0~rc2-1) unstable; urgency=low
   * Provide manpages for gendef and genidl.
   * Ship libmangle and libpseh in mingw-w64-dev (32-bit only for
     libpseh).
+  * Correct debian/copyright ("Upstream-Name" instead of "Name", correct
+    license for mingw-w64-headers/ddk/include/ddk/csq.h).
 
  -- Stephen Kitt <steve@sk2.org>  Thu, 06 Oct 2011 00:25:32 +0200
 

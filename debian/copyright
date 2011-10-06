@@ -1,5 +1,5 @@
 Format: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=174
-Name: mingw-w64
+Upstream-Name: mingw-w64
 Source: http://mingw-w64.sourceforge.net/
 
 Files: *
@@ -111,7 +111,16 @@ License: LGPL-2.1+
 
 Files: mingw-w64-headers/ddk/include/ddk/csq.h
 Copyright: 2004,  Vizzini (vizzini@plasmic.com)
-License: GPL-1+
+License:
+ * THIS SOFTWARE IS NOT COPYRIGHTED
+ *
+ * This source code is offered for use in the public domain. You may
+ * use, modify or distribute it freely.
+ *
+ * This code is distributed in the hope that it will be useful but
+ * WITHOUT ANY WARRANTY. ALL WARRANTIES, EXPRESS OR IMPLIED ARE HEREBY
+ * DISCLAIMED. This includes but is not limited to warranties of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 Files: mingw-w64-crt/misc/getopt.c
 Copyright: 2002,  Todd C. Miller <Todd.Miller@courtesan.com>
