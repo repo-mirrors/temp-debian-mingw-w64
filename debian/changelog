@@ -1,6 +1,10 @@
 mingw-w64 (2.0~rc3-1) unstable; urgency=low
 
+  [ Stephen Kitt ]
   * New upstream release candidate.
+
+  [ Didier Raboud ]
+  * Confidently setting the DM-Upload-Allowed flag to yes.
 
  -- Stephen Kitt <steve@sk2.org>  Sat, 08 Oct 2011 18:08:40 +0200
 
