@@ -1,3 +1,9 @@
+mingw-w64 (2.0-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Stephen Kitt <steve@sk2.org>  Thu, 13 Oct 2011 00:41:25 +0200
+
 mingw-w64 (2.0~rc3-1) unstable; urgency=low
 
   [ Stephen Kitt ]
