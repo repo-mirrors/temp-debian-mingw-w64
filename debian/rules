@@ -19,11 +19,15 @@ target32 := i686-w64-mingw32
 target64 := x86_64-w64-mingw32
 targets := $(target32) $(target64)
 
-ifneq (,$(filter noopt,$(DEB_BUILD_OPTIONS)))
-    CFLAGS += -O0
-else
-    CFLAGS += -O2
-endif
+# No hardening support for now
+dpkg_buildflags = DEB_BUILD_MAINT_OPTIONS="hardening=-all" dpkg-buildflags
+
+CFLAGS = $(shell $(dpkg_buildflags) --get CFLAGS)
+CPPFLAGS = $(shell $(dpkg_buildflags) --get CPPFLAGS)
+CXXFLAGS = $(shell $(dpkg_buildflags) --get CXXFLAGS)
+FFLAGS = $(shell $(dpkg_buildflags) --get FFLAGS)
+LDFLAGS = $(shell $(dpkg_buildflags) --get LDFLAGS)
+export CFLAGS CPPFLAGS CXXFLAGS FFLAGS LDFLAGS
 
 clean:
 	dh_testdir
