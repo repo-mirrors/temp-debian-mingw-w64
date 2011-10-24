@@ -1,6 +1,8 @@
 mingw-w64 (2.0-2) unstable; urgency=low
 
   * Disable dpkg-buildflags hardening. (LP: #880726.)
+  * Apply upstream fix for imagehlp.h's extern "C" declarations (in
+    particular this is required to build Ekiga).
 
  -- Stephen Kitt <steve@sk2.org>  Mon, 24 Oct 2011 22:39:43 +0200
 
