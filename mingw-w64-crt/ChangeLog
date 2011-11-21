@@ -1,3 +1,68 @@
+2011-11-17  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* stdio/mingw_pformat.c (__pformat_cvt): Add missing initializer
+	to the int_max member of fpi.  Needed due to recent gdtoa update.
+
+2011-11-17  Ozkan Sezer  <sezeroz@gmail.com>
+
+	Add gdiplus from mingw.org sources: Original work was by Markus Koenig
+	<basilo@users.sourceforge.net>.  Patch to integrate into mingw-w64 was
+	provided by Mark Dootson <mark.dootson@znix.com>.
+
+	* lib32/gdiplus.def: New, generated from version 1.1.7601.17514 dll.
+	* lib64/gdiplus.def: New, generated from version 1.1.7601.17514 dll.
+	* libsrc/gdiplus.c: New.
+	* Makefile.am: Add gdiplus defs and sources to build.
+	* Makefile.in: Regenerate.
+
+2011-11-17  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* Makefile.am: Add $(sysincludes) to all build rules' CPPFLAGS.
+	* Makefile.in: Regenerate.
+
+2011-11-15  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* lib64/kernel32.def (RegUnLoadKeyA): Comment out advapi32 export.
+	(RegUnLoadKeyW): Likewise.
+
+2011-11-14  Ozkan Sezer  <sezeroz@gmail.com>
+
+	Merge from trunk rev. 4489:
+	2011-09-24  Kai Tietz  <ktietz@redhat.com>
+	* crt/crtexe.c, misc/mingw_matherr.c:
+	Make sure that variable _MINGW_INSTALL_DEBUG_MATHERR is placed in data-
+	segment in all cases.  Therefore initialize dummy-variant by minus one,
+	and check within crtexe for enabling this variable having one as value.
+
+2011-11-13  Ozkan Sezer  <sezeroz@gmail.com>
+
+	Merge from trunk rev. 4591:
+	2011-11-09  Kai Tietz  <ktietz@redhat.com>
+	* lib32/msvcr*.def: Make sure _assert and _wassert are marked DATA.
+	* lib64/msvcr*.def: Likewise.
+
+	Merge from trunk revs. 4362, 4565, 4566, 4567:
+	2011-08-09  Jonathan Yong  <jon_y@users.sourceforge.net>
+	* stdio/asprintf.c: New.
+	* stdio/vasprintf.c: New.
+	* Makefile.am: Add new sources to build.
+	* Makefile.in: Regenerate.
+
+2011-11-04  Ozkan Sezer  <sezeroz@gmail.com>
+
+	gdtoa: Sync to match the latest version at netlib.org as of Nov. 02
+	2011.  Changelog from http://netlib.org/fp/changes :
+	    Add field int_max to struct FPI and adjust gdtoa.c and *fmt.c
+	    so gdtoa.c tests against fpi->int_max rather than Int_max. This
+	    only affects some conversions by g_ffmt.c, which in some cases
+	    produced too many digits.
+
+2011-10-29  Jonathan Yong  <jon_y@users.sourceforge.net>
+
+	* lib32/dwmapi.def: New.
+	* Makefile.am: Added lib32/libdwmapi.a
+	* Makefile.in: Regenerated.
+
 2011-10-09  Ozkan Sezer  <sezeroz@gmail.com>
 
 	* revstamp.h: Set latest information.
@@ -63,7 +128,7 @@
 	code and prevent multiple temporary write-access settings on same
 	section.
 
-2011-05-26  Dongsheng Song  <dongsheng@users.sourceforge.net>:
+2011-05-26  Dongsheng Song  <dongsheng@users.sourceforge.net>
 
 	* lib32/msvcr90.def (__report_gsfailure, _assert, _byteswap_uint64,
 	_byteswap_ulong, _byteswap_ushort, _ctime32, _decode_pointer, _difftime32,
@@ -125,7 +190,7 @@
 	* math/pow.def.h: Use log2l/exp2l and integer/fraction separation
 	for improving calculation precission.
 
-2011-03-12  Dongsheng Song  <dongsheng.song@gmail.com>:
+2011-03-12  Dongsheng Song  <dongsheng.song@gmail.com>
 
 	* lib32/msvcr100.def (__report_gsfailure, _assert, _byteswap_uint64,
 	_byteswap_ulong, _byteswap_ushort, _ctime32, _difftime32,
