@@ -1,3 +1,10 @@
+mingw-w64 (2.0.1-1) unstable; urgency=low
+
+  * New upstream release (notably adding GDI+ support).
+  * Drop imagehlp-fix.patch, included upstream.
+
+ -- Stephen Kitt <steve@sk2.org>  Mon, 21 Nov 2011 23:05:31 +0100
+
 mingw-w64 (2.0-2) unstable; urgency=low
 
   * Disable dpkg-buildflags hardening. (LP: #880726.)
