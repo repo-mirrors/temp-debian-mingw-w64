@@ -1,3 +1,62 @@
+2011-11-19  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* wincon.h: Added MOUSE_HWHEELED (0x8).  Moved the Vista version guard
+	to cover only GetConsoleOriginalTitle[A|W].
+
+2011-11-17  Ozkan Sezer  <sezeroz@gmail.com>
+
+	Add gdiplus from mingw.org sources: Original work was by Markus Koenig
+	<basilo@users.sourceforge.net>.  Patch to integrate into mingw-w64 was
+	provided by Mark Dootson <mark.dootson@znix.com>.
+
+	* gdiplus.h: New.
+	* gdiplus/gdiplus.h: New.
+	* gdiplus/gdiplusbase.h: New.
+	* gdiplus/gdiplusbrush.h: New.
+	* gdiplus/gdipluscolor.h: New.
+	* gdiplus/gdipluscolormatrix.h: New.
+	* gdiplus/gdipluseffects.h: New.
+	* gdiplus/gdiplusenums.h: New.
+	* gdiplus/gdiplusflat.h: New.
+	* gdiplus/gdiplusgpstubs.h: New.
+	* gdiplus/gdiplusgraphics.h: New.
+	* gdiplus/gdiplusheaders.h: New.
+	* gdiplus/gdiplusimageattributes.h: New.
+	* gdiplus/gdiplusimagecodec.h: New.
+	* gdiplus/gdiplusimaging.h: New.
+	* gdiplus/gdiplusimpl.h: New.
+	* gdiplus/gdiplusinit.h: New.
+	* gdiplus/gdipluslinecaps.h: New.
+	* gdiplus/gdiplusmatrix.h: New.
+	* gdiplus/gdiplusmem.h: New.
+	* gdiplus/gdiplusmetafile.h: New.
+	* gdiplus/gdiplusmetaheader.h: New.
+	* gdiplus/gdipluspath.h: New.
+	* gdiplus/gdipluspen.h: New.
+	* gdiplus/gdipluspixelformats.h: New.
+	* gdiplus/gdiplusstringformat.h: New.
+	* gdiplus/gdiplustypes.h: New.
+	* configure.ac: Add GDIPLUSHEAD_LIST as a new header list.
+	* configure: Regenerate.
+	* Makefile.am: Add gdiplusheaddir and gdiplushead_HEADERS.
+	* Makefile.in: Regenerate.
+
+2011-11-16  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* wincon.h (SetConsoleDisplayMode): Add missing prototype from
+	http://msdn.microsoft.com/en-us/library/ms686028(v=VS.85).aspx
+	(CONSOLE_FULLSCREEN_MODE): New macro.
+	(CONSOLE_WINDOWED_MODE): New macro.
+
+2011-11-03  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* ntdef.h (FORCEINLINE): Sync the definition to the winnt.h version.
+
+2011-10-19  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* imagehlp.h: Fixed misplaced extern "C" {} braces which used to break
+	C_ASSERTs. (bug #3425478.)
+
 2011-09-26  Ozkan Sezer  <sezeroz@gmail.com>
 
 	* sdkddkver.h: Whitespace tidy-up.  Add our standart license header.
