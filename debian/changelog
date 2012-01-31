@@ -1,3 +1,11 @@
+mingw-w64 (2.0.1+svn4784-1) unstable; urgency=low
+
+  * New upstream snapshot.
+    - Builds libmsi.a for i686. (Closes: #652362.)
+    - Includes fixed asprintf as requested by Rafaël Carré.
+
+ -- Stephen Kitt <steve@sk2.org>  Tue, 31 Jan 2012 22:57:13 +0100
+
 mingw-w64 (2.0.1-1) unstable; urgency=low
 
   * New upstream release (notably adding GDI+ support).
