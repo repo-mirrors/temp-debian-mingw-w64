@@ -41,7 +41,7 @@ CONFFLAGS = --prefix=/usr
 # them during the build
 headers-stamp:
 	for target in $(targets); do \
-		dh_auto_configure -D$(top_dir)/mingw-w64-headers -B$(build_dir)/$$target/headers -- --host=$$target --enable-sdk=all && \
+		dh_auto_configure -D$(top_dir)/mingw-w64-headers -B$(build_dir)/$$target/headers -- --host=$$target --enable-sdk=all --enable-secure-api && \
 		dh_auto_build -D$(top_dir)/mingw-w64-headers -B$(build_dir)/$$target/headers && \
 		dh_auto_install -D$(top_dir)/mingw-w64-headers -B$(build_dir)/$$target/headers; \
 	done
@@ -59,8 +59,8 @@ build-arch-stamp:
 # Build the arch-independent subprojects, with different options for each
 # target architecture
 build-indep-stamp: headers-stamp
-	CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(target32)/include" dh_auto_configure -B$(build_dir)/$(target32)/all -- --host=$(target32) --with-libraries=all --enable-lib32 --disable-lib64
-	CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(target64)/include" dh_auto_configure -B$(build_dir)/$(target64)/all -- --host=$(target64) --with-libraries=libmangle --disable-lib32 --enable-lib64
+	CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(target32)/include" dh_auto_configure -B$(build_dir)/$(target32)/all -- --host=$(target32) --with-libraries=all --enable-lib32 --disable-lib64 --enable-secure-api
+	CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(target64)/include" dh_auto_configure -B$(build_dir)/$(target64)/all -- --host=$(target64) --with-libraries=libmangle --disable-lib32 --enable-lib64 --enable-secure-api
 # Move headers and libraries to target-specific folders
 	set -e; \
 	for target in $(targets); do \
