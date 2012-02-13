@@ -1,3 +1,11 @@
+mingw-w64 (2.0.1+svn4784-2) unstable; urgency=low
+
+  * Mention "x86" and "x64" as used on Windows (see thread starting at
+    http://lists.debian.org/4EBA730A.7060707@greffrath.com for
+    rationale; the 32-/64-bit split will come later).
+
+ -- Stephen Kitt <steve@sk2.org>  Mon, 13 Feb 2012 20:39:39 +0100
+
 mingw-w64 (2.0.1+svn4784-1) unstable; urgency=low
 
   * New upstream snapshot.
