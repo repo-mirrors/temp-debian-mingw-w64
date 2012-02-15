@@ -5,8 +5,10 @@ mingw-w64 (2.0.1+svn4784-2) unstable; urgency=low
     rationale; the 32-/64-bit split will come later).
   * Enable secure API (required in particular for newer versions of Wine
     Gecko).
+  * Allow bootstrapping again (thanks to Sam Morris for pointing out
+    that bootstrapping the mingw-w64 package set no longer worked!).
 
- -- Stephen Kitt <steve@sk2.org>  Mon, 13 Feb 2012 20:39:39 +0100
+ -- Stephen Kitt <steve@sk2.org>  Wed, 15 Feb 2012 01:00:43 +0100
 
 mingw-w64 (2.0.1+svn4784-1) unstable; urgency=low
 
