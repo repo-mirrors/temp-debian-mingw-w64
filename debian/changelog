@@ -1,6 +1,7 @@
 mingw-w64 (3.0~svn4933-1) experimental; urgency=low
 
   * New upstream trunk snapshot.
+    - Allows dshow.h to be used on its own. (Closes: #661442.)
 
  -- Stephen Kitt <steve@sk2.org>  Mon, 02 Apr 2012 00:16:13 +0200
 
