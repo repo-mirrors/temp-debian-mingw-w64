@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.65])
-AC_INIT([mingw-w64-headers],[2.0],[mingw-w64-public@lists.sourceforge.net])
+AC_INIT([mingw-w64-headers],[3.0b],[mingw-w64-public@lists.sourceforge.net])
 AC_CONFIG_SRCDIR([crt/_mingw.h.in])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_HEADERS([config.h])
@@ -14,6 +14,28 @@ AC_CANONICAL_HOST
 
 # Checks for programs.
 AC_PROG_SED
+
+AC_ARG_WITH([widl],
+  AS_HELP_STRING([--with-widl=PATH],
+    [use widl to update idl-based headers]),
+  [],
+  [with_widl=no])
+
+AS_VAR_IF([with_widl],[no],[],[
+  AS_VAR_IF([with_widl],[yes],[
+    AC_PATH_PROGS([widl_prog], [mingw-w64-widl widl])
+    AS_VAR_IF([widl_prog],[],[
+      AC_MSG_ERROR([Could not find widl installation, which is required in maintainer mode])])
+  ],[
+    AS_IF(AC_TRY_COMMAND([$with_widl -V]),
+      [widl_prog=$with_widl],
+      [AC_MSG_ERROR([Specified widl command is not valid])])]
+  )])
+
+AS_VAR_IF([widl_prog],[],[],[WIDL="$widl_prog"])
+
+AC_SUBST([WIDL])
+AM_CONDITIONAL([HAVE_WIDL],[test -n "$widl_prog"])
 
 # Checks for libraries.
 
@@ -52,27 +74,41 @@ AC_SUBST([SECSYSHEAD_LIST])
 
 enable_directx=no
 enable_ddk=no
-enable_idl=no
+
+if test -d ddk/include/ddk
+then
+    # DDK headers have been fetched from ReactOS
+    ddk_present=yes
+else
+    # DDK heaers are absent
+    AC_MSG_WARN([svn checkout incomplete, ddk headers missing.])
+    ddk_present=no
+fi
 
 AC_MSG_CHECKING([for optional sdk headers])
 AC_ARG_ENABLE([sdk],
   [AS_HELP_STRING([--enable-sdk=ARG],
-    [Add the desired SDK, where ARG can be one of ddk, directx, idl or all])],
+    [Add the desired SDK, where ARG can be one of ddk, directx, no or all])],
   [],
-  [enable_sdk=no])
+  [
+  if test "${ddk_present}" = no
+  then
+    enable_sdk=directx
+  else
+    enable_sdk=all
+  fi
+  ])
 AS_CASE([$enable_sdk],
   [all|yes],[
-    enable_sdk="ddk,directx,idl"
+    enable_sdk="ddk,directx"
     enable_ddk=yes
     enable_directx=yes],
   [ddk],[
     enable_ddk=yes],
   [directx],[
     enable_directx=yes],
-  [idl],[
-    enable_idl=yes],
   [no],[],
-  [AC_MSG_ERROR([Invalid option: $enable_sdk.  Please choose one of ddk, directx, idl or all.])])
+  [AC_MSG_ERROR([Invalid option: $enable_sdk.  Please choose one of ddk, directx, no or all.])])
 AC_MSG_RESULT([$enable_sdk])
 
 AS_VAR_IF([enable_directx],[yes],[
@@ -93,8 +129,15 @@ AS_VAR_IF([enable_ddk],[yes],[
 AC_SUBST([DDKHEAD_LIST])
 AC_SUBST([MINGW_HAS_DDK])
 
-AS_VAR_IF([enable_idl],[yes],[
-    IDLHEAD_LIST=$srcdir/idl/*.idl],[])
+AC_MSG_CHECKING([if installing idl files is enabled])
+AC_ARG_ENABLE([idl],
+    [AS_HELP_STRING([--enable-idl],
+        [Enable installing idl files (default disabled)])],
+    [enable_idl=yes])
+AC_MSG_RESULT([$enable_idl])
+AS_VAR_IF([enable_idl],[yes],
+    [IDLHEAD_LIST=$srcdir/include/*.idl],
+    [IDLHEAD_LIST=""])
 AC_SUBST([IDLHEAD_LIST])
 
 AC_MSG_CHECKING([whether to enable the secure API])

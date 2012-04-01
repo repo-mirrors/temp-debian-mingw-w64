@@ -33,6 +33,7 @@ EXTRA_HEADERS = \
   include/*.h \
   include/*.h16 \
   include/*.hxx \
+  include/*.idl \
   include/*.rh \
   include/*.ver \
   include/GL/*.h \
@@ -44,12 +45,57 @@ EXTRA_HEADERS = \
   crt/sec_api/sys/*.h \
   direct-x/include/*.h \
   direct-x/include/*.idl \
-  ddk/include/ddk/*.h \
-  idl/*.idl
+  ddk/include/ddk/*.h
 
 BUILT_SOURCES = \
   _mingw_directx.h \
   _mingw_ddk.h
+
+if HAVE_WIDL
+
+IDL_SRCS = \
+  include/audioclient.idl \
+  include/audiopolicy.idl \
+  include/downloadmgr.idl \
+  include/fusion.idl \
+  include/oaidl.idl \
+  include/ocidl.idl \
+  include/comcat.idl \
+  include/mscoree.idl \
+  include/msctf.idl \
+  include/objectarray.idl \
+  include/objidl.idl \
+  include/oleidl.idl \
+  include/optary.idl \
+  include/propidl.idl \
+  include/shobjidl.idl \
+  include/shtypes.idl \
+  include/tpcshrd.idl \
+  include/textstor.idl \
+  include/unknwn.idl \
+  include/urlmon.idl \
+  include/wpcapi.idl \
+  include/wtypes.idl \
+  include/xmllite.idl \
+  direct-x/include/amvideo.idl \
+  direct-x/include/austream.idl \
+  direct-x/include/d3d10.idl \
+  direct-x/include/d3d10_1.idl \
+  direct-x/include/d3d11.idl \
+  direct-x/include/d3dcommon.idl \
+  direct-x/include/ddstream.idl \
+  direct-x/include/dmodshow.idl \
+  direct-x/include/dxgi.idl \
+  direct-x/include/mediaobj.idl \
+  direct-x/include/mmstream.idl \
+  direct-x/include/vmr9.idl
+
+BUILT_SOURCES += $(IDL_SRCS:.idl=.h)
+
+.idl.h: crt/_mingw.h
+	$(WIDL) -DBOOL=WINBOOL -I$(srcdir)/include -I$(srcdir)/direct-x/include -Icrt -I$(srcdir)/crt -h -o $(srcdir)/$@ $<
+
+endif
 
 _mingw_directx.h: $(srcdir)/crt/sdks/_mingw_directx.h.in
 	$(SED) s/MINGW_HAS_DX$$/@MINGW_HAS_DX@/ $< > $@

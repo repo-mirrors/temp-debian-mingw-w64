@@ -10,10 +10,10 @@
 #define __STRINGIFY(x) #x
 #define __MINGW64_STRINGIFY(x) __STRINGIFY(x)
 
-#define __MINGW64_VERSION_MAJOR	2
+#define __MINGW64_VERSION_MAJOR	3
 #define __MINGW64_VERSION_MINOR	0
 #define __MINGW64_VERSION_STR	__MINGW64_STRINGIFY(__MINGW64_VERSION_MAJOR) "." __MINGW64_STRINGIFY(__MINGW64_VERSION_MINOR)
-#define __MINGW64_VERSION_STATE	"stable"
+#define __MINGW64_VERSION_STATE	"alpha"
 
 /* mingw.org's version macros: these make gcc to define
    MINGW32_SUPPORTS_MT_EH and to use the _CRT_MT global
@@ -149,6 +149,50 @@
 #else
 #define __MINGW_POISON_NAME(__IFACE)\
   __IFACE##_layout_has_not_been_verified_and_its_declaration_is_most_likely_incorrect
+#endif
+
+#ifndef __MSABI_LONG
+#define __MSABI_LONG(x)  x ## l
+#endif
+
+#if defined (__GNUC__) && defined (__GNUC_MINOR__)
+#define __MINGW_GNUC_PREREQ(major, minor) \
+  (__GNUC__ > (major) \
+   || (__GNUC__ == (major) && __GNUC_MINOR__ >= (minor)))
+#else
+#define __MINGW_GNUC_PREREQ(major, minor)  0
+#endif
+
+#if defined (_MSC_VER)
+#define __MINGW_MSC_PREREQ(major, minor) \
+  (_MSC_VER >= (major * 100 + minor * 10))
+#else
+#define __MINGW_MSC_PREREQ(major, minor)   0
+#endif
+
+#ifdef __MINGW_MSVC_COMPAT_WARNINGS
+# if __MINGW_GNUC_PREREQ (4, 5)
+#  define __MINGW_ATTRIB_DEPRECATED_STR(X) __attribute__ ((__deprecated__ (X)))
+# else
+#  define __MINGW_ATTRIB_DEPRECATED_STR(X) __MINGW_ATTRIB_DEPRECATED
+# endif
+#else
+# define __MINGW_ATTRIB_DEPRECATED_STR(X)
+#endif
+
+#define __MINGW_SEC_WARN_STR "This function or variable may be unsafe, use _CRT_SECURE_NO_WARNINGS to disable deprecation"
+#define __MINGW_MSVC2005_DEPREC_STR "This POSIX function is deprecated beginning in Visual C++ 2005, use _CRT_NONSTDC_NO_DEPRECATE to disable deprecation"
+
+#if !defined (_CRT_NONSTDC_NO_DEPRECATE)
+# define __MINGW_ATTRIB_DEPRECATED_MSVC2005 __MINGW_ATTRIB_DEPRECATED_STR (__MINGW_MSVC2005_DEPREC_STR)
+#else
+# define __MINGW_ATTRIB_DEPRECATED_MSVC2005
+#endif
+
+#if !defined (_CRT_SECURE_NO_WARNINGS) || (_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES == 0)
+# define __MINGW_ATTRIB_DEPRECATED_SEC_WARN __MINGW_ATTRIB_DEPRECATED_STR (__MINGW_SEC_WARN_STR)
+#else
+# define __MINGW_ATTRIB_DEPRECATED_SEC_WARN
 #endif
 
 #endif	/* _INC_CRTDEFS_MACRO */

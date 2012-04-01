@@ -73,6 +73,7 @@ src_libdxerr8=libsrc/dxerr8.c libsrc/dxerr8w.c
 src_libdxerr9=libsrc/dxerr9.c libsrc/dxerr9w.c
 src_libdxguid=libsrc/dxguid.c
 src_libksuser=libsrc/ksuser.c
+src_libksguid=libsrc/ksuser.c
 src_liblargeint=libsrc/largeint.c
 
 src_libmingw32=include/oscalls.h include/internal.h include/sect_attribs.h \
@@ -98,10 +99,10 @@ src_libuuid=libsrc/uuid.c   libsrc/guid_nul.c         libsrc/devguid.c         l
   libsrc/hlink-uuid.c       libsrc/mlang-uuid.c       libsrc/msctf-uuid.c      libsrc/mshtml-uuid.c     libsrc/msxml-uuid.c        \
   libsrc/netcon-uuid.c      libsrc/objidl-uuid.c      libsrc/oaidl-uuid.c      libsrc/objsafe-uuid.c    libsrc/ocidl-uuid.c        \
   libsrc/oleacc-uuid.c      libsrc/olectlid-uuid.c    libsrc/oleidl-uuid.c     libsrc/power-uuid.c      libsrc/servprov-uuid.c     \
-  libsrc/unknwn-uuid.c      libsrc/urlmon-uuid.c      libsrc/vds-uuid.c        libsrc/virtdisk-uuid.c   \
+  libsrc/urlmon-uuid.c      libsrc/vds-uuid.c        libsrc/virtdisk-uuid.c   \
   libsrc/wia-uuid.c         libsrc/powrprof-uuid.c    libsrc/usbcamdi-uuid.c   libsrc/usbiodef-uuid.c   libsrc/ntddkbd-uuid.c      \
   libsrc/ntddmou-uuid.c     libsrc/ntddpar-uuid.c     libsrc/ntddser-uuid.c    libsrc/ntddscsi-uuid.c   libsrc/ntddstor-uuid.c     \
-  libsrc/ntddvdeo-uuid.c
+  libsrc/ntddvdeo-uuid.c    libsrc/dxva-uuid.c
 
 src_libws2_32=libsrc/ws2_32.c \
   \
@@ -241,6 +242,8 @@ src_libmingwex=\
   stdio/mingw_swscanf.c stdio/mingw_wscanf.c \
   stdio/mingw_fwscanf.c stdio/mingw_sscanf.c \
   stdio/mingw_vfscanf.c stdio/mingw_wvfscanf.c \
+  stdio/vfscanf2.S  stdio/vscanf2.S  stdio/vsscanf2.S \
+  stdio/vswscanf2.S  stdio/vwscanf2.S stdio/vfwscanf2.S \
   stdio/snprintf.c stdio/snwprintf.c stdio/_stat64i32.c \
   stdio/_stat.c stdio/strtof.c stdio/ulltoa.c stdio/ulltow.c stdio/vfscanf.c \
   stdio/vfwscanf.c stdio/vscanf.c stdio/vsnprintf.c stdio/vsnprintf_s.c \
@@ -250,6 +253,7 @@ src_libmingwex=\
   stdio/_wstat64i32.c stdio/_wstat.c stdio/wtoll.c \
   stdio/fgetpos64.c        stdio/fseeko32.c        stdio/fsetpos64.c        stdio/ftello.c            stdio/ftruncate64.c     \
   stdio/truncate.c         stdio/asprintf.c        stdio/vasprintf.c        \
+  misc/uchar_c16rtomb.c    misc/uchar_c32rtomb.c   misc/uchar_mbrtoc16.c    misc/uchar_mbrtoc32.c     \
   intrincs/ilockadd.c      intrincs/ilockand64.c   intrincs/ilockcxch64.c   intrincs/ilockcxchptr.c   intrincs/ilockdec64.c   \
   intrincs/ilockexch64.c   intrincs/ilockexchptr.c intrincs/ilockinc64.c    intrincs/ilockor64.c      intrincs/ilockxor64.c   \
   intrincs/ilockexchadd64.c
@@ -364,6 +368,10 @@ lib32_libksuser_a_SOURCES = $(src_libksuser)
 lib32_libksuser_a_CPPFLAGS=$(CPPFLAGS32) $(sysincludes)
 lib32_libksuser_a_AR = $(DTLIB32) && $(AR) $(ARFLAGS)
 
+lib32_LIBRARIES += lib32/libksguid.a
+lib32_libksguid_a_SOURCES = $(src_libksguid)
+lib32_libksguid_a_CPPFLAGS=$(CPPFLAGS32) $(sysincludes)
+
 lib32_LIBRARIES += lib32/liblargeint.a
 lib32_liblargeint_a_SOURCES = $(src_liblargeint)
 lib32_liblargeint_a_CPPFLAGS=$(CPPFLAGS32) $(sysincludes)
@@ -422,6 +430,7 @@ lib32_DATA = \
   lib32/libaclui.a     lib32/libadvapi32.a  lib32/libapcups.a    lib32/libavicap32.a  lib32/libavifil32.a \
   lib32/libcap.a       lib32/libcfgmgr32.a  lib32/libcomctl32.a  lib32/libcomdlg32.a  lib32/libcrypt32.a  \
   lib32/libctl3d32.a   \
+  lib32/libt2embed.a   \
   lib32/libclasspnp.a  lib32/libd3d8.a      lib32/libd3d9.a      lib32/libd3dim.a     lib32/libd3drm.a    \
   lib32/libd3dx8d.a    lib32/libd3dx9d.a    lib32/libd3dxof.a    lib32/libdbghelp.a   lib32/libddraw.a    \
   lib32/libdhcpcsvc.a  lib32/libdlcapi.a    lib32/libdnsapi.a    lib32/libdplayx.a    lib32/libdpnaddr.a  \
@@ -635,6 +644,10 @@ lib64_LIBRARIES += lib64/libksuser.a
 lib64_libksuser_a_SOURCES = $(src_libksuser)
 lib64_libksuser_a_CPPFLAGS=$(CPPFLAGS64) $(sysincludes)
 lib64_libksuser_a_AR = $(DTLIB64) && $(AR) $(ARFLAGS)
+
+lib64_LIBRARIES += lib64/libksguid.a
+lib64_libksguid_a_SOURCES = $(src_libksguid)
+lib64_libksguid_a_CPPFLAGS=$(CPPFLAGS64) $(sysincludes)
 
 lib64_LIBRARIES += lib64/liblargeint.a
 lib64_liblargeint_a_SOURCES = $(src_liblargeint)
