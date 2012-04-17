@@ -25,14 +25,17 @@ Description: Development files for MinGW-w64
 
 Package: mingw-w64
 Architecture: all
-Depends: gcc-mingw-w64, mingw-w64-dev, ${misc:Depends}
+Depends: gcc-mingw-w64, g++-mingw-w64 | gcc-mingw-w64 (<< 4.6.3-3+4), mingw-w64-dev, ${misc:Depends}
 Description: Development environment targetting 32- and 64-bit Windows
  MinGW-w64 provides a development and runtime environment for 32- and
  64-bit (x86 and x64) Windows applications using the Windows API and
  the GNU Compiler Collection (gcc).
  .
- This metapackage provides the full MinGW-w64 development
- environment.
+ This metapackage provides the MinGW-w64 development environment,
+ including C and C++ compilers. Ada, Fortran, Objective-C and
+ Objective-C++ compilers are available respectively in the
+ gnat-mingw-w64, gfortran-mingw-w64, gobjc-mingw-w64 and
+ gojbc++-mingw-w64 packages.
 
 Package: mingw-w64-tools
 Architecture: any
