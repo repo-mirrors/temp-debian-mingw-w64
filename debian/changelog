@@ -1,3 +1,9 @@
+mingw-w64 (2.0.2-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Stephen Kitt <steve@sk2.org>  Tue, 17 Apr 2012 23:47:18 +0200
+
 mingw-w64 (2.0.1+svn4784-2) unstable; urgency=low
 
   * Mention "x86" and "x64" as used on Windows (see thread starting at
