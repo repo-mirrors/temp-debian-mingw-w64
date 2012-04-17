@@ -4,8 +4,9 @@ mingw-w64 (2.0.2-1) unstable; urgency=low
   * Following the gcc-mingw-w64 package split, make mingw-w64 depend on
     gcc-mingw-w64 and g++-mingw-w64, and correct the description
     appropriately.
+  * Update watch file to take into account any upstream tarball.
 
- -- Stephen Kitt <steve@sk2.org>  Wed, 18 Apr 2012 00:13:32 +0200
+ -- Stephen Kitt <steve@sk2.org>  Wed, 18 Apr 2012 00:14:29 +0200
 
 mingw-w64 (2.0.1+svn4784-2) unstable; urgency=low
 
