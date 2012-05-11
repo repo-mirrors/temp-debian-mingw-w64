@@ -3,7 +3,7 @@ mingw-w64 (2.0.3-1) unstable; urgency=low
   * New upstream release.
   * Split the -dev package into 32- and 64-bit variants.
   * Fix "Error when including dshow.h" by ensuring all SDKs are enabled
-    throughout the build. (Closes: #661442.)
+    throughout the build. (Closes: #661442)
 
  -- Stephen Kitt <steve@sk2.org>  Thu, 10 May 2012 17:56:59 +0200
 
