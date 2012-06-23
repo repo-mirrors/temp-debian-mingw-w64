@@ -49,6 +49,11 @@ headers-stamp:
 
 # Build the two arch-dependent subprojects
 build-arch-stamp:
+	export CFLAGS="$(shell dpkg-buildflags --get CFLAGS)"; \
+	export CPPFLAGS="$(shell dpkg-buildflags --get CPPFLAGS)"; \
+	export CXXFLAGS="$(shell dpkg-buildflags --get CXXFLAGS)"; \
+	export FFLAGS="$(shell dpkg-buildflags --get FFLAGS)"; \
+	export LDFLAGS="$(shell dpkg-buildflags --get LDFLAGS)"; \
 	for tool_dir in $(top_dir)/mingw-w64-tools/*; do \
 		dh_auto_configure -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir) && \
 		dh_auto_build -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir) && \
