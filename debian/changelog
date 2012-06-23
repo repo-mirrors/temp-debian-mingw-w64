@@ -1,10 +1,12 @@
-mingw-w64 (3.0~svn4933-2) experimental; urgency=low
+mingw-w64 (3.0~svn5131-1) experimental; urgency=low
 
+  * New upstream trunk snapshot.
+  * Split the -dev package into 32- and 64-bit variants, with the
+    appropriate Breaks and Replaces. (Closes: #678486.)
   * Following the gcc-mingw-w64 package split, make mingw-w64 depend on
     gcc-mingw-w64 and g++-mingw-w64, and correct the description
     appropriately.
   * Update watch file to take into account any upstream tarball.
-  * Standards-Version 3.9.3, no change required.
   * Make sure we get the split gcc-mingw-w64 packages (to avoid
     attempting a build with only the architecture-independent gcc-mingw-
     w64 package).
