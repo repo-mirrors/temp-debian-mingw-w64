@@ -1,3 +1,58 @@
+2012-05-10  Kai Tietz  <ktietz@redhat.com>
+
+	PR 3523077
+	* tmschema.h: Add warning about obsoleted tmschema.h for
+	_WIN32_NT > 0x600.
+
+2012-05-10  Piotr Caban  <piotr@codeweavers.com>
+
+	* vsstyle.h: Wine-version relicensed.
+	* vssym32.h: Likewise.
+
+2012-05-09  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* winuser.h (MAPVK_VK_TO_*): Moved map types for MapVirtualKeyEx
+	out of win7 ifdefs. Protected MAPVK_VK_TO_VSC_EX for vista-only.
+
+2012-05-08  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* uxtheme.h (MAX_INTLIST_COUNT): Define as 402 instead of 10 for
+	vista and newer. (bug #3524667).
+
+2012-05-07  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* dwmapi.h: Fixed all function prototypes to be WINAPI.
+
+2012-05-02  Kai Tietz  <ktietz@redhat.com>
+
+	PR 3523072
+	* commctrl.h:  Add missing button-styles, and messages.
+
+2012-04-28  Jonathan Liu  <net147@users.sourceforge.net>
+
+	* wlanapi.h: Fixed incorrectly nested if blocks.
+
+2012-04-23  Stefan Sundin  <recover89@gmail.com>
+
+	* Fix incorrect references for pVtbl to lpVtbl in these files:
+	audioengineendpoint.h, bdaiface.h, dvbsiparser.h, dwrite.h, dxvahd.h,
+	evr.h, fsrm.h, fsrmquota.h, fsrmreports.h, fsrmscreen.h,
+	functiondiscoveryapi.h, functiondiscoverynotification.h,
+	identitystore.h, locationapi.h, mfapi.h, mfidl.h, mfobjects.h,
+	mfplay.h, mfreadwrite.h, mftransform.h, mpeg2data.h, mpeg2psiparser.h,
+	msrdc.h, ndhelper.h, opmapi.h, portabledeviceconnectapi.h,
+	rdpencomapi.h, strmif.h, strmif.idl, tuner.h, vsadmin.h, vsbackup.h,
+	vsmgmt.h, vsprov.h, vss.h, vswriter.h, winsync.h, wmcontainer.h,
+	wsdattachment.h, wsdbase.h, wsdclient.h, wsddisco.h, wsdhost.h,
+	wsdxml.h.
+	* adhoc.h (IDot11AdHocInterfaceNotificationSink): Fix
+	OnConnectionStatusChange.
+
+2012-04-23  Kai Tietz  <ktietz@redhat.com>
+
+	PR/3520095
+	* endpointvolume.h (IAudioEndpointVolume): Fix.
+
 2012-03-07  Corinna Vinschen <corinna@vinschen.de>
 
 	* winternl.h (struct _LDR_DATA_TABLE_ENTRY): Changed type of Reserved1

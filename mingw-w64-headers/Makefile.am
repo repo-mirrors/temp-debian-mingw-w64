@@ -56,27 +56,37 @@ if HAVE_WIDL
 IDL_SRCS = \
   include/audioclient.idl \
   include/audiopolicy.idl \
+  include/docobj.idl \
   include/downloadmgr.idl \
   include/fusion.idl \
   include/oaidl.idl \
   include/ocidl.idl \
   include/comcat.idl \
+  include/mmdeviceapi.idl \
   include/mscoree.idl \
   include/msctf.idl \
+  include/msxml.idl \
   include/objectarray.idl \
   include/objidl.idl \
   include/oleidl.idl \
   include/optary.idl \
+  include/portabledevicetypes.idl \
   include/propidl.idl \
+  include/propsys.idl \
+  include/sensorsapi.idl \
   include/shobjidl.idl \
   include/shtypes.idl \
+  include/strmif.idl \
+  include/structuredquerycondition.idl \
   include/tpcshrd.idl \
   include/textstor.idl \
   include/unknwn.idl \
   include/urlmon.idl \
+  include/wincodec.idl \
   include/wpcapi.idl \
   include/wtypes.idl \
   include/xmllite.idl \
+  direct-x/include/amstream.idl \
   direct-x/include/amvideo.idl \
   direct-x/include/austream.idl \
   direct-x/include/d3d10.idl \
@@ -87,7 +97,10 @@ IDL_SRCS = \
   direct-x/include/dmodshow.idl \
   direct-x/include/dxgi.idl \
   direct-x/include/mediaobj.idl \
+  direct-x/include/medparam.idl \
   direct-x/include/mmstream.idl \
+  direct-x/include/qedit.idl \
+  direct-x/include/qnetwork.idl \
   direct-x/include/vmr9.idl
 
 BUILT_SOURCES += $(IDL_SRCS:.idl=.h)

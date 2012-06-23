@@ -17,6 +17,12 @@
 /* for MARGINS structure declaration.  */
 #include <uxtheme.h>
 
+/*
+ * This API is available only on Vista+ versions. It's not guarded by version check
+ * because that would cause problems with Mozilla code (and MSVC doesn't seem to be
+ * doing that as well).
+ */
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -158,11 +164,7 @@ typedef enum _DWMNCRENDERINGPOLICY {
 typedef HANDLE HTHUMBNAIL;
 typedef HTHUMBNAIL* PHTHUMBNAIL;
 
-/* Only for Vista and higher */
-/* FIXME: use WINVER instead? */
-#if _WIN32_WINNT >= 0x0600
-
-BOOL DwmDefWindowProc(
+BOOL WINAPI DwmDefWindowProc(
     HWND hwnd,
     UINT msg,
     WPARAM wParam,
@@ -170,89 +172,87 @@ BOOL DwmDefWindowProc(
     LRESULT *plResult
 );
 
-HRESULT DwmEnableBlurBehindWindow(
+HRESULT WINAPI DwmEnableBlurBehindWindow(
     HWND hWnd,
     const DWM_BLURBEHIND *pBlurBehind
 );
 
-HRESULT DwmEnableComposition(
+HRESULT WINAPI DwmEnableComposition(
     UINT uCompositionAction
 );
 
-HRESULT DwmEnableMMCSS(
+HRESULT WINAPI DwmEnableMMCSS(
     BOOL fEnableMMCSS
 );
 
-HRESULT DwmExtendFrameIntoClientArea(
+HRESULT WINAPI DwmExtendFrameIntoClientArea(
     HWND hWnd,
     const MARGINS *pMarInset
 );
 
-HRESULT DwmGetColorizationColor(
+HRESULT WINAPI DwmGetColorizationColor(
     DWORD *pcrColorization,
     BOOL *pfOpaqueBlend
 );
 
-HRESULT DwmGetCompositionTimingInfo(
+HRESULT WINAPI DwmGetCompositionTimingInfo(
     HWND hwnd,
     DWM_TIMING_INFO *pTimingInfo
 );
 
-HRESULT DwmGetWindowAttribute(
+HRESULT WINAPI DwmGetWindowAttribute(
     HWND hwnd,
     DWORD dwAttribute,
     PVOID pvAttribute,
     DWORD cbAttribute
 );
 
-HRESULT DwmIsCompositionEnabled(
+HRESULT WINAPI DwmIsCompositionEnabled(
     BOOL *pfEnabled
 );
 
-HRESULT DwmModifyPreviousDxFrameDuration(
+HRESULT WINAPI DwmModifyPreviousDxFrameDuration(
     HWND hwnd,
     INT cRefreshes,
     BOOL fRelative
 );
 
-HRESULT DwmQueryThumbnailSourceSize(
+HRESULT WINAPI DwmQueryThumbnailSourceSize(
     HTHUMBNAIL hThumbnail,
     PSIZE pSize
 );
 
-HRESULT DwmRegisterThumbnail(
+HRESULT WINAPI DwmRegisterThumbnail(
     HWND hwndDestination,
     HWND *hwndSource,
     PHTHUMBNAIL phThumbnailId
 );
 
-HRESULT DwmSetDxFrameDuration(
+HRESULT WINAPI DwmSetDxFrameDuration(
     HWND hwnd,
     INT cRefreshes
 );
 
-HRESULT DwmSetPresentParameters(
+HRESULT WINAPI DwmSetPresentParameters(
     HWND hwnd,
     DWM_PRESENT_PARAMETERS *pPresentParams
 );
 
-HRESULT DwmSetWindowAttribute(
+HRESULT WINAPI DwmSetWindowAttribute(
     HWND hwnd,
     DWORD dwAttribute,
     LPCVOID pvAttribute,
     DWORD cbAttribute
 );
 
-HRESULT DwmUnregisterThumbnail(
+HRESULT WINAPI DwmUnregisterThumbnail(
     HTHUMBNAIL hThumbnailId
 );
 
-HRESULT DwmUpdateThumbnailProperties(
+HRESULT WINAPI DwmUpdateThumbnailProperties(
     HTHUMBNAIL hThumbnailId,
     const DWM_THUMBNAIL_PROPERTIES *ptnProperties
 );
-
-#endif
 
 #ifdef __cplusplus
 }

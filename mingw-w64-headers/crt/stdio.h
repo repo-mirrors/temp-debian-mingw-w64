@@ -200,6 +200,16 @@ extern
 /*
  * User has expressed a preference for C99 conformance...
  */
+#undef __MINGW_PRINTF_FORMAT
+#undef __MINGW_SCANF_FORMAT
+#define __MINGW_PRINTF_FORMAT gnu_printf
+#define __MINGW_SCANF_FORMAT  gnu_scanf
+
+/* There seems to be a bug about builtins and static overrides of them
+   in g++.  So we need to do here some trickery.  */
+#ifdef __cplusplus
+extern "C++" {
+#endif
 
 __mingw_ovr
 __attribute__((__format__ (gnu_scanf, 2, 3))) __MINGW_ATTRIB_NONNULL(2)
@@ -355,8 +365,16 @@ int vsnprintf (char *__stream, size_t __n, const char *__format, __builtin_va_li
 
 /* #endif */ /* __NO_ISOCEXT */
 
+#ifdef __cplusplus
+}
+#endif
+
 #else /* !__USE_MINGW_ANSI_STDIO */
 
+#undef __MINGW_PRINTF_FORMAT
+#undef __MINGW_SCANF_FORMAT
+#define __MINGW_PRINTF_FORMAT ms_printf
+#define __MINGW_SCANF_FORMAT  ms_scanf
 #undef __builtin_vsnprintf
 #undef __builtin_vsprintf
 
@@ -451,11 +469,7 @@ int vsnprintf (char *__stream, size_t __n, const char *__format, __builtin_va_li
 #ifndef _FILE_OFFSET_BITS_SET_FSEEKO
 #define _FILE_OFFSET_BITS_SET_FSEEKO
 #if (defined(_FILE_OFFSET_BITS) && (_FILE_OFFSET_BITS == 64))
-/*#define fseeko(__stream,__offset,__whence) fseeko64(__stream,__offset,__whence)*/
 #define fseeko fseeko64
-#else
-/* fseeko32 redirects to fseeko64, though fseeko (32bit off_t) symbol is provided */
-/* #define fseeko(__stream,__offset,__whence) fseeko64(__stream,__offset,__whence) */
 #endif /* (defined(_FILE_OFFSET_BITS) && (_FILE_OFFSET_BITS == 64)) */
 #endif /* _FILE_OFFSET_BITS_SET_FSEEKO */
 

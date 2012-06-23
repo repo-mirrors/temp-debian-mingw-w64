@@ -1026,8 +1026,8 @@ atol
 bsearch
 bsearch_s
 calloc
-ceil
-;ceilf
+ceil DATA
+ceilf DATA
 clearerr
 clearerr_s
 clock
@@ -1040,8 +1040,8 @@ ctime DATA
 difftime
 div
 exit
-exp
-;expf
+exp DATA
+expf DATA
 ;fabs
 fclose
 feof
@@ -1052,8 +1052,8 @@ fgetpos
 fgets
 fgetwc
 fgetws
-floor
-;floorf
+floor DATA
+floorf DATA
 fmod
 ;fmodf
 fopen
@@ -1120,10 +1120,10 @@ ldiv
 localeconv
 localtime DATA
 ;_localtime32 = localtime
-log
+log DATA
 log10
-;log10f
-;logf
+log10f DATA
+logf DATA
 longjmp DATA
 malloc
 mblen
@@ -1174,8 +1174,8 @@ sinh
 ;sinhf
 sprintf
 sprintf_s
-sqrt
-;sqrtf
+sqrt DATA
+sqrtf DATA
 srand
 sscanf
 sscanf_s
