@@ -71,10 +71,13 @@ src_libdinput8=libsrc/dinput_private.h libsrc/dinput_joy.c libsrc/dinput_joy2.c 
 src_libdmoguids=libsrc/dmoguids.c
 src_libdxerr8=libsrc/dxerr8.c libsrc/dxerr8w.c
 src_libdxerr9=libsrc/dxerr9.c libsrc/dxerr9w.c
+src_libwindowscodecs=libsrc/windowscodecs.c
 src_libdxguid=libsrc/dxguid.c
 src_libksuser=libsrc/ksuser.c
 src_libksguid=libsrc/ksuser.c
 src_liblargeint=libsrc/largeint.c
+src_libsensorsapi=libsrc/sensorsapi.c
+src_libportabledeviceguids=libsrc/portabledeviceguids.c
 
 src_libmingw32=include/oscalls.h include/internal.h include/sect_attribs.h \
   crt/atonexit.c      crt/crt0_c.c         crt/dll_argv.c  crt/gccmain.c     crt/natstart.c  crt/pseudo-reloc-list.c  crt/wildcard.c \
@@ -99,10 +102,10 @@ src_libuuid=libsrc/uuid.c   libsrc/guid_nul.c         libsrc/devguid.c         l
   libsrc/hlink-uuid.c       libsrc/mlang-uuid.c       libsrc/msctf-uuid.c      libsrc/mshtml-uuid.c     libsrc/msxml-uuid.c        \
   libsrc/netcon-uuid.c      libsrc/objidl-uuid.c      libsrc/oaidl-uuid.c      libsrc/objsafe-uuid.c    libsrc/ocidl-uuid.c        \
   libsrc/oleacc-uuid.c      libsrc/olectlid-uuid.c    libsrc/oleidl-uuid.c     libsrc/power-uuid.c      libsrc/servprov-uuid.c     \
-  libsrc/urlmon-uuid.c      libsrc/vds-uuid.c        libsrc/virtdisk-uuid.c   \
+  libsrc/urlmon-uuid.c      libsrc/vds-uuid.c         libsrc/virtdisk-uuid.c   \
   libsrc/wia-uuid.c         libsrc/powrprof-uuid.c    libsrc/usbcamdi-uuid.c   libsrc/usbiodef-uuid.c   libsrc/ntddkbd-uuid.c      \
   libsrc/ntddmou-uuid.c     libsrc/ntddpar-uuid.c     libsrc/ntddser-uuid.c    libsrc/ntddscsi-uuid.c   libsrc/ntddstor-uuid.c     \
-  libsrc/ntddvdeo-uuid.c    libsrc/dxva-uuid.c
+  libsrc/ntddvdeo-uuid.c    libsrc/dxva-uuid.c        libsrc/mshtmhst-uuid.c
 
 src_libws2_32=libsrc/ws2_32.c \
   \
@@ -136,6 +139,7 @@ src_libmingwex=\
   intrincs/ilockxor.c   intrincs/ilockinc.c    intrincs/ilockdec.c intrincs/ilockexch.c intrincs/ilockcxch.c     \
   intrincs/__movsb.c    intrincs/__movsw.c     intrincs/__movsd.c     \
   intrincs/__stosb.c    intrincs/__stosw.c     intrincs/__stosd.c     \
+  intrincs/RtlSecureZeroMemory.c \
   intrincs/currentteb.c intrincs/currentfiber.c intrincs/fiberdata.c  \
   \
   complex/cabs.c     complex/cabsf.c    complex/cabsl.c   complex/cacos.c    complex/cacosf.c   complex/cacosl.c \
@@ -173,10 +177,12 @@ src_libmingwex=\
   math/acosf.c        math/acosh.c        math/acoshf.c       math/acoshl.c        math/acosl.c       math/asinf.c       \
   math/asinh.c        math/asinhf.c       math/asinhl.c       math/asinl.c         math/atan2f.c      math/atan2l.c      \
   math/atanf.c        math/atanh.c        math/atanhf.c       math/atanhl.c        math/atanl.c       math/cbrt.c        \
-  math/cbrtf.c        math/cbrtl.c        math/ceilf.c        math/cephes_emath.c  math/copysign.c    math/copysignf.c   \
+  math/cbrtf.c        math/cbrtl.c        math/ceilf.S        math/ceil.S \
+  math/cephes_emath.c  math/copysign.c    math/copysignf.c   \
   math/coshf.c        math/coshl.c        math/erfl.c         math/expf.c          math/exp.c         math/expl.c        \
   math/expm1.c        math/expm1f.c       math/expm1l.c       math/fabs.c          math/fabsf.c       math/fabsl.c       \
-  math/fdim.c         math/fdimf.c        math/fdiml.c        math/floorf.c        math/fmal.c        math/fmax.c        \
+  math/fdim.c         math/fdimf.c        math/fdiml.c        math/floorf.S \
+  math/floor.S        math/fmal.c        math/fmax.c        \
   math/fmaxf.c        math/fmaxl.c        math/fmin.c         math/fminf.c         math/fminl.c       math/fmodf.c       \
   math/fmod.c         math/modf.c         \
   math/fmodl.c        math/fpclassify.c   math/fpclassifyf.c  math/fpclassifyl.c   math/fp_consts.c   math/fp_constsf.c  \
@@ -195,8 +201,9 @@ src_libmingwex=\
   math/sinhf.c        math/sinhl.c        \
   math/sqrtf.c        math/sqrtl.c        math/sqrt.c         \
   math/tanf.c         math/tanhf.c        \
-  math/tanhl.c        math/tgamma.c       math/tgammaf.c      math/tgammal.c       math/trunc.c       math/truncf.c      \
-  math/truncl.c       math/cossin.c       \
+  math/tanhl.c        math/tgamma.c       math/tgammaf.c      math/tgammal.c \
+  math/trunc.S       math/truncf.S        math/truncl.c \
+  math/cossin.c       \
   \
   misc/mingw_matherr.c \
   misc/mb_wc_common.h \
@@ -359,6 +366,10 @@ lib32_LIBRARIES += lib32/libdxerr9.a
 lib32_libdxerr9_a_SOURCES = $(src_libdxerr9)
 lib32_libdxerr9_a_CPPFLAGS=$(CPPFLAGS32) $(sysincludes)
 
+lib32_LIBRARIES += lib32/libwindowscodecs.a
+lib32_libwindowscodecs_a_SOURCES = $(src_libwindowscodecs)
+lib32_libwindowscodecs_a_CPPFLAGS = $(CPPFLAGS32) $(sysincludes)
+
 lib32_LIBRARIES += lib32/libdxguid.a
 lib32_libdxguid_a_SOURCES = $(src_libdxguid)
 lib32_libdxguid_a_CPPFLAGS=$(CPPFLAGS32) $(sysincludes)
@@ -371,6 +382,14 @@ lib32_libksuser_a_AR = $(DTLIB32) && $(AR) $(ARFLAGS)
 lib32_LIBRARIES += lib32/libksguid.a
 lib32_libksguid_a_SOURCES = $(src_libksguid)
 lib32_libksguid_a_CPPFLAGS=$(CPPFLAGS32) $(sysincludes)
+
+lib32_LIBRARIES += lib32/libsensorsapi.a
+lib32_libsensorsapi_a_SOURCES = $(src_libsensorsapi)
+lib32_libsensorsapi_a_CPPFLAGS=$(CPPFLAGS32) $(sysincludes)
+
+lib32_LIBRARIES += lib32/libportabledeviceguids.a
+lib32_libportabledeviceguids_a_SOURCES = $(src_libportabledeviceguids)
+lib32_libportabledeviceguids_a_CPPFLAGS=$(CPPFLAGS32) $(sysincludes)
 
 lib32_LIBRARIES += lib32/liblargeint.a
 lib32_liblargeint_a_SOURCES = $(src_liblargeint)
@@ -484,7 +503,7 @@ lib32_DATA = \
   lib32/libwdsutil.a   lib32/libwdsclient.a lib32/libwdsimage.a  lib32/libwdsupgcompl.a \
   lib32/libmsvcr100.a  lib32/libwdsclientapi.a lib32/libpcwum.a  lib32/libdbgeng.a    \
   \
-  lib32/libcryptxml.a  lib32/libsspicli.a   \
+  lib32/libcabinet.a   lib32/libcryptxml.a  lib32/libsspicli.a   \
   \
   lib32/libd3dcompiler_33.a lib32/libd3dcompiler_34.a lib32/libd3dcompiler_35.a \
   lib32/libd3dcompiler_36.a lib32/libd3dcompiler_37.a lib32/libd3dcompiler_38.a \
@@ -629,9 +648,21 @@ lib64_LIBRARIES += lib64/libdxerr9.a
 lib64_libdxerr9_a_SOURCES = $(src_libdxerr9)
 lib64_libdxerr9_a_CPPFLAGS=$(CPPFLAGS64) $(sysincludes)
 
+lib64_LIBRARIES += lib64/libwindowscodecs.a
+lib64_libwindowscodecs_a_SOURCES = $(src_libwindowscodecs)
+lib64_libwindowscodecs_a_CPPFLAGS = $(CPPFLAGS64) $(sysincludes)
+
 lib64_LIBRARIES += lib64/libdxguid.a
 lib64_libdxguid_a_SOURCES = $(src_libdxguid)
 lib64_libdxguid_a_CPPFLAGS=$(CPPFLAGS64) $(sysincludes)
+
+lib64_LIBRARIES += lib64/libsensorsapi.a
+lib64_libsensorsapi_a_SOURCES = $(src_libsensorsapi)
+lib64_libsensorsapi_a_CPPFLAGS=$(CPPFLAGS64) $(sysincludes)
+
+lib64_LIBRARIES += lib64/libportabledeviceguids.a
+lib64_libportabledeviceguids_a_SOURCES = $(src_libportabledeviceguids)
+lib64_libportabledeviceguids_a_CPPFLAGS=$(CPPFLAGS64) $(sysincludes)
 
 lib64_LIBRARIES += lib64/libgmon.a
 lib64_libgmon_a_SOURCES = profile/mcount.c \

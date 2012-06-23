@@ -321,6 +321,25 @@ extern "C" {
 #define LOCALE_SSORTNAME              0x1013
 #define LOCALE_IDIGITSUBSTITUTION     0x1014
 
+/* Locale name special values */
+#if defined(__GNUC__)
+# define LOCALE_NAME_INVARIANT      (const WCHAR []){ 0 }
+#elif defined(_MSC_VER)
+# define LOCALE_NAME_INVARIANT      L""
+#else
+static const WCHAR LOCALE_NAME_INVARIANT[] = { 0 };
+#endif
+
+#if defined(__GNUC__)
+# define LOCALE_NAME_SYSTEM_DEFAULT      (const WCHAR []){'!','s','y','s','-','d','e','f','a','u','l','t','-','l','o','c','a','l','e',0}
+#elif defined(_MSC_VER)
+# define LOCALE_NAME_SYSTEM_DEFAULT      L"!sys-default-locale"
+#else
+static const WCHAR LOCALE_NAME_SYSTEM_DEFAULT[] = {'!','s','y','s','-','d','e','f','a','u','l','t','-','l','o','c','a','l','e',0};
+#endif
+
+#define LOCALE_NAME_USER_DEFAULT    NULL
+
 #define LOCALE_IDEFAULTUNIXCODEPAGE   0x1030 /* Wine extension */
 
 #define NORM_IGNORECASE     0x00001
@@ -648,6 +667,19 @@ typedef struct _currencyfmtW
 DECL_WINELIB_TYPE_AW(CURRENCYFMT)
 DECL_WINELIB_TYPE_AW(LPCURRENCYFMT)
 
+typedef struct _nlsversioninfo {
+    DWORD dwNLSVersionInfoSize;
+    DWORD dwNLSVersion;
+    DWORD dwDefinedVersion;
+} NLSVERSIONINFO, *LPNLSVERSIONINFO;
+
+typedef struct _nlsversioninfoex {
+    DWORD dwNLSVersionInfoSize;
+    DWORD dwNLSVersion;
+    DWORD dwDefinedVersion;
+    DWORD dwEffectiveId;
+    GUID  guidCustomVersion;
+} NLSVERSIONINFOEX, *LPNLSVERSIONINFOEX;
 
 /* Define a bunch of callback types */
 
@@ -830,6 +862,7 @@ WINBASEAPI INT         WINAPI LCIDToLocaleName(LCID,LPWSTR,INT,DWORD);
 WINBASEAPI INT         WINAPI LCMapStringA(LCID,DWORD,LPCSTR,INT,LPSTR,INT);
 WINBASEAPI INT         WINAPI LCMapStringW(LCID,DWORD,LPCWSTR,INT,LPWSTR,INT);
 #define                       LCMapString WINELIB_NAME_AW(LCMapString)
+WINBASEAPI INT         WINAPI LCMapStringEx(LPCWSTR,DWORD,LPCWSTR,INT,LPWSTR,INT,LPNLSVERSIONINFO,LPVOID,LPARAM);
 WINBASEAPI LCID        WINAPI LocaleNameToLCID(LPCWSTR,DWORD);
 WINBASEAPI INT         WINAPI MultiByteToWideChar(UINT,DWORD,LPCSTR,INT,LPWSTR,INT);
 WINNORMALIZEAPI INT    WINAPI NormalizeString(NORM_FORM,LPCWSTR,INT,LPWSTR,INT);

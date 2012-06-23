@@ -1368,7 +1368,7 @@ bsearch
 bsearch_s
 btowc
 calloc
-ceil
+ceil DATA
 clearerr
 clearerr_s
 clock
@@ -1376,7 +1376,7 @@ cos
 cosh
 div
 exit
-exp
+exp DATA
 fabs
 fclose
 feof
@@ -1387,8 +1387,8 @@ fgetpos
 fgets
 fgetwc
 fgetws
-floor
-fmod
+floor DATA
+fmod DATA
 fopen
 fopen_s
 fprintf
@@ -1451,7 +1451,7 @@ labs
 ldexp DATA
 ldiv
 localeconv
-log
+log DATA
 log10
 longjmp DATA
 malloc
@@ -1499,7 +1499,7 @@ sin
 sinh
 sprintf
 sprintf_s
-sqrt
+sqrt DATA
 srand
 sscanf
 sscanf_s

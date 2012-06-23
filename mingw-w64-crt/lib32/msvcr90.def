@@ -1296,7 +1296,7 @@ bsearch
 bsearch_s
 btowc DATA
 calloc
-ceil
+ceil DATA
 clearerr
 clearerr_s
 clock
@@ -1315,7 +1315,7 @@ fgetpos
 fgets
 fgetwc
 fgetws
-floor
+floor DATA
 fmod DATA
 fopen
 fopen_s

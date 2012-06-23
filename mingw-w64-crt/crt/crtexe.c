@@ -32,7 +32,9 @@ extern char *** __MINGW_IMP_SYMBOL(__initenv);
 #endif
 
 /* Hack, for bug in ld.  Will be removed soon.  */
+#if defined(__GNUC__)
 #define __ImageBase __MINGW_LSYMBOL(_image_base__)
+#endif
 /* This symbol is defined by ld.  */
 extern IMAGE_DOS_HEADER __ImageBase;
 
@@ -68,7 +70,7 @@ extern int mingw_app_type;
 
 HINSTANCE __mingw_winmain_hInstance;
 _TCHAR *__mingw_winmain_lpCmdLine;
-DWORD __mingw_winmain_nShowCmd;
+DWORD __mingw_winmain_nShowCmd = SW_SHOWDEFAULT;
 
 static int argc;
 extern void __main(void);
@@ -267,13 +269,16 @@ __tmainCRTStartup (void)
     
     _fpreset ();
 
-    if (mingw_app_type)
-      {
+    __mingw_winmain_hInstance = (HINSTANCE) &__ImageBase;
+
 #ifdef WPRFLAG
-	lpszCommandLine = (_TCHAR *) _wcmdln;
+    lpszCommandLine = (_TCHAR *) _wcmdln;
 #else
-	lpszCommandLine = (char *) _acmdln;
+    lpszCommandLine = (char *) _acmdln;
 #endif
+
+    if (lpszCommandLine)
+      {
 	while (*lpszCommandLine > SPACECHAR || (*lpszCommandLine && inDoubleQuote))
 	  {
 	    if (*lpszCommandLine == DQUOTECHAR)
@@ -281,8 +286,8 @@ __tmainCRTStartup (void)
 #ifdef _MBCS
 	    if (_ismbblead (*lpszCommandLine))
 	      {
-		if (lpszCommandLine) /* FIXME: Why this check? Should I check for *lpszCommandLine != 0 too? */
-		  lpszCommandLine++;
+		if (lpszCommandLine[1])
+		  ++lpszCommandLine;
 	      }
 #endif
 	    ++lpszCommandLine;
@@ -290,8 +295,11 @@ __tmainCRTStartup (void)
 	while (*lpszCommandLine && (*lpszCommandLine <= SPACECHAR))
 	  lpszCommandLine++;
 
-	__mingw_winmain_hInstance = (HINSTANCE) &__ImageBase;
 	__mingw_winmain_lpCmdLine = lpszCommandLine;
+      }
+
+    if (mingw_app_type)
+      {
 	__mingw_winmain_nShowCmd = StartupInfo.dwFlags & STARTF_USESHOWWINDOW ?
 				    StartupInfo.wShowWindow : SW_SHOWDEFAULT;
       }
@@ -376,7 +384,7 @@ static void duplicate_ppstrings (int ac, wchar_t ***av)
 	avl=*av;
 	for (i=0; i < ac; i++)
 	  {
-		int l = wbytelen (avl[i]);
+		size_t l = wbytelen (avl[i]);
 		n[i] = (wchar_t *) malloc (l);
 		memcpy (n[i], avl[i], l);
 	  }
@@ -393,7 +401,7 @@ static void duplicate_ppstrings (int ac, char ***av)
 	avl=*av;
 	for (i=0; i < ac; i++)
 	  {
-		int l = strlen (avl[i]) + 1;
+		size_t l = strlen (avl[i]) + 1;
 		n[i] = (char *) malloc (l);
 		memcpy (n[i], avl[i], l);
 	  }
