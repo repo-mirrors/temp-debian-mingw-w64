@@ -1,3 +1,36 @@
+2012-06-29  Ozkan Sezer  <sezeroz@gmail.com>
+
+	Merge from the trunk revs. 4808 and 5149:
+	2012-02-07  Rafaël Carré  <funman@videolan.org>
+	* dxva2api.h : Add missing UUIDS
+	2012-06-28  Rafaël Carré  <funman@videolan.org>
+	* dxva2api.h: Remove DXVA_* GUIDs and structs ...
+	* dxva.h: ... And put them here.
+
+2012-06-28  Corinna Vinschen  <vinschen@redhat.com>
+
+	* ntdef.h (PHYSICAL_ADDRESS): Define unconditionally.
+
+2012-06-27  Corinna Vinschen  <vinschen@redhat.com>
+
+	* include/stralign.h: Fix and add #endif comments.
+
+2012-05-09  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* winuser.h (MAPVK_VK_TO_*): Moved map types for MapVirtualKeyEx
+	out of win7 ifdefs. Protected MAPVK_VK_TO_VSC_EX for vista-only.
+	* winuser.h (HTOUCHINPUT): Added new declaration (merged trunk
+	rev. 4810 by cjacek.)
+
+2012-05-08  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* uxtheme.h (MAX_INTLIST_COUNT): Define as 402 instead of 10 for
+	vista and newer. (bug #3524667).
+
+2012-05-07  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* dwmapi.h: Fixed all function prototypes to be WINAPI.
+
 2012-04-28  Jonathan Liu  <net147@users.sourceforge.net>
 
 	* wlanapi.h: Fixed incorrectly nested if blocks.
