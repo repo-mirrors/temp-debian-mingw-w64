@@ -1,3 +1,69 @@
+2012-08-29  Yaakov Selkowitz  <yselkowitz@users.sourceforge.net>
+
+	* stdio.h (_mingw_ovr): Use GCC form for both C and C++.
+	* wchar.h (_mingw_ovr): Ditto.
+
+2012-08-12  Kai Tietz  <ktietz@redhat.com>
+
+	* excpt.h (__try1, __except1): Correct macros for x64.
+
+2012-08-10  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* getopt.h (optreset): Guard __mingw_optreset definition by
+	_BSD_SOURCE again (bug #3556105.)
+
+2012-08-07  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* getopt.h (optreset): Define as __mingw_optreset regardless of
+	_BSD_SOURCE being defined. (bug #3554856.)
+
+2012-08-04  Kai Tietz  <ktietz@redhat.com>
+
+	* crtdbg.h: disable prototyping of C++ new/delete operators.
+
+2012-07-30  Kai Tietz  <ktietz@redhat.com>
+
+	* _bsd_types.h (u_long): Make u_long type dependent to
+	__LONG32 define.
+
+2012-07-19  Corinna Vinschen  <vinschen@redhat.com>
+
+	* _cygwin.h (_WIN64): Define if targeting x86_64.
+
+2012-07-17  Corinna Vinschen  <vinschen@redhat.com>
+
+	* _mingw_mac.h (__MSABI_LONG): Define for LP64 systems as well.
+
+2012-07-17  Corinna Vinschen  <vinschen@redhat.com>
+
+	* _mingw.h.in (__LONG32): Define.  Explain what it's good for.
+
+2012-07-05  Kai Tietz  <ktietz@redhat.com>
+
+	* stdio.h (asprintf, vasprintf): Disable definitions stubs.
+
+2012-07-04  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* _mingw_mac.h (__MINGW_GCC_VERSION): New macro.
+	* setjmp.h (setjmp): Use mingw_getsp() with gcc < 4.7.2.
+
+2012-07-04  Kai Tietz  <ktietz@redhat.com>
+	    Tristan Gingold <gingold@adacore.com>
+
+	* setjmp.h (setjmp): Use frame-address builtin.
+	Reformat #if/#else block.
+
+2012-06-27  Corinna Vinschen  <vinschen@redhat.com>
+
+	* _cygwin.h: Include stddef.h.
+
+2012-06-26  Corinna Vinschen  <vinschen@redhat.com>
+
+	* _cygwin.h: New file.
+	* _mingw.h.in: Include _cygwin.h when building a Cygwin application.
+	Allow building Cygwin applications even though _WIN32 isn't defined.
+	* vadefs.h: Drop test for _WIN32 since it's done in _mingw.h.
+
 2012-06-19  Kai Tietz  <ktietz@redhat.com>
 
 	* math.h (logb, logbf): Special-case x64 inline.
@@ -20,7 +86,6 @@
 2012-06-15 niXman <i.nixman@gmail.com>
 
 	* wchar.h (wmemcmp): Add missing __cdecl to prototype.
-
 	* math.h (fabs, fabsf): Fix typo.
 
 2012-05-31  Kai Tietz  <ktietz@redhat.com>

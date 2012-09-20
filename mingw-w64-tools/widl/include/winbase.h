@@ -63,6 +63,10 @@ typedef PRTL_SRWLOCK PSRWLOCK;
 
 typedef WAITORTIMERCALLBACKFUNC WAITORTIMERCALLBACK;
 
+#define CONDITION_VARIABLE_INIT RTL_CONDITION_VARIABLE_INIT
+#define CONDITION_VARIABLE_LOCKMODE_SHARED RTL_CONDITION_VARIABLE_LOCKMODE_SHARED
+typedef RTL_CONDITION_VARIABLE CONDITION_VARIABLE, *PCONDITION_VARIABLE;
+
 #define EXCEPTION_DEBUG_EVENT       1
 #define CREATE_THREAD_DEBUG_EVENT   2
 #define CREATE_PROCESS_DEBUG_EVENT  3
@@ -1316,6 +1320,17 @@ typedef struct _WIN32_STREAM_ID {
 #define LOGON_NETCREDENTIALS_ONLY   0x00000002
 #define LOGON_ZERO_PASSWORD_BUFFER  0x80000000
 
+/* one-time initialisation API */
+typedef RTL_RUN_ONCE  INIT_ONCE;
+typedef PRTL_RUN_ONCE PINIT_ONCE;
+typedef PRTL_RUN_ONCE LPINIT_ONCE;
+#define INIT_ONCE_STATIC_INIT       RTL_RUN_ONCE_INIT
+#define INIT_ONCE_CHECK_ONLY        RTL_RUN_ONCE_CHECK_ONLY
+#define INIT_ONCE_ASYNC             RTL_RUN_ONCE_ASYNC
+#define INIT_ONCE_INIT_FAILED       RTL_RUN_ONCE_INIT_FAILED
+/* initialization callback prototype */
+typedef BOOL (WINAPI *PINIT_ONCE_FN)(PINIT_ONCE,PVOID,PVOID*);
+
 WINBASEAPI BOOL        WINAPI ActivateActCtx(HANDLE,ULONG_PTR *);
 WINADVAPI  BOOL        WINAPI AddAccessAllowedAce(PACL,DWORD,DWORD,PSID);
 WINADVAPI  BOOL        WINAPI AddAccessAllowedAceEx(PACL,DWORD,DWORD,DWORD,PSID);
@@ -1869,6 +1884,7 @@ WINBASEAPI BOOL        WINAPI HeapValidate(HANDLE,DWORD,LPCVOID);
 WINBASEAPI BOOL        WINAPI HeapWalk(HANDLE,LPPROCESS_HEAP_ENTRY);
 WINBASEAPI BOOL        WINAPI InitAtomTable(DWORD);
 WINADVAPI  BOOL        WINAPI InitializeAcl(PACL,DWORD,DWORD);
+WINBASEAPI VOID        WINAPI InitializeConditionVariable(PCONDITION_VARIABLE);
 WINBASEAPI void        WINAPI InitializeCriticalSection(CRITICAL_SECTION *lpCrit);
 WINBASEAPI BOOL        WINAPI InitializeCriticalSectionAndSpinCount(CRITICAL_SECTION *,DWORD);
 WINBASEAPI BOOL        WINAPI InitializeCriticalSectionEx(CRITICAL_SECTION *,DWORD,DWORD);
@@ -1876,6 +1892,8 @@ WINADVAPI  BOOL        WINAPI InitializeSecurityDescriptor(PSECURITY_DESCRIPTOR,
 WINADVAPI  BOOL        WINAPI InitializeSid(PSID,PSID_IDENTIFIER_AUTHORITY,BYTE);
 WINBASEAPI VOID        WINAPI InitializeSListHead(PSLIST_HEADER);
 WINBASEAPI VOID        WINAPI InitializeSRWLock(PSRWLOCK);
+WINBASEAPI BOOL        WINAPI InitOnceExecuteOnce(PINIT_ONCE,PINIT_ONCE_FN,PVOID,PVOID*);
+WINBASEAPI VOID        WINAPI InitOnceInitialize(PINIT_ONCE);
 WINBASEAPI PSLIST_ENTRY WINAPI InterlockedFlushSList(PSLIST_HEADER);
 WINBASEAPI PSLIST_ENTRY WINAPI InterlockedPopEntrySList(PSLIST_HEADER);
 WINBASEAPI PSLIST_ENTRY WINAPI InterlockedPushEntrySList(PSLIST_HEADER, PSLIST_ENTRY);
@@ -2159,6 +2177,7 @@ WINBASEAPI BOOL        WINAPI SetupComm(HANDLE,DWORD,DWORD);
 WINBASEAPI DWORD       WINAPI SignalObjectAndWait(HANDLE,HANDLE,DWORD,BOOL);
 WINBASEAPI DWORD       WINAPI SizeofResource(HMODULE,HRSRC);
 WINBASEAPI VOID        WINAPI Sleep(DWORD);
+WINBASEAPI BOOL        WINAPI SleepConditionVariableCS(PCONDITION_VARIABLE,PCRITICAL_SECTION,DWORD);
 WINBASEAPI DWORD       WINAPI SleepEx(DWORD,BOOL);
 WINBASEAPI DWORD       WINAPI SuspendThread(HANDLE);
 WINBASEAPI void        WINAPI SwitchToFiber(LPVOID);
@@ -2211,6 +2230,8 @@ WINBASEAPI DWORD       WINAPI WaitForSingleObjectEx(HANDLE,DWORD,BOOL);
 WINBASEAPI BOOL        WINAPI WaitNamedPipeA(LPCSTR,DWORD);
 WINBASEAPI BOOL        WINAPI WaitNamedPipeW(LPCWSTR,DWORD);
 #define                       WaitNamedPipe WINELIB_NAME_AW(WaitNamedPipe)
+WINBASEAPI VOID        WINAPI WakeAllConditionVariable(PCONDITION_VARIABLE);
+WINBASEAPI VOID        WINAPI WakeConditionVariable(PCONDITION_VARIABLE);
 WINBASEAPI UINT        WINAPI WinExec(LPCSTR,UINT);
 WINBASEAPI BOOL        WINAPI Wow64DisableWow64FsRedirection(PVOID*);
 WINBASEAPI BOOLEAN     WINAPI Wow64EnableWow64FsRedirection(BOOLEAN);
@@ -2422,6 +2443,10 @@ WINBASEAPI LONGLONG WINAPI InterlockedCompareExchange64(LONGLONG volatile*,LONGL
 
 #else  /* __i386__ */
 
+#if defined(__x86_64__) && defined(_MSC_VER)
+#pragma intrinsic(_InterlockedCompareExchange)
+#endif
+
 static FORCEINLINE LONG WINAPI InterlockedCompareExchange( LONG volatile *dest, LONG xchg, LONG compare )
 {
 #if defined(__x86_64__) && defined(__GNUC__)
@@ -2429,11 +2454,17 @@ static FORCEINLINE LONG WINAPI InterlockedCompareExchange( LONG volatile *dest, 
     __asm__ __volatile__( "lock; cmpxchgl %2,(%1)"
                           : "=a" (ret) : "r" (dest), "r" (xchg), "0" (compare) : "memory" );
     return ret;
+#elif defined(__x86_64__) && defined(_MSC_VER)
+    return _InterlockedCompareExchange( dest, xchg, compare );
 #else
     extern int interlocked_cmpxchg( int *dest, int xchg, int compare );
     return interlocked_cmpxchg( (int *)dest, xchg, compare );
 #endif
 }
+
+#if defined(__x86_64__) && defined(_MSC_VER)
+#pragma intrinsic(_InterlockedCompareExchangePointer)
+#endif
 
 static FORCEINLINE PVOID WINAPI InterlockedCompareExchangePointer( PVOID volatile *dest, PVOID xchg, PVOID compare )
 {
@@ -2442,11 +2473,17 @@ static FORCEINLINE PVOID WINAPI InterlockedCompareExchangePointer( PVOID volatil
     __asm__ __volatile__( "lock; cmpxchgq %2,(%1)"
                           : "=a" (ret) : "r" (dest), "r" (xchg), "0" (compare) : "memory" );
     return ret;
+#elif defined(__x86_64__) && defined(_MSC_VER)
+    return _InterlockedCompareExchangePointer( dest, xchg, compare );
 #else
     extern void *interlocked_cmpxchg_ptr( void **dest, void *xchg, void *compare );
     return interlocked_cmpxchg_ptr( (void **)dest, xchg, compare );
 #endif
 }
+
+#if defined(__x86_64__) && defined(_MSC_VER)
+#pragma intrinsic(_InterlockedCompareExchange64)
+#endif
 
 static FORCEINLINE LONGLONG WINAPI InterlockedCompareExchange64( LONGLONG volatile *dest, LONGLONG xchg, LONGLONG compare )
 {
@@ -2455,11 +2492,17 @@ static FORCEINLINE LONGLONG WINAPI InterlockedCompareExchange64( LONGLONG volati
     __asm__ __volatile__( "lock; cmpxchgq %2,(%1)"
                           : "=a" (ret) : "r" (dest), "r" (xchg), "0" (compare) : "memory" );
     return ret;
+#elif defined(__x86_64__) && defined(_MSC_VER)
+    return _InterlockedCompareExchange64( dest, xchg, compare );
 #else
     extern __int64 interlocked_cmpxchg64( __int64 *dest, __int64 xchg, __int64 compare );
     return interlocked_cmpxchg64( (__int64 *)dest, xchg, compare );
 #endif
 }
+
+#if defined(__x86_64__) && defined(_MSC_VER)
+#pragma intrinsic(_InterlockedExchange)
+#endif
 
 static FORCEINLINE LONG WINAPI InterlockedExchange( LONG volatile *dest, LONG val )
 {
@@ -2468,11 +2511,17 @@ static FORCEINLINE LONG WINAPI InterlockedExchange( LONG volatile *dest, LONG va
     __asm__ __volatile__( "lock; xchgl %0,(%1)"
                           : "=r" (ret) :"r" (dest), "0" (val) : "memory" );
     return ret;
+#elif defined(__x86_64__) && defined(_MSC_VER)
+    return _InterlockedExchange( dest, val );
 #else
     extern int interlocked_xchg( int *dest, int val );
     return interlocked_xchg( (int *)dest, val );
 #endif
 }
+
+#if defined(__x86_64__) && defined(_MSC_VER)
+#pragma intrinsic(_InterlockedExchangePointer)
+#endif
 
 static FORCEINLINE PVOID WINAPI InterlockedExchangePointer( PVOID volatile *dest, PVOID val )
 {
@@ -2481,11 +2530,17 @@ static FORCEINLINE PVOID WINAPI InterlockedExchangePointer( PVOID volatile *dest
     __asm__ __volatile__( "lock; xchgq %0,(%1)"
                           : "=r" (ret) :"r" (dest), "0" (val) : "memory" );
     return ret;
+#elif defined(__x86_64__) && defined(_MSC_VER)
+    return _InterlockedExchangePointer( dest, val );
 #else
     extern void *interlocked_xchg_ptr( void **dest, void *val );
     return interlocked_xchg_ptr( (void **)dest, val );
 #endif
 }
+
+#if defined(__x86_64__) && defined(_MSC_VER)
+#pragma intrinsic(_InterlockedExchangeAdd)
+#endif
 
 static FORCEINLINE LONG WINAPI InterlockedExchangeAdd( LONG volatile *dest, LONG incr )
 {
@@ -2494,20 +2549,38 @@ static FORCEINLINE LONG WINAPI InterlockedExchangeAdd( LONG volatile *dest, LONG
     __asm__ __volatile__( "lock; xaddl %0,(%1)"
                           : "=r" (ret) : "r" (dest), "0" (incr) : "memory" );
     return ret;
+#elif defined(__x86_64__) && defined(_MSC_VER)
+    return _InterlockedExchangeAdd( dest, incr );
 #else
     extern int interlocked_xchg_add( int *dest, int incr );
     return interlocked_xchg_add( (int *)dest, incr );
 #endif
 }
 
+#if defined(__x86_64__) && defined(_MSC_VER)
+#pragma intrinsic(_InterlockedIncrement)
+#endif
+
 static FORCEINLINE LONG WINAPI InterlockedIncrement( LONG volatile *dest )
 {
+#if defined(__x86_64__) && defined(_MSC_VER)
+    return _InterlockedIncrement( dest );
+#else
     return InterlockedExchangeAdd( dest, 1 ) + 1;
+#endif
 }
+
+#if defined(__x86_64__) && defined(_MSC_VER)
+#pragma intrinsic(_InterlockedDecrement)
+#endif
 
 static FORCEINLINE LONG WINAPI InterlockedDecrement( LONG volatile *dest )
 {
+#if defined(__x86_64__) && defined(_MSC_VER)
+    return _InterlockedDecrement( dest );
+#else
     return InterlockedExchangeAdd( dest, -1 ) - 1;
+#endif
 }
 
 #endif  /* __i386__ */

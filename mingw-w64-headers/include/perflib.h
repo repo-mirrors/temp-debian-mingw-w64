@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef _INC_PERFLIB
@@ -12,7 +12,11 @@ extern "C" {
 #endif
 
 #ifndef WINADVAPI
+#ifndef _ADVAPI32_
 #define WINADVAPI DECLSPEC_IMPORT
+#else
+#define WINADVAPI
+#endif
 #endif
 
 typedef LPVOID (CALLBACK *PERF_MEM_ALLOC)(SIZE_T AllocSize,LPVOID pContext);

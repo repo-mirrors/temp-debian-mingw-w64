@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ([2.65])
+AC_PREREQ([2.69])
 AC_INIT([mingw-w64-headers],[3.0b],[mingw-w64-public@lists.sourceforge.net])
 AC_CONFIG_SRCDIR([crt/_mingw.h.in])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -15,37 +15,50 @@ AC_CANONICAL_HOST
 # Checks for programs.
 AC_PROG_SED
 
+# Search for a usable widl.  If PATH is given, search there.  Otherwise, search
+# in $PATH.  In all cases, search for a canonicalized name first ($host-widl),
+# followed by a non-canonicalized name (widl).  If these fail, error out.
+# NB: $host from this perspective is the same as $target while building widl.
+AC_MSG_CHECKING([whether to rebuild headers with widl])
 AC_ARG_WITH([widl],
   AS_HELP_STRING([--with-widl=PATH],
-    [use widl to update idl-based headers]),
+    [use widl to update idl-based headers.  Optionally search for a compatible widl in PATH]),
   [],
-  [with_widl=no])
+  [AS_VAR_SET([with_widl],[no])])
+AC_MSG_RESULT([$with_widl])
 
+AS_VAR_IF([with_widl],[yes],[AS_VAR_SET([with_widl],["$PATH"])])
 AS_VAR_IF([with_widl],[no],[],[
-  AS_VAR_IF([with_widl],[yes],[
-    AC_PATH_PROGS([widl_prog], [mingw-w64-widl widl])
-    AS_VAR_IF([widl_prog],[],[
-      AC_MSG_ERROR([Could not find widl installation, which is required in maintainer mode])])
-  ],[
-    AS_IF(AC_TRY_COMMAND([$with_widl -V]),
-      [widl_prog=$with_widl],
-      [AC_MSG_ERROR([Specified widl command is not valid])])]
-  )])
+  AC_PATH_PROGS([WIDL], [$host-widl widl], [], [$with_widl])
+  AS_VAR_IF([WIDL],[],[AC_MSG_ERROR([--with-widl is specified, but widl installation could not be found.])])])
 
-AS_VAR_IF([widl_prog],[],[],[WIDL="$widl_prog"])
-
-AC_SUBST([WIDL])
-AM_CONDITIONAL([HAVE_WIDL],[test -n "$widl_prog"])
+AM_CONDITIONAL([HAVE_WIDL],[AS_VAR_TEST_SET([WIDL])])
 
 # Checks for libraries.
 
 # Checks for header files.
 
-BASEHEAD_LIST="crt/_mingw.h "$srcdir/include/*.h
+BASEHEAD_LIST="crt/_bsd_types.h crt/_cygwin.h crt/_mingw.h crt/_mingw_mac.h crt/_mingw_print_push.h crt/_mingw_print_pop.h crt/_mingw_secapi.h crt/_mingw_unicode.h crt/_timeval.h crt/crtdefs.h crt/excpt.h crt/vadefs.h "$srcdir/include/*.h
+SECHEAD_LIST="$srcdir/crt/sec_api/stralign_s.h"
 for i in dlg h16 hxx rh ver; do
   BASEHEAD_LIST="$BASEHEAD_LIST "$srcdir/include/*.$i
 done
 #FIXME: Add in base directx
+
+AC_MSG_CHECKING([whether to build a w32api package for Cygwin])
+AC_ARG_ENABLE([w32api],
+  [AS_HELP_STRING([--enable-w32api],
+    [Enable building a w32api package for Cygwin (shorthand for --includedir=PREFIX/include/w32api --disable-crt)])],
+  [],
+  [AS_VAR_SET([enable_w32api],[no])])
+AC_MSG_RESULT([$enable_w32api])
+AS_CASE([$enable_w32api],
+  [no],[],
+  [yes],[AS_VAR_SET([W32API])
+  	 AS_VAR_SET([enable_crt],[no])
+	 AS_VAR_SET([includedir],[${prefix}/include/w32api])],
+  [AC_MSG_ERROR([invalid argument.  Must be either yes or no.])])
+AM_CONDITIONAL([W32API], [AS_VAR_TEST_SET([W32API])])
 
 AC_MSG_CHECKING([for c-runtime headers])
 AC_ARG_ENABLE([crt],
@@ -72,41 +85,22 @@ AC_SUBST([SYSHEAD_LIST])
 AC_SUBST([SECHEAD_LIST])
 AC_SUBST([SECSYSHEAD_LIST])
 
-enable_directx=no
-enable_ddk=no
-
-if test -d ${srcdir}/ddk/include/ddk
-then
-    # DDK headers have been fetched from ReactOS
-    ddk_present=yes
-else
-    # DDK heaers are absent
-    AC_MSG_WARN([svn checkout incomplete, ddk headers missing.])
-    ddk_present=no
-fi
-
 AC_MSG_CHECKING([for optional sdk headers])
 AC_ARG_ENABLE([sdk],
   [AS_HELP_STRING([--enable-sdk=ARG],
-    [Add the desired SDK, where ARG can be one of ddk, directx, no or all])],
+    [Add the desired SDK, where ARG can be one of ddk, directx, no or all.  Default is all.])],
   [],
-  [
-  if test "${ddk_present}" = no
-  then
-    enable_sdk=directx
-  else
-    enable_sdk=all
-  fi
-  ])
+  [AS_VAR_SET([enable_sdk],[all])])
+
 AS_CASE([$enable_sdk],
   [all|yes],[
-    enable_sdk="ddk,directx"
-    enable_ddk=yes
-    enable_directx=yes],
+    AS_VAR_SET([enable_sdk],[ddk,directx])
+    AS_VAR_SET([enable_ddk],[yes])
+    AS_VAR_SET([enable_directx],[yes])],
   [ddk],[
-    enable_ddk=yes],
+    AS_VAR_SET([enable_ddk],[yes])],
   [directx],[
-    enable_directx=yes],
+    AS_VAR_SET([enable_directx],[yes])],
   [no],[],
   [AC_MSG_ERROR([Invalid option: $enable_sdk.  Please choose one of ddk, directx, no or all.])])
 AC_MSG_RESULT([$enable_sdk])

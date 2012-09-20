@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef __IDENTITYSTORE_H__
@@ -10,7 +10,7 @@
 
 #if (_WIN32_WINNT >= 0x0601)
 
-DEFINE_GUID(IID_IAssociatedIdentityProvider,0x2AF066B3L,0x4CBB,0x4CBA,0xA7,0x98,0x20,0x4B,0x6A,0xF6,0x8C,0xC0);
+DEFINE_GUID(IID_IAssociatedIdentityProvider,0x2AF066B3,0x4CBB,0x4CBA,0xA7,0x98,0x20,0x4B,0x6A,0xF6,0x8C,0xC0);
 
 #ifndef __IAssociatedIdentityProvider_FWD_DEFINED__
 #define __IAssociatedIdentityProvider_FWD_DEFINED__

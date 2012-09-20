@@ -1,3 +1,123 @@
+2012-08-17  Corinna Vinschen  <vinschen@redhat.com>
+
+	* configure.ac (sysroot): Set sysroot to $prefix since include is
+	attached in Makefile.am anyway.
+	* configure: Regenerate.
+
+2012-08-10  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* misc/getopt.c (optreset): Define as __mingw_optreset (bugs
+	#3554856, 3556105.)
+
+2012-08-09  Corinna Vinschen  <vinschen@redhat.com>
+
+	* Makefile.am (libglut.a): Add missing "lib32/".
+	* Makefile.in: Regenerate.
+
+2012-08-09  Corinna Vinschen  <vinschen@redhat.com>
+
+	* Makefile.am (libdelayimp.a): Only build and install if not creating
+	a w32api installation for Cygwin.
+	(libglut.a): Ditto.
+	* Makefile.in: Regenerate.
+
+2012-08-08  Kai Tietz  <ktietz@redhat.com>
+
+	* gdtoa/dg_qnan.h: Make Nan constants positive valued.
+
+2012-08-08  Corinna Vinschen  <vinschen@redhat.com>
+
+	* configure.ac: Fix default to --enable-w32api=no in previous patch.
+	* configure: Regenerate.
+
+2012-08-07  Corinna Vinschen  <vinschen@redhat.com>
+
+	* configure.ac: Replace --enable-startup with --enable-w32api option.
+	(LIB64SUFFIXDIR, LIB32SUFFIXDIR): Conditionalize on enable_w32api.
+	* Makefile.am: Replace STARTUP conditions with W32API conditions.
+	Drop libraries depending on W32API.
+	(libsrcdir): Set to includedir.
+	* configure: Regenerate.
+	* Makefile.in: Regenerate.
+
+2012-08-07  Kai Tietz  <ktietz@redhat.com>
+
+	* secapi/wmemcpy_s.c: New file.
+	* secapi/memcpy_s.c: New file.
+	* secapi/_strdate_s.c: New file.
+	* secapi/_wstrdate_s.c: New file.
+	* secapi/_strtime_s.c: New file.
+	* secapi/_wstrtime_s.c: New file.
+	* secapi/_gmtime64_s.c: New file.
+	* secapi/_gmtime32_s.c: New file.
+	* secapi/_localtime32_s.c: New file.
+	* secapi/_localtime64_s.c: New file.
+	* secapi/_ctime64_s.c: New file.
+	* secapi/_wctime64_s.c: New file.
+	* Makefile.am: Add new files.
+	* Makefile.in: Regenerated.
+	* lib32/msvcrt.def: Commented symbols.
+	* lib64/msvcrt.def: Likewise.
+
+2012-08-03  Kai Tietz  <ktietz@redhat.com>
+
+	* secapi/asctime_s.c: New file.
+	* secapi/_wasctime_s.c: New file.
+	* secapi/_wctime32_s.c: New file.
+	* secapi/_ctime32_s.c: New file.
+	* Makefile.am: Add new files.
+        * Makefile.in: Regenerated.
+	* lib32/msvcrt.def: Commented symbols.
+	* lib64/msvcrt.def: Likewise.
+
+2012-08-01  Kai Tietz  <ktietz@redhat.com>
+
+	* secapi/_umask_s.c: New file.
+	* secapi/_chsize_s.c: New file.
+	* secapi/_mktemp_s.c: New file.
+	* secapi/_wmktemp_s.c: New file.
+	* secapi/_wassert_s.c: New file.
+	* secapi/_assert_s.c: New file.
+	* secapi/_cwprintf_s.c: New file.
+	* secapi/_cwprintf_s_l.c: New file.
+	* secapi/_vcwprintf_s.c: New file.
+	* secapi/_vcwprintf_s_l.c: New file.
+	* secapi/_vcprintf_s.c: New file.
+	* secapi/_vcprintf_s_l.c: New file.
+	* secapi/_cprintf_s_l.c: New file.
+	* Makefile.am: Add new file.
+	* Makefile.in: Regenerated.
+	* lib32/msvcrt.def: Commented symbol.
+	* lib64/msvcrt.def: Likewise.
+
+2012-07-31  Kai Tietz  <ktietz@redhat.com>
+
+	* secapi/: New folder.
+	* Makefile.am: Add _cgets_s.c _cgetwe_s.c and _cprintf_s.c files
+	to libmingwex.a library.
+	* Makefile.in: Regnerated.
+	* lib32/msvcrt.def: Comment replaced secured-API functions.
+	* lib64/msvcrt.def: Likewise.
+
+2012-07-17  Kai Tietz  <ktietz@redhat.com>
+
+	PR 3544372
+	* misc/mingw_pformat.h (PFORMAT_TO_FILE): Increased constant.
+	(PFORMAT_NOLIMIT): Likewise.
+
+2012-07-11  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* lib32/tapi32.def: Add missing exports.
+
+2012-07-10  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* crt/tlsmthread.c: Removed leftovers of Win9X/Me mingwm10.dll
+	support.
+
+2012-07-06  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* crt/tlssup.c: Removed Windows 9X/Me mingwm10.dll support.
+
 2012-06-19  Kai Tietz  <ktietz@redhat.com>
 
 	* math/fdim.c: Adjust for being posix compatible.

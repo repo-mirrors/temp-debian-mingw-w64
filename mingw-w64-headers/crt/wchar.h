@@ -1,12 +1,12 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef _INC_WCHAR
 #define _INC_WCHAR
 
-#include <_mingw.h>
+#include <crtdefs.h>
 #include <_mingw_print_push.h>
 
 #pragma pack(push,_CRT_PACKING)
@@ -450,10 +450,10 @@ extern FILE (* __MINGW_IMP_SYMBOL(_iob))[];	/* A pointer to an array of FILE */
   int __cdecl __mingw_vsnwprintf (wchar_t * __restrict__ , size_t, const wchar_t * __restrict__ , va_list);
 
 #undef __mingw_ovr
-#ifdef __cplusplus
-#define __mingw_ovr  inline __cdecl
-#elif defined (__GNUC__)
+#if defined (__GNUC__)
 #define __mingw_ovr static __attribute__ ((__unused__)) __inline__ __cdecl
+#elif defined(__cplusplus)
+#define __mingw_ovr inline __cdecl
 #else
 #define __mingw_ovr static __cdecl
 #endif

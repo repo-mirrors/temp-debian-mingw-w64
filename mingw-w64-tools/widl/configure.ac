@@ -1,31 +1,28 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ([2.65])
+AC_PREREQ([2.69])
 AC_INIT([widl],[1.0],[mingw-w64-public@lists.sourceforge.net])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_SRCDIR([src/widl.c])
 AC_CONFIG_HEADERS([include/config.h])
 
+AC_CANONICAL_TARGET
+
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 AM_MAINTAINER_MODE
 
-AC_CANONICAL_HOST
+AC_ARG_PROGRAM
 
 # Checks for programs.
 AC_PROG_CC
 
-case $host in
-  *-mingw32)
-    widl_bin_name=widl
-    CFLAGS="$CFLAGS -Wno-pedantic-ms-format"
-    ;;
-  *)
-    widl_bin_name=mingw-w64-widl
-    ;;
-esac
+AS_CASE([$target],
+  [*-mingw*],[],
+  [AC_MSG_ERROR([Unsupported target: $target. Only *-mingw32 targets are supported])])
 
-AC_SUBST(WIDL_BIN_NAME,[$widl_bin_name])
+AS_CASE([$host],
+  [*-mingw*],[CFLAGS="$CFLAGS -Wno-pedantic-ms-format"])
 
 # Checks for libraries.
 

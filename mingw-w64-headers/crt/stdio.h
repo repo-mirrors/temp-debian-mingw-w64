@@ -1,12 +1,12 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef _INC_STDIO
 #define _INC_STDIO
 
-#include <_mingw.h>
+#include <crtdefs.h>
 
 #include <_mingw_print_push.h>
 
@@ -323,6 +323,11 @@ int vsprintf (char *__stream, const char *__format, __builtin_va_list __local_ar
   return __mingw_vsprintf( __stream, __format, __local_argv );
 }
 
+#if 0
+/* Disabled due issue of definition in POSIX way in libmingwex,
+   which could cause troubles on scenarios venure expects those
+   function in MS formatter style.
+   So simplest way for now, disable it.  */
 __mingw_ovr
 __attribute__ ((__format__ (gnu_printf, 2, 3))) __attribute__((nonnull (1,2)))
 int asprintf(char **__ret, const char *__format, ...)
@@ -340,6 +345,7 @@ int vasprintf(char **__ret, const char *__format, __builtin_va_list __local_argv
 {
   return __mingw_vasprintf( __ret, __format, __local_argv );
 }
+#endif
 /* #ifndef __NO_ISOCEXT */  /* externs in libmingwex.a */
 __mingw_ovr
 __attribute__((__format__ (gnu_printf, 3, 4))) __MINGW_ATTRIB_NONNULL(3)
@@ -618,10 +624,10 @@ int snprintf (char * __restrict__ __stream, size_t __n, const char * __restrict_
   int __cdecl __mingw_vsnwprintf (wchar_t * __restrict__ , size_t, const wchar_t * __restrict__ , va_list);
 
 #undef __mingw_ovr
-#ifdef __cplusplus
-#define __mingw_ovr  inline __cdecl
-#elif defined (__GNUC__)
+#if defined (__GNUC__)
 #define __mingw_ovr static __attribute__ ((__unused__)) __inline__ __cdecl
+#elif defined(__cplusplus)
+#define __mingw_ovr inline __cdecl
 #else
 #define __mingw_ovr static __cdecl
 #endif

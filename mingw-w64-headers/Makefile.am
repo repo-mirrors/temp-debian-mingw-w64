@@ -1,5 +1,5 @@
 
-baseheaddir = $(includedir)/../$(host)/include
+baseheaddir = $(includedir)
 sysheaddir = $(baseheaddir)/sys
 secheaddir = $(baseheaddir)/sec_api
 secsysheaddir = $(baseheaddir)/sec_api/sys
@@ -25,8 +25,8 @@ ddkhead_HEADERS = @DDKHEAD_LIST@
 dxhead_HEADERS = @DXHEAD_LIST@
 idlhead_HEADERS = @IDLHEAD_LIST@
 
-EXTRA_DIST = ChangeLog-2009
-DISTCHECK_CONFIGURE_FLAGS = --enable-sdk=all
+EXTRA_DIST = ChangeLog*
+DISTCHECK_CONFIGURE_FLAGS = --enable-idl
 
 EXTRA_HEADERS = \
   include/*.dlg \
@@ -57,7 +57,9 @@ IDL_SRCS = \
   include/audioclient.idl \
   include/audiopolicy.idl \
   include/docobj.idl \
+  include/devitetopology.idl \
   include/downloadmgr.idl \
+  include/endpointvolume.idl \
   include/fusion.idl \
   include/oaidl.idl \
   include/ocidl.idl \

@@ -2221,14 +2221,6 @@ static FORCEINLINE struct _TEB * WINAPI NtCurrentTeb(void)
     __asm__(".byte 0x65\n\tmovq (0x30),%0" : "=r" (teb));
     return teb;
 }
-#elif defined(__x86_64__) && defined (_MSC_VER)
-static FORCEINLINE struct _TEB * WINAPI NtCurrentTeb(void)
-{
-  struct _TEB *teb;
-  __asm mov rax, gs:[0x30];
-  __asm mov teb, rax;
-  return teb;
-}
 #else
 extern struct _TEB * WINAPI NtCurrentTeb(void);
 #endif
@@ -2409,7 +2401,7 @@ typedef struct _IMAGE_VXD_HEADER {
 #define	IMAGE_FILE_MACHINE_SH5		0x01a8
 #define	IMAGE_FILE_MACHINE_ARM		0x01c0
 #define	IMAGE_FILE_MACHINE_THUMB	0x01c2
-#define	IMAGE_FILE_MACHINE_ARMV7	0x01c4
+#define	IMAGE_FILE_MACHINE_ARMNT	0x01c4
 #define	IMAGE_FILE_MACHINE_AM33		0x01d3
 #define	IMAGE_FILE_MACHINE_POWERPC	0x01f0
 #define	IMAGE_FILE_MACHINE_POWERPCFP	0x01f1
@@ -3429,7 +3421,10 @@ typedef struct IMAGE_COR20_HEADER
 
     IMAGE_DATA_DIRECTORY MetaData;
     DWORD Flags;
-    DWORD EntryPointToken;
+    union {
+        DWORD EntryPointToken;
+        DWORD EntryPointRVA;
+    } DUMMYUNIONNAME;
 
     IMAGE_DATA_DIRECTORY Resources;
     IMAGE_DATA_DIRECTORY StrongNameSignature;
@@ -3745,13 +3740,16 @@ typedef struct _ACL_SIZE_INFORMATION
 #define SE_IMPERSONATE_NAME             TEXT("SeImpersonatePrivilege")
 #define SE_CREATE_GLOBAL_NAME           TEXT("SeCreateGlobalPrivilege")
 
-#define SE_GROUP_MANDATORY 		0x00000001
-#define SE_GROUP_ENABLED_BY_DEFAULT 	0x00000002
-#define SE_GROUP_ENABLED 		0x00000004
-#define SE_GROUP_OWNER 			0x00000008
-#define SE_GROUP_USE_FOR_DENY_ONLY 	0x00000010
-#define SE_GROUP_LOGON_ID 		0xC0000000
-#define SE_GROUP_RESOURCE 		0x20000000
+#define SE_GROUP_MANDATORY          0x00000001
+#define SE_GROUP_ENABLED_BY_DEFAULT 0x00000002
+#define SE_GROUP_ENABLED            0x00000004
+#define SE_GROUP_OWNER              0x00000008
+#define SE_GROUP_USE_FOR_DENY_ONLY  0x00000010
+#define SE_GROUP_INTEGRITY          0x00000020
+#define SE_GROUP_INTEGRITY_ENABLED  0x00000040
+#define SE_GROUP_LOGON_ID           0xC0000000
+#define SE_GROUP_RESOURCE           0x20000000
+#define SE_GROUP_VALID_ATTRIBUTES   0xE000007F
 
 #define SE_PRIVILEGE_ENABLED_BY_DEFAULT 0x00000001
 #define SE_PRIVILEGE_ENABLED 		0x00000002
@@ -4225,6 +4223,9 @@ typedef struct _TOKEN_ELEVATION {
   DWORD TokenIsElevated;
 } TOKEN_ELEVATION, * PTOKEN_ELEVATION;
 
+typedef struct _TOKEN_MANDATORY_LABEL {
+  SID_AND_ATTRIBUTES Label;
+} TOKEN_MANDATORY_LABEL, * PTOKEN_MANDATORY_LABEL;
 
 /*
  *	ACLs of NT
@@ -5081,8 +5082,28 @@ typedef struct _RTL_SRWLOCK {
 
 #define RTL_SRWLOCK_INIT {0}
 
+typedef struct _RTL_CONDITION_VARIABLE {
+    PVOID Ptr;
+} RTL_CONDITION_VARIABLE, *PRTL_CONDITION_VARIABLE;
+#define RTL_CONDITION_VARIABLE_INIT {0}
+#define RTL_CONDITION_VARIABLE_LOCKMODE_SHARED  0x1
+
 typedef VOID (NTAPI * WAITORTIMERCALLBACKFUNC) (PVOID, BOOLEAN );
 typedef VOID (NTAPI * PFLS_CALLBACK_FUNCTION) ( PVOID );
+
+#define RTL_RUN_ONCE_INIT {0}
+typedef union _RTL_RUN_ONCE {
+    PVOID Ptr;
+} RTL_RUN_ONCE, *PRTL_RUN_ONCE;
+
+#define RTL_RUN_ONCE_CHECK_ONLY     0x00000001
+#define RTL_RUN_ONCE_ASYNC          0x00000002
+#define RTL_RUN_ONCE_INIT_FAILED    0x00000004
+
+typedef DWORD WINAPI RTL_RUN_ONCE_INIT_FN(PRTL_RUN_ONCE, PVOID, PVOID*);
+typedef RTL_RUN_ONCE_INIT_FN *PRTL_RUN_ONCE_INIT_FN;
+NTSYSAPI VOID WINAPI RtlRunOnceInitialize(PRTL_RUN_ONCE);
+NTSYSAPI DWORD WINAPI RtlRunOnceExecuteOnce(PRTL_RUN_ONCE,PRTL_RUN_ONCE_INIT_FN,PVOID,PVOID*);
 
 #include <pshpack8.h>
 typedef struct _IO_COUNTERS {
