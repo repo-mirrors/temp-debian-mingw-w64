@@ -725,9 +725,9 @@ _fstat64
 _ftime64
 _futime64
 _gmtime64
-_localtime32_s
+; _localtime32_s replaced by emu
 _localtime64
-_localtime64_s
+; _localtime64_s replaced by emu
 _mkgmtime DATA
 ;_mkgmtime32 = _mkgmtime
 _mkgmtime64
@@ -810,25 +810,25 @@ _atoflt_l
 _atoi64_l
 _atoi_l
 _atol_l
-_cgets_s
-_cgetws_s
-_chsize_s
+; _cgets_s replaced by emu
+; _cgetws_s  likewise
+; _chsize_s Likewise.
 _controlfp_s
 _cprintf_l
 _cprintf_p
 _cprintf_p_l
-_cprintf_s
-_cprintf_s_l
+; _cprintf_s replaced by emu
+; _cprintf_s_l likewise.
 _cscanf_l
 _cscanf_s
 _cscanf_s_l
-_ctime32_s
-_ctime64_s
+; _ctime32_s replaced by eum
+; _ctime64_s Likewise
 _cwprintf_l
 _cwprintf_p
 _cwprintf_p_l
-_cwprintf_s
-_cwprintf_s_l
+; _cwprintf_s Replaced by emu
+; _cwprintf_s_l Likewise.
 _cwscanf_l
 _cwscanf_s
 _cwscanf_s_l
@@ -848,8 +848,8 @@ _fwprintf_s_l
 _fwscanf_l
 _fwscanf_s_l
 _gcvt_s
-_gmtime32_s
-_gmtime64_s
+; _gmtime32_s replaced by emu
+; _gmtime64_s replaced by emu
 _i64toa_s
 _i64tow_s
 _isalnum_l
@@ -992,7 +992,7 @@ _mbsupr_s
 _mbsupr_s_l
 _mbtowc_l
 _memicmp_l
-_mktemp_s
+; _mktemp_s replaced by emu
 _printf_l
 _printf_p
 _printf_p_l
@@ -1027,7 +1027,7 @@ _sprintf_s_l
 _sscanf_l
 _sscanf_s_l
 _strcoll_l
-_strdate_s
+; _strdate_s replaced by emu
 _strerror_s
 _stricmp_l
 _stricoll_l
@@ -1039,7 +1039,7 @@ _strnicmp_l
 _strnicoll_l
 _strnset_s
 _strset_s
-_strtime_s
+; _strtime_s replaced by emu
 _strtod_l
 _strtoi64_l
 _strtol_l
@@ -1049,6 +1049,7 @@ _strupr_l
 _strupr_s
 _strupr_s_l
 _strxfrm_l
+_swprintf == swprintf
 _swprintf_c_l
 _swprintf_p_l
 _swprintf_s_l
@@ -1062,19 +1063,19 @@ _ui64toa_s
 _ui64tow_s
 _ultoa_s
 _ultow_s
-_umask_s
+; _umask_s Replaced by emu
 _vcprintf
 _vcprintf_l
 _vcprintf_p
 _vcprintf_p_l
-_vcprintf_s
-_vcprintf_s_l
+; _vcprintf_s Replaced by emu.
+; _vcprintf_s_l Likewise.
 _vcwprintf
 _vcwprintf_l
 _vcwprintf_p
 _vcwprintf_p_l
-_vcwprintf_s
-_vcwprintf_s_l
+; _vcwprintf_s Replaced by emu.
+; _vcwprintf_s_l  Likewise.
 _vfprintf_l
 _vfprintf_p
 _vfprintf_p_l
@@ -1112,8 +1113,9 @@ _vwprintf_l
 _vwprintf_p
 _vwprintf_p_l
 _vwprintf_s_l
-_waccess_s
-_wasctime_s
+; _waccess_s Replaced by emu
+; _access_s Likewise.
+; _wasctime_s Likewise.
 _wcscoll_l
 _wcserror_s
 _wcsftime_l
@@ -1137,8 +1139,8 @@ _wcsupr_l
 _wcsupr_s
 _wcsupr_s_l
 _wcsxfrm_l
-_wctime32_s
-_wctime64_s
+; _wctime32_s replaced by emu
+; _wctime64_s Likewise.
 _wctomb_l
 _wctomb_s_l
 _wfopen_s
@@ -1146,7 +1148,7 @@ _wfreopen_s
 _wgetenv_s
 _winput_s
 _wmakepath_s
-_wmktemp_s
+; _wmktemp_s replaced by emu
 _woutput_s
 _wprintf_l
 _wprintf_p
@@ -1158,14 +1160,14 @@ _wscanf_s_l
 _wsearchenv_s
 _wsopen_s
 _wsplitpath_s
-_wstrdate_s
-_wstrtime_s
+; _wstrdate_s replaced by emu
+; _wstrtime_s Likewise.
 _wtmpnam_s
 _wtof_l
 _wtoi64_l
 _wtoi_l
 _wtol_l
-asctime_s
+; asctime_s replaced by emu
 bsearch_s
 clearerr_s
 fopen_s
@@ -1177,7 +1179,7 @@ fwscanf_s
 getenv_s
 mbsrtowcs_s
 mbstowcs_s
-memcpy_s
+; memcpy_s replaced by emu
 memmove_s
 printf_s
 qsort_s

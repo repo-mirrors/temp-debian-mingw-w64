@@ -1,12 +1,12 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef _INC_STDLIB
 #define _INC_STDLIB
 
-#include <_mingw.h>
+#include <crtdefs.h>
 #include <limits.h>
 
 #pragma pack(push,_CRT_PACKING)
@@ -327,6 +327,12 @@ extern "C" {
 #endif
 
   __MINGW_EXTENSION __int64 __cdecl _abs64(__int64);
+#ifdef __MINGW_INTRIN_INLINE
+  __MINGW_INTRIN_INLINE __int64 __cdecl _abs64(__int64 x) {
+    return __builtin_llabs(x);
+  }
+#endif
+
   int __cdecl atexit(void (__cdecl *)(void));
 #ifndef _CRT_ATOF_DEFINED
 #define _CRT_ATOF_DEFINED

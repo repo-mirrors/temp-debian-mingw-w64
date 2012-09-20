@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef _CORREG_H_
@@ -45,7 +45,7 @@ extern "C" {
   typedef INT_PTR mdFormatImpl;
   typedef INT_PTR mdProgID;
   typedef INT_PTR mdRoleCheck;
-  typedef unsigned long RID;
+  typedef unsigned __LONG32 RID;
 
   enum CorRegTokenType {
     mdtTypeDef = 0x00000000,mdtInterfaceImpl = 0x01000000,mdtTypeRef = 0x03000000,mdtNamespace = 0x06000000,mdtCustomValue = 0x07000000,

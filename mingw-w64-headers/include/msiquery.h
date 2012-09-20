@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef _MSIQUERY_H_
@@ -57,7 +57,7 @@ typedef enum tagMSIRUNMODE {
   MSIRUNMODE_RESERVED15 = 15,MSIRUNMODE_SCHEDULED = 16,MSIRUNMODE_ROLLBACK = 17,MSIRUNMODE_COMMIT = 18
 } MSIRUNMODE;
 
-#define INSTALLMESSAGE_TYPEMASK 0xFF000000L
+#define INSTALLMESSAGE_TYPEMASK __MSABI_LONG(0xFF000000)
 
 typedef enum tagMSITRANSFORM_ERROR {
   MSITRANSFORM_ERROR_ADDEXISTINGROW = 0x00000001,MSITRANSFORM_ERROR_DELMISSINGROW = 0x00000002,MSITRANSFORM_ERROR_ADDEXISTINGTABLE = 0x00000004,

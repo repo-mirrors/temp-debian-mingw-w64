@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #include <fsrmenums.h>
@@ -374,7 +374,7 @@ DECLARE_INTERFACE_(IFsrmReportJob,IFsrmObject)
     STDMETHOD_(HRESULT,EnumReports)(THIS_ IFsrmCollection **reports) PURE;
     STDMETHOD_(HRESULT,CreateReport)(THIS_ FsrmReportType reportType,IFsrmReport **report) PURE;
     STDMETHOD_(HRESULT,Run)(THIS_ FsrmReportGenerationContext context) PURE;
-    STDMETHOD_(HRESULT,WaitForCompletion)(THIS_ long waitSeconds,VARIANT_BOOL *completed) PURE;
+    STDMETHOD_(HRESULT,WaitForCompletion)(THIS_ __LONG32 waitSeconds,VARIANT_BOOL *completed) PURE;
     STDMETHOD_(HRESULT,Cancel)(THIS) PURE;
 
     END_INTERFACE

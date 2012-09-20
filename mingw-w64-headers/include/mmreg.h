@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef _INC_MMREG
@@ -2517,7 +2517,7 @@ DEFINE_GUIDSTRUCT("00000003-0000-0010-8000-00aa00389b71", KSDATAFORMAT_SUBTYPE_I
 
 #define JPEG_PROCESS_BASELINE 0
 
-#define AVIIF_CONTROLFRAME 0x00000200L
+#define AVIIF_CONTROLFRAME __MSABI_LONG(0x00000200)
 
 #define JIFMK_SOF0 0xFFC0
 #define JIFMK_SOF1 0xFFC1

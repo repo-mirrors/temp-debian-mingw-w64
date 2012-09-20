@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef __WINCRYPT_H__
@@ -30,7 +30,11 @@ extern "C" {
 #endif
 
 #ifndef WINADVAPI
+#ifndef _ADVAPI32_
 #define WINADVAPI WINIMPM
+#else
+#define WINADVAPI
+#endif
 #endif
 
 
@@ -830,6 +834,10 @@ extern "C" {
 #define szOID_INFOSEC_mosaicUpdatedSig "2.16.840.1.101.2.1.1.19"
 #define szOID_INFOSEC_mosaicKMandUpdSig "2.16.840.1.101.2.1.1.20"
 #define szOID_INFOSEC_mosaicUpdatedInteg "2.16.840.1.101.2.1.1.21"
+
+#define szOID_NIST_AES128_CBC "2.16.840.1.101.3.4.1.2"
+#define szOID_NIST_AES192_CBC "2.16.840.1.101.3.4.1.22"
+#define szOID_NIST_AES256_CBC "2.16.840.1.101.3.4.1.42"
 
   typedef struct _CRYPT_OBJID_TABLE {
     DWORD dwAlgId;
@@ -1694,7 +1702,7 @@ extern "C" {
 #define CRL_DIST_POINT_ERR_INDEX_SHIFT 24
 #define GET_CRL_DIST_POINT_ERR_INDEX(X) ((X >> CRL_DIST_POINT_ERR_INDEX_SHIFT) & CRL_DIST_POINT_ERR_INDEX_MASK)
 
-#define CRL_DIST_POINT_ERR_CRL_ISSUER_BIT 0x80000000L
+#define CRL_DIST_POINT_ERR_CRL_ISSUER_BIT __MSABI_LONG(0x80000000)
 #define IS_CRL_DIST_POINT_ERR_CRL_ISSUER(X) (0!=(X & CRL_DIST_POINT_ERR_CRL_ISSUER_BIT))
 
   typedef struct _CROSS_CERT_DIST_POINTS_INFO {
@@ -1734,7 +1742,7 @@ extern "C" {
     PCERT_GENERAL_SUBTREE rgExcludedSubtree;
   } CERT_NAME_CONSTRAINTS_INFO,*PCERT_NAME_CONSTRAINTS_INFO;
 
-#define CERT_EXCLUDED_SUBTREE_BIT 0x80000000L
+#define CERT_EXCLUDED_SUBTREE_BIT __MSABI_LONG(0x80000000)
 #define IS_CERT_EXCLUDED_SUBTREE(X) (0!=(X & CERT_EXCLUDED_SUBTREE_BIT))
 
 #define SORTED_CTL_EXT_FLAGS_OFFSET (0*4)
@@ -2098,7 +2106,7 @@ extern "C" {
 #define CMSG_HASHED 5
 #define CMSG_ENCRYPTED 6
 
-#define CMSG_ALL_FLAGS (~0UL)
+#define CMSG_ALL_FLAGS (~__MSABI_LONG(0U))
 #define CMSG_DATA_FLAG (1 << CMSG_DATA)
 #define CMSG_SIGNED_FLAG (1 << CMSG_SIGNED)
 #define CMSG_ENVELOPED_FLAG (1 << CMSG_ENVELOPED)
@@ -3153,7 +3161,7 @@ extern "C" {
 #define CERT_STORE_CERTIFICATE_CONTEXT 1
 #define CERT_STORE_CRL_CONTEXT 2
 #define CERT_STORE_CTL_CONTEXT 3
-#define CERT_STORE_ALL_CONTEXT_FLAG (~0UL)
+#define CERT_STORE_ALL_CONTEXT_FLAG (~__MSABI_LONG(0U))
 #define CERT_STORE_CERTIFICATE_CONTEXT_FLAG (1 << CERT_STORE_CERTIFICATE_CONTEXT)
 #define CERT_STORE_CRL_CONTEXT_FLAG (1 << CERT_STORE_CRL_CONTEXT)
 #define CERT_STORE_CTL_CONTEXT_FLAG (1 << CERT_STORE_CTL_CONTEXT)

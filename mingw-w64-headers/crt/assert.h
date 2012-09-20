@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 
@@ -12,7 +12,7 @@
 #ifndef __ASSERT_H_
 #define __ASSERT_H_
 
-#include <_mingw.h>
+#include <crtdefs.h>
 #ifdef __cplusplus
 #include <stdlib.h>
 #endif
@@ -52,6 +52,14 @@ _assert (const char *_Message, const char *_File, unsigned _Line);
 #endif
 
 #endif /* !defined (__ASSERT_H_) */
+
+#if (defined _ISOC11_SOURCE \
+     || (defined __STDC_VERSION__ && __STDC_VERSION__ >= 201112L)) \
+    && !defined (__cplusplus)
+/* Static assertion.  Requires support in the compiler.  */
+#undef static_assert
+#define static_assert _Static_assert
+#endif
 
 #ifdef NDEBUG
 #define assert(_Expression) ((void)0)
