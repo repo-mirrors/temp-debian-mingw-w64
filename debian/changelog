@@ -2,11 +2,10 @@ mingw-w64 (3.0~svn5408-1) experimental; urgency=low
 
   * New upstream trunk snapshot.
     - Adds missing wincrypt.h OIDs. (Closes: #685710.)
-  * Disable widl for now, it doesn't build on all architectures and seems
-    target-specific.
+  * mingw-w64-widl is now target-prefixed.
   * Specify the full target-specific prefix as required since 5197.
 
- -- Stephen Kitt <steve@sk2.org>  Thu, 20 Sep 2012 22:30:27 +0200
+ -- Stephen Kitt <steve@sk2.org>  Fri, 21 Sep 2012 07:05:52 +0200
 
 mingw-w64 (3.0~svn5131-1) experimental; urgency=low
 

@@ -58,6 +58,13 @@ build-arch-stamp:
 		dh_auto_configure -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir) && \
 		dh_auto_build -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir) && \
 		dh_auto_install -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir); \
+	done; \
+	for target in $(targets); do \
+		for tool_dir in $(top_dir)/mingw-w64-tools/widl; do \
+			dh_auto_configure -D$$tool_dir -B$(build_dir)/$$target-$$(basename $$tool_dir) -- --target=$$target && \
+			dh_auto_build -D$$tool_dir -B$(build_dir)/$$target-$$(basename $$tool_dir) && \
+			dh_auto_install -D$$tool_dir -B$(build_dir)/$$target-$$(basename $$tool_dir); \
+		done; \
 	done
 	touch $@
 
