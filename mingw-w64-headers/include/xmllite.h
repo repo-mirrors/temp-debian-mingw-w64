@@ -574,39 +574,122 @@ void __RPC_STUB IXmlReader_IsEOF_Stub(
 
 #endif  /* __IXmlReader_INTERFACE_DEFINED__ */
 
-typedef enum XmlReadState
-{
-    XmlReadState_Initial     = 0,
+typedef enum XmlReadState {
+    XmlReadState_Initial = 0,
     XmlReadState_Interactive = 1,
-    XmlReadState_Error       = 2,
-    XmlReadState_EndOfFile   = 3,
-    XmlReadState_Closed      = 4
+    XmlReadState_Error = 2,
+    XmlReadState_EndOfFile = 3,
+    XmlReadState_Closed = 4
 } XmlReadState;
-typedef enum XmlConformanceLevel
-{
-    XmlConformanceLevel_Auto     = 0,
+typedef enum XmlConformanceLevel {
+    XmlConformanceLevel_Auto = 0,
     XmlConformanceLevel_Fragment = 1,
     XmlConformanceLevel_Document = 2,
-    _XmlConformanceLevel_Last    = 2
+    _XmlConformanceLevel_Last = XmlConformanceLevel_Document
 } XmlConformanceLevel;
-typedef enum DtdProcessing
-{
+typedef enum DtdProcessing {
     DtdProcessing_Prohibit = 0,
-    DtdProcessing_Parse    = DtdProcessing_Prohibit + 1,
-    _DtdProcessing_Last    = DtdProcessing_Parse
+    DtdProcessing_Parse = 1,
+    _DtdProcessing_Last = DtdProcessing_Parse
 } DtdProcessing;
-typedef enum XmlReaderProperty
-{
-    XmlReaderProperty_MultiLanguage      = 0,
-    XmlReaderProperty_ConformanceLevel   = XmlReaderProperty_MultiLanguage + 1,
-    XmlReaderProperty_RandomAccess       = XmlReaderProperty_ConformanceLevel + 1,
-    XmlReaderProperty_XmlResolver        = XmlReaderProperty_RandomAccess + 1,
-    XmlReaderProperty_DtdProcessing      = XmlReaderProperty_XmlResolver + 1,
-    XmlReaderProperty_ReadState          = XmlReaderProperty_DtdProcessing + 1,
-    XmlReaderProperty_MaxElementDepth    = XmlReaderProperty_ReadState + 1,
-    XmlReaderProperty_MaxEntityExpansion = XmlReaderProperty_MaxElementDepth + 1,
-    _XmlReaderProperty_Last              = XmlReaderProperty_MaxEntityExpansion
+typedef enum XmlReaderProperty {
+    XmlReaderProperty_MultiLanguage = 0,
+    XmlReaderProperty_ConformanceLevel = 1,
+    XmlReaderProperty_RandomAccess = 2,
+    XmlReaderProperty_XmlResolver = 3,
+    XmlReaderProperty_DtdProcessing = 4,
+    XmlReaderProperty_ReadState = 5,
+    XmlReaderProperty_MaxElementDepth = 6,
+    XmlReaderProperty_MaxEntityExpansion = 7,
+    _XmlReaderProperty_Last = XmlReaderProperty_MaxEntityExpansion
 } XmlReaderProperty;
+typedef enum XmlError {
+    MX_E_MX = 0xc00cee00,
+    MX_E_INPUTEND = 0xc00cee01,
+    MX_E_ENCODING = 0xc00cee02,
+    MX_E_ENCODINGSWITCH = 0xc00cee03,
+    MX_E_ENCODINGSIGNATURE = 0xc00cee04,
+    WC_E_WC = 0xc00cee20,
+    WC_E_WHITESPACE = 0xc00cee21,
+    WC_E_SEMICOLON = 0xc00cee22,
+    WC_E_GREATERTHAN = 0xc00cee23,
+    WC_E_QUOTE = 0xc00cee24,
+    WC_E_EQUAL = 0xc00cee25,
+    WC_E_LESSTHAN = 0xc00cee26,
+    WC_E_HEXDIGIT = 0xc00cee27,
+    WC_E_DIGIT = 0xc00cee28,
+    WC_E_LEFTBRACKET = 0xc00cee29,
+    WC_E_LEFTPAREN = 0xc00cee2a,
+    WC_E_XMLCHARACTER = 0xc00cee2b,
+    WC_E_NAMECHARACTER = 0xc00cee2c,
+    WC_E_SYNTAX = 0xc00cee2d,
+    WC_E_CDSECT = 0xc00cee2e,
+    WC_E_COMMENT = 0xc00cee2f,
+    WC_E_CONDSECT = 0xc00cee30,
+    WC_E_DECLATTLIST = 0xc00cee31,
+    WC_E_DECLDOCTYPE = 0xc00cee32,
+    WC_E_DECLELEMENT = 0xc00cee33,
+    WC_E_DECLENTITY = 0xc00cee34,
+    WC_E_DECLNOTATION = 0xc00cee35,
+    WC_E_NDATA = 0xc00cee36,
+    WC_E_PUBLIC = 0xc00cee37,
+    WC_E_SYSTEM = 0xc00cee38,
+    WC_E_NAME = 0xc00cee39,
+    WC_E_ROOTELEMENT = 0xc00cee3a,
+    WC_E_ELEMENTMATCH = 0xc00cee3b,
+    WC_E_UNIQUEATTRIBUTE = 0xc00cee3c,
+    WC_E_TEXTXMLDECL = 0xc00cee3d,
+    WC_E_LEADINGXML = 0xc00cee3e,
+    WC_E_TEXTDECL = 0xc00cee3f,
+    WC_E_XMLDECL = 0xc00cee40,
+    WC_E_ENCNAME = 0xc00cee41,
+    WC_E_PUBLICID = 0xc00cee42,
+    WC_E_PESINTERNALSUBSET = 0xc00cee43,
+    WC_E_PESBETWEENDECLS = 0xc00cee44,
+    WC_E_NORECURSION = 0xc00cee45,
+    WC_E_ENTITYCONTENT = 0xc00cee46,
+    WC_E_UNDECLAREDENTITY = 0xc00cee47,
+    WC_E_PARSEDENTITY = 0xc00cee48,
+    WC_E_NOEXTERNALENTITYREF = 0xc00cee49,
+    WC_E_PI = 0xc00cee4a,
+    WC_E_SYSTEMID = 0xc00cee4b,
+    WC_E_QUESTIONMARK = 0xc00cee4c,
+    WC_E_CDSECTEND = 0xc00cee4d,
+    WC_E_MOREDATA = 0xc00cee4e,
+    WC_E_DTDPROHIBITED = 0xc00cee4f,
+    WC_E_INVALIDXMLSPACE = 0xc00cee50,
+    NC_E_NC = 0xc00cee60,
+    NC_E_QNAMECHARACTER = 0xc00cee61,
+    NC_E_QNAMECOLON = 0xc00cee62,
+    NC_E_NAMECOLON = 0xc00cee63,
+    NC_E_DECLAREDPREFIX = 0xc00cee64,
+    NC_E_UNDECLAREDPREFIX = 0xc00cee65,
+    NC_E_EMPTYURI = 0xc00cee66,
+    NC_E_XMLPREFIXRESERVED = 0xc00cee67,
+    NC_E_XMLNSPREFIXRESERVED = 0xc00cee68,
+    NC_E_XMLURIRESERVED = 0xc00cee69,
+    NC_E_XMLNSURIRESERVED = 0xc00cee6a,
+    SC_E_SC = 0xc00cee80,
+    SC_E_MAXELEMENTDEPTH = 0xc00cee81,
+    SC_E_MAXENTITYEXPANSION = 0xc00cee82,
+    WR_E_WR = 0xc00cef00,
+    WR_E_NONWHITESPACE = 0xc00cef01,
+    WR_E_NSPREFIXDECLARED = 0xc00cef02,
+    WR_E_NSPREFIXWITHEMPTYNSURI = 0xc00cef03,
+    WR_E_DUPLICATEATTRIBUTE = 0xc00cef04,
+    WR_E_XMLNSPREFIXDECLARATION = 0xc00cef05,
+    WR_E_XMLPREFIXDECLARATION = 0xc00cef06,
+    WR_E_XMLURIDECLARATION = 0xc00cef07,
+    WR_E_XMLNSURIDECLARATION = 0xc00cef08,
+    WR_E_NAMESPACEUNDECLARED = 0xc00cef09,
+    WR_E_INVALIDXMLSPACE = 0xc00cef0a,
+    WR_E_INVALIDACTION = 0xc00cef0b,
+    WR_E_INVALIDSURROGATEPAIR = 0xc00cef0c,
+    XML_E_INVALID_DECIMAL = 0xc00ce01d,
+    XML_E_INVALID_HEXIDECIMAL = 0xc00ce01e,
+    XML_E_INVALID_UNICODE = 0xc00ce01f,
+    XML_E_INVALIDENCODING = 0xc00ce06e
+} XmlError;
 STDAPI CreateXmlReader(REFIID riid, void **ppvObject, IMalloc *pMalloc);
 typedef IUnknown IXmlReaderInput;
 STDAPI CreateXmlReaderInputWithEncodingName(IUnknown *stream, IMalloc *pMalloc,

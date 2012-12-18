@@ -15,7 +15,8 @@ secsyshead_HEADERS = @SECSYSHEAD_LIST@
 glhead_HEADERS = @GLHEAD_LIST@
 gdiplushead_HEADERS = @GDIPLUSHEAD_LIST@
 mingwhelperhead_HEADERS = @MINGWHELPERHEAD_LIST@
-sdkshead_HEADERS = _mingw_directx.h _mingw_ddk.h
+nodist_sdkshead_HEADERS = _mingw_directx.h _mingw_ddk.h
+noinst_HEADERS = crt/sdks/_mingw_directx.h.in crt/sdks/_mingw_ddk.h.in
 
 ddkheaddir = $(baseheaddir)/ddk
 dxheaddir = $(baseheaddir)
@@ -25,8 +26,14 @@ ddkhead_HEADERS = @DDKHEAD_LIST@
 dxhead_HEADERS = @DXHEAD_LIST@
 idlhead_HEADERS = @IDLHEAD_LIST@
 
-EXTRA_DIST = ChangeLog*
-DISTCHECK_CONFIGURE_FLAGS = --enable-idl
+CLEANFILES = $(nodist_sdkshead_HEADERS)
+
+DISTCHECK_CONFIGURE_FLAGS = --enable-crt --enable-sdk=all --enable-idl
+
+EXTRA_DIST = $(srcdir)/ChangeLog.* include crt direct-x ddk
+
+dist-hook:
+	find $(distdir) -name ".svn" -type d -delete
 
 EXTRA_HEADERS = \
   include/*.dlg \
@@ -40,6 +47,7 @@ EXTRA_HEADERS = \
   include/psdk_inc/*.h \
   include/gdiplus/*.h \
   crt/*.h \
+  crt/*.inl \
   crt/sys/*.h \
   crt/sec_api/*.h \
   crt/sec_api/sys/*.h \
@@ -47,17 +55,13 @@ EXTRA_HEADERS = \
   direct-x/include/*.idl \
   ddk/include/ddk/*.h
 
-BUILT_SOURCES = \
-  _mingw_directx.h \
-  _mingw_ddk.h
-
 if HAVE_WIDL
 
 IDL_SRCS = \
   include/audioclient.idl \
   include/audiopolicy.idl \
   include/docobj.idl \
-  include/devitetopology.idl \
+  include/devicetopology.idl \
   include/downloadmgr.idl \
   include/endpointvolume.idl \
   include/fusion.idl \
@@ -82,6 +86,8 @@ IDL_SRCS = \
   include/structuredquerycondition.idl \
   include/tpcshrd.idl \
   include/textstor.idl \
+  include/uiautomationclient.idl \
+  include/uiautomationcore.idl \
   include/unknwn.idl \
   include/urlmon.idl \
   include/wincodec.idl \
@@ -105,7 +111,7 @@ IDL_SRCS = \
   direct-x/include/qnetwork.idl \
   direct-x/include/vmr9.idl
 
-BUILT_SOURCES += $(IDL_SRCS:.idl=.h)
+BUILT_SOURCES = $(IDL_SRCS:.idl=.h)
 
 .idl.h: crt/_mingw.h
 	$(WIDL) -DBOOL=WINBOOL -I$(srcdir)/include -I$(srcdir)/direct-x/include -Icrt -I$(srcdir)/crt -h -o $(srcdir)/$@ $<
