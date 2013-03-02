@@ -12,6 +12,15 @@
 
 #define __MINGW64_VERSION_MAJOR	3
 #define __MINGW64_VERSION_MINOR	0
+
+/* This macro holds an monotonic increasing value, which indicates
+   a specific fix/patch is present on trunk.  This value isn't related to
+   minor/major version-macros.  It is increased on demand, if a big
+   fix was applied to trunk.  This macro gets just increased on trunk.  For
+   other branches its value won't be modified.  */
+
+#define __MINGW64_VERSION_RC    1
+
 #define __MINGW64_VERSION_STR	__MINGW64_STRINGIFY(__MINGW64_VERSION_MAJOR) "." __MINGW64_STRINGIFY(__MINGW64_VERSION_MINOR)
 #define __MINGW64_VERSION_STATE	"alpha"
 
@@ -218,6 +227,20 @@
 # define __MINGW_ATTRIB_DEPRECATED_SEC_WARN __MINGW_ATTRIB_DEPRECATED_STR (__MINGW_SEC_WARN_STR)
 #else
 # define __MINGW_ATTRIB_DEPRECATED_SEC_WARN
+#endif
+
+#define __MINGW_MS_PRINTF(__format,__args)  __attribute__((__format__(ms_printf, __format,__args)))
+#define __MINGW_MS_SCANF(__format,__args)   __attribute__((__format__(ms_scanf,  __format,__args)))
+#define __MINGW_GNU_PRINTF(__format,__args) __attribute__((__format__(gnu_printf,__format,__args)))
+#define __MINGW_GNU_SCANF(__format,__args)  __attribute__((__format__(gnu_scanf, __format,__args)))
+
+#undef __mingw_ovr
+#ifdef __cplusplus
+#define __mingw_ovr  inline __cdecl
+#elif defined (__GNUC__)
+#define __mingw_ovr static __attribute__ ((__unused__)) __inline__ __cdecl
+#else
+#define __mingw_ovr static __cdecl
 #endif
 
 #endif	/* _INC_CRTDEFS_MACRO */

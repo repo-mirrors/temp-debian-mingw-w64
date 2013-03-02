@@ -71,6 +71,9 @@ src_libdinput8=libsrc/dinput_private.h libsrc/dinput_joy.c libsrc/dinput_joy2.c 
 src_libdmoguids=libsrc/dmoguids.c
 src_libdxerr8=libsrc/dxerr8.c libsrc/dxerr8w.c
 src_libdxerr9=libsrc/dxerr9.c libsrc/dxerr9w.c
+src_libmfuuid=libsrc/mfuuid.c
+src_libwbemuuid=libsrc/wbemuuid.c
+src_libwmcodecdspuuid=libsrc/wmcodecdspuuid.c
 src_libwindowscodecs=libsrc/windowscodecs.c
 src_libdxguid=libsrc/dxguid.c
 src_libksuser=libsrc/ksuser.c
@@ -97,7 +100,7 @@ src_libmingwthrd=libsrc/mingwthrd_mt.c
 src_libgdiplus=libsrc/gdiplus.c
 
 src_libuuid=libsrc/uuid.c   libsrc/guid_nul.c         libsrc/devguid.c         libsrc/fwp-uuid.c        \
-  libsrc/ativscp-uuid.c     libsrc/atsmedia-uuid.c    libsrc/bdamedia-uuid.c   libsrc/bth-uuid.c        libsrc/cguid-uuid.c        \
+  libsrc/ativscp-uuid.c     libsrc/atsmedia-uuid.c    libsrc/bth-uuid.c        libsrc/cguid-uuid.c        \
   libsrc/comcat-uuid.c      libsrc/docobj-uuid.c      libsrc/exdisp-uuid.c     libsrc/extras-uuid.c     libsrc/hlguids-uuid.c      \
   libsrc/hlink-uuid.c       libsrc/mlang-uuid.c       libsrc/msctf-uuid.c      libsrc/mshtml-uuid.c     libsrc/msxml-uuid.c        \
   libsrc/netcon-uuid.c      libsrc/objidl-uuid.c      libsrc/oaidl-uuid.c      libsrc/objsafe-uuid.c    libsrc/ocidl-uuid.c        \
@@ -344,9 +347,21 @@ lib32_LIBRARIES += lib32/libdxerr9.a
 lib32_libdxerr9_a_SOURCES = $(src_libdxerr9)
 lib32_libdxerr9_a_CPPFLAGS=$(CPPFLAGS32) $(sysincludes)
 
+lib32_LIBRARIES += lib32/libmfuuid.a
+lib32_libmfuuid_a_SOURCES = $(src_libmfuuid)
+lib32_libmfuuid_a_CPPFLAGS = $(CPPFLAGS32) $(sysincludes)
+
+lib32_LIBRARIES += lib32/libwmcodecdspuuid.a
+lib32_libwmcodecdspuuid_a_SOURCES = $(src_libwmcodecdspuuid)
+lib32_libwmcodecdspuuid_a_CPPFLAGS = $(CPPFLAGS32) $(sysincludes)
+
 lib32_LIBRARIES += lib32/libwindowscodecs.a
 lib32_libwindowscodecs_a_SOURCES = $(src_libwindowscodecs)
 lib32_libwindowscodecs_a_CPPFLAGS = $(CPPFLAGS32) $(sysincludes)
+
+lib32_LIBRARIES += lib32/libwbemuuid.a
+lib32_libwbemuuid_a_SOURCES = $(src_libwbemuuid)
+lib32_libwbemuuid_a_CPPFLAGS = $(CPPFLAGS32) $(sysincludes)
 
 lib32_LIBRARIES += lib32/libdxguid.a
 lib32_libdxguid_a_SOURCES = $(src_libdxguid)
@@ -520,12 +535,13 @@ lib32_DATA = \
   lib32/libxaudio2_2.a      lib32/libxaudio2_3.a      lib32/libxaudio2_4.a \
   lib32/libxaudio2_5.a      lib32/libxaudio2_6.a      lib32/libxaudio2_7.a \
   lib32/libxaudiod2_7.a     lib32/libxinput1_1.a      lib32/libxinput1_2.a \
-  lib32/libxinput1_3.a      \
+  lib32/libxinput1_3.a      lib32/libd3dcompiler_46.a lib32/libd3dcsx_46.a \
   \
   lib32/libxinput.a         lib32/libxaudio.a         lib32/libxaudiod.a   \
   lib32/libxapofx.a         lib32/libx3daudio.a       lib32/libd3dx9.a     \
   lib32/libd3dx10.a         lib32/libd3dx11.a         lib32/libd3dcsxd.a   \
-  lib32/libd3dcompiler.a    lib32/libwinhttp.a        lib32/libmsvcr110.a
+  lib32/libd3dcompiler.a    lib32/libwinhttp.a        lib32/libmsvcr110.a  \
+  lib32/libdevmgr.a         lib32/libdevobj.a         lib32/libdevrtl.a
 
 if ! W32API
 lib32_DATA += lib32/libglut.a
@@ -643,9 +659,21 @@ lib64_LIBRARIES += lib64/libdxerr9.a
 lib64_libdxerr9_a_SOURCES = $(src_libdxerr9)
 lib64_libdxerr9_a_CPPFLAGS=$(CPPFLAGS64) $(sysincludes)
 
+lib64_LIBRARIES += lib64/libmfuuid.a
+lib64_libmfuuid_a_SOURCES = $(src_libmfuuid)
+lib64_libmfuuid_a_CPPFLAGS = $(CPPFLAGS64) $(sysincludes)
+
+lib64_LIBRARIES += lib64/libwmcodecdspuuid.a
+lib64_libwmcodecdspuuid_a_SOURCES = $(src_libwmcodecdspuuid)
+lib64_libwmcodecdspuuid_a_CPPFLAGS = $(CPPFLAGS64) $(sysincludes)
+
 lib64_LIBRARIES += lib64/libwindowscodecs.a
 lib64_libwindowscodecs_a_SOURCES = $(src_libwindowscodecs)
 lib64_libwindowscodecs_a_CPPFLAGS = $(CPPFLAGS64) $(sysincludes)
+
+lib64_LIBRARIES += lib64/libwbemuuid.a
+lib64_libwbemuuid_a_SOURCES = $(src_libwbemuuid)
+lib64_libwbemuuid_a_CPPFLAGS=$(CPPFLAGS64) $(sysincludes)
 
 lib64_LIBRARIES += lib64/libdxguid.a
 lib64_libdxguid_a_SOURCES = $(src_libdxguid)
@@ -766,7 +794,8 @@ lib64_DATA = \
   lib64/libdataclen.a   lib64/libdatime.a     lib64/libdavclnt.a      lib64/libdavcprox.a   lib64/libdbgeng.a        \
   lib64/libdbghelp.a    lib64/libdbnetlib.a   lib64/libdbnmpntw.a     lib64/libdciman32.a   lib64/libddraw.a         \
   lib64/libddrawex.a    lib64/libdeskadp.a    lib64/libdeskmon.a      lib64/libdeskperf.a   lib64/libdevenum.a       \
-  lib64/libdevmgr.a     lib64/libdfrgifps.a   lib64/libdfrgsnap.a     lib64/libdfrgui.a     lib64/libdfsshlex.a      \
+  lib64/libdevmgr.a     lib64/libdevobj.a     lib64/libdevrtl.a       \
+  lib64/libdfrgifps.a   lib64/libdfrgsnap.a     lib64/libdfrgui.a     lib64/libdfsshlex.a      \
   lib64/libdgnet.a      lib64/libdhcpcsvc.a   lib64/libdhcpmon.a      lib64/libdhcpsapi.a   lib64/libdiactfrm.a      \
   lib64/libdigest.a     lib64/libdimap.a      lib64/libdimsntfy.a     lib64/libdimsroam.a   lib64/libdirectdb.a      \
   lib64/libdiskcopy.a   lib64/libdispex.a     lib64/libdmconfig.a     lib64/libdmdlgs.a     lib64/libdmdskmgr.a      \
@@ -1001,7 +1030,7 @@ lib64_DATA = \
   lib64/libxaudio2_2.a      lib64/libxaudio2_3.a      lib64/libxaudio2_4.a \
   lib64/libxaudio2_5.a      lib64/libxaudio2_6.a      lib64/libxaudio2_7.a \
   lib64/libxaudiod2_7.a     lib64/libxinput1_1.a      lib64/libxinput1_2.a \
-  lib64/libxinput1_3.a      \
+  lib64/libxinput1_3.a      lib64/libd3dcompiler_46.a lib64/libd3dcsx_46.a \
   \
   lib64/libxinput.a         lib64/libxaudio.a         lib64/libxaudiod.a   \
   lib64/libxapofx.a         lib64/libx3daudio.a       lib64/libd3dx9.a     \

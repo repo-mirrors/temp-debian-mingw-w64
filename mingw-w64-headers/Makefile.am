@@ -60,6 +60,7 @@ if HAVE_WIDL
 IDL_SRCS = \
   include/audioclient.idl \
   include/audiopolicy.idl \
+  include/ctfutb.idl \
   include/docobj.idl \
   include/devicetopology.idl \
   include/downloadmgr.idl \
@@ -68,6 +69,10 @@ IDL_SRCS = \
   include/oaidl.idl \
   include/ocidl.idl \
   include/comcat.idl \
+  include/mfidl.idl \
+  include/mfobjects.idl \
+  include/mfreadwrite.idl \
+  include/mftransform.idl \
   include/mmdeviceapi.idl \
   include/mscoree.idl \
   include/msctf.idl \
@@ -91,6 +96,7 @@ IDL_SRCS = \
   include/unknwn.idl \
   include/urlmon.idl \
   include/wincodec.idl \
+  include/wmcodecdsp.idl \
   include/wpcapi.idl \
   include/wtypes.idl \
   include/xmllite.idl \
@@ -114,7 +120,7 @@ IDL_SRCS = \
 BUILT_SOURCES = $(IDL_SRCS:.idl=.h)
 
 .idl.h: crt/_mingw.h
-	$(WIDL) -DBOOL=WINBOOL -I$(srcdir)/include -I$(srcdir)/direct-x/include -Icrt -I$(srcdir)/crt -h -o $(srcdir)/$@ $<
+	$(WIDL) -DBOOL=WINBOOL -I$(srcdir)/include -I$(srcdir)/direct-x/include -Icrt -I$(srcdir)/crt -h -o $@ $<
 
 endif
 

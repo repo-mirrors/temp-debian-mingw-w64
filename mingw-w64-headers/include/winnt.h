@@ -1501,7 +1501,6 @@ extern "C" {
 
 #define ReadTimeStampCounter() __rdtsc()
 
-    __MINGW_EXTENSION unsigned __int64 __rdtsc(void);
     VOID __movsb(PBYTE Destination,BYTE const *Source,SIZE_T Count);
     VOID __movsw(PWORD Destination,WORD const *Source,SIZE_T Count);
     VOID __movsd(PDWORD Destination,DWORD const *Source,SIZE_T Count);
@@ -1591,6 +1590,7 @@ extern "C" {
       extractedProduct = ShiftRight128(lowProduct,highProduct,Shift);
       return extractedProduct;
     }
+#endif
 
     __CRT_INLINE BYTE __readgsbyte(DWORD Offset) {
       BYTE ret;
@@ -1632,7 +1632,6 @@ extern "C" {
       __asm__ volatile ("movq	%0,%%gs:%1"
 	: "=r" (Data) ,"=m" ((*(volatile __LONG32 *) (DWORD64) Offset)));
     }
-#endif /* !__CRT__NO_INLINE */
 
 #ifdef __cplusplus
   }
@@ -6473,13 +6472,11 @@ extern "C" {
     struct _TEB *NtCurrentTeb(VOID);
     PVOID GetCurrentFiber(VOID);
     PVOID GetFiberData(VOID);
-#ifndef __CRT__NO_INLINE
     __CRT_INLINE struct _TEB *NtCurrentTeb(VOID) { return (struct _TEB *)__readgsqword(FIELD_OFFSET(NT_TIB,Self)); }
     __CRT_INLINE PVOID GetCurrentFiber(VOID) { return(PVOID)__readgsqword(FIELD_OFFSET(NT_TIB,FiberData)); }
     __CRT_INLINE PVOID GetFiberData(VOID) {
       return *(PVOID *)GetCurrentFiber();
     }
-#endif /* !__CRT__NO_INLINE */
 #endif /* __x86_64 */
 
 #if (_WIN32_WINNT >= 0x0600)

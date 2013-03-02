@@ -72,8 +72,8 @@ typedef LONG D3DFIXED;
 #define D3DENUMRET_OK                            DDENUMRET_OK
 
 typedef HRESULT (CALLBACK *LPD3DVALIDATECALLBACK)(LPVOID lpUserArg, DWORD dwOffset);
-typedef HRESULT (CALLBACK *LPD3DENUMTEXTUREFORMATSCALLBACK)(LPDDSURFACEDESC lpDdsd, LPVOID lpContext);
-typedef HRESULT (CALLBACK *LPD3DENUMPIXELFORMATSCALLBACK)(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext);
+typedef HRESULT (CALLBACK *LPD3DENUMTEXTUREFORMATSCALLBACK)(DDSURFACEDESC *surface_desc, void *ctx);
+typedef HRESULT (CALLBACK *LPD3DENUMPIXELFORMATSCALLBACK)(DDPIXELFORMAT *format, void *ctx);
 
 #ifndef DX_SHARED_DEFINES
 
@@ -472,7 +472,7 @@ typedef struct _D3DTRANSFORMDATA {
   DWORD           dwInSize;
   LPVOID          lpOut;
   DWORD           dwOutSize;
-  LPD3DHVERTEX    lpHOut;
+  D3DHVERTEX      *lpHOut;
   DWORD           dwClip;
   DWORD           dwClipIntersection;
   DWORD           dwClipUnion;
@@ -597,9 +597,9 @@ typedef struct _D3DLIGHT2 {
 
 typedef struct _D3DLIGHTDATA {
   DWORD                dwSize;
-  LPD3DLIGHTINGELEMENT lpIn;
+  D3DLIGHTINGELEMENT   *lpIn;
   DWORD                dwInSize;
-  LPD3DTLVERTEX        lpOut;
+  D3DTLVERTEX          *lpOut;
   DWORD                dwOutSize;
 } D3DLIGHTDATA, *LPD3DLIGHTDATA;
 
