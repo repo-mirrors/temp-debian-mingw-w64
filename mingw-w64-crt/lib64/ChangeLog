@@ -1,3 +1,9 @@
-2012-01-10  Kai Tietz  <ktietz@redhat.com>
+2013-02-16  Kai Tietz  <ktietz@redhat.com>
 
-	* msvcrt.def (vsnprintf): Forward to _vsnprintf.
+	* cfgbkend.def: Update.
+	* cfgmgr32.def: Update.
+	* devenum.def: Update.
+	* devmgr.def: Update.
+	* devobj.def: Update.
+	* devrtl.def: Update.
+	* setupapi.def: Update

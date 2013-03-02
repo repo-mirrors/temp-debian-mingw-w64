@@ -40,7 +40,6 @@ extern "C" {
 #define SetSwapAreaSize(w) (w)
 #define LockSegment(w) GlobalFix((HANDLE)(w))
 #define UnlockSegment(w) GlobalUnfix((HANDLE)(w))
-#define GetCurrentTime() GetTickCount()
 
 #define Yield()
 
@@ -231,6 +230,8 @@ extern "C" {
 #else
   typedef LPVOID LPLDT_ENTRY;
 #endif
+
+#define CRITICAL_SECTION_NO_DEBUG_INFO RTL_CRITICAL_SECTION_FLAG_NO_DEBUG_INFO
 
 #define MUTEX_MODIFY_STATE MUTANT_QUERY_STATE
 #define MUTEX_ALL_ACCESS MUTANT_ALL_ACCESS
@@ -1542,11 +1543,19 @@ extern "C" {
   WINBASEAPI LONG WINAPI CompareFileTime(CONST FILETIME *lpFileTime1,CONST FILETIME *lpFileTime2);
   WINBASEAPI WINBOOL WINAPI FileTimeToDosDateTime(CONST FILETIME *lpFileTime,LPWORD lpFatDate,LPWORD lpFatTime);
   WINBASEAPI WINBOOL WINAPI DosDateTimeToFileTime(WORD wFatDate,WORD wFatTime,LPFILETIME lpFileTime);
-  WINBASEAPI DWORD WINAPI GetTickCount(VOID);
   WINBASEAPI WINBOOL WINAPI SetSystemTimeAdjustment(DWORD dwTimeAdjustment,WINBOOL bTimeAdjustmentDisabled);
   WINBASEAPI WINBOOL WINAPI GetSystemTimeAdjustment(PDWORD lpTimeAdjustment,PDWORD lpTimeIncrement,PBOOL lpTimeAdjustmentDisabled);
   WINBASEAPI DWORD WINAPI FormatMessageA(DWORD dwFlags,LPCVOID lpSource,DWORD dwMessageId,DWORD dwLanguageId,LPSTR lpBuffer,DWORD nSize,va_list *Arguments);
   WINBASEAPI DWORD WINAPI FormatMessageW(DWORD dwFlags,LPCVOID lpSource,DWORD dwMessageId,DWORD dwLanguageId,LPWSTR lpBuffer,DWORD nSize,va_list *Arguments);
+
+  WINBASEAPI DWORD WINAPI GetTickCount(VOID);
+#ifndef __cplusplus
+#define GetCurrentTime() GetTickCount()
+#else
+  DWORD FORCEINLINE GetCurrentTime(void) {
+    return GetTickCount();
+  }
+#endif
 
 #define FORMAT_MESSAGE_ALLOCATE_BUFFER 0x100
 #define FORMAT_MESSAGE_IGNORE_INSERTS 0x200
@@ -2769,6 +2778,7 @@ extern "C" {
 #define SYMBOLIC_LINK_FLAG_FILE		0x0
 #define SYMBOLIC_LINK_FLAG_DIRECTORY	0x1
 #define EXTENDED_STARTUPINFO_PRESENT	0x00080000
+#define CREATE_MUTEX_INITIAL_OWNER   0x00000001
 
 #define CreateSymbolicLink __MINGW_NAME_AW(CreateSymbolicLink)
 #define CreateBoundaryDescriptor __MINGW_NAME_AW(CreateBoundaryDescriptor)
@@ -3058,85 +3068,26 @@ WINBASEAPI WINBOOL WINAPI DeleteFileTransactedW(
   HANDLE hTransaction
 );
 
-WINBASEAPI HANDLE WINAPI CreateMutexExA(
-  LPSECURITY_ATTRIBUTES lpMutexAttributes,
-  LPCTSTR lpName,
-  DWORD dwFlags,
-  DWORD dwDesiredAccess
-);
+WINBASEAPI HANDLE WINAPI CreateMutexExA(LPSECURITY_ATTRIBUTES lpMutexAttributes, LPCTSTR lpName, DWORD dwFlags, DWORD dwDesiredAccess);
+WINBASEAPI HANDLE WINAPI CreateMutexExW(LPSECURITY_ATTRIBUTES lpMutexAttributes, LPCWSTR lpName, DWORD dwFlags, DWORD dwDesiredAccess);
 
-WINBASEAPI HANDLE WINAPI CreateMutexExW(
-  LPSECURITY_ATTRIBUTES lpMutexAttributes,
-  LPCWSTR lpName,
-  DWORD dwFlags,
-  DWORD dwDesiredAccess
-);
+WINBASEAPI HANDLE WINAPI CreateSemaphoreExA(LPSECURITY_ATTRIBUTES lpSemaphoreAttributes, LONG lInitialCount, LONG lMaximumCount, LPCSTR lpName, DWORD dwFlags, DWORD dwDesiredAccess);
+WINBASEAPI HANDLE WINAPI CreateSemaphoreExW(LPSECURITY_ATTRIBUTES lpSemaphoreAttributes, LONG lInitialCount, LONG lMaximumCount, LPCWSTR lpName, DWORD dwFlags, DWORD dwDesiredAccess);
 
-WINBASEAPI HANDLE WINAPI CreateSemaphoreExA(
-  LPSECURITY_ATTRIBUTES lpSemaphoreAttributes,
-  LONG lInitialCount,
-  LONG lMaximumCount,
-  LPCSTR lpName,
-  DWORD dwFlags,
-  DWORD dwDesiredAccess
-);
+WINBASEAPI BOOLEAN WINAPI CreateSymbolicLinkTransactedW(LPWSTR lpSymlinkFileName, LPWSTR lpTargetFileName, DWORD dwFlags, HANDLE hTransaction);
+WINBASEAPI BOOLEAN WINAPI CreateSymbolicLinkTransactedA(LPSTR lpSymlinkFileName, LPSTR lpTargetFileName, DWORD dwFlags, HANDLE hTransaction);
 
-WINBASEAPI HANDLE WINAPI CreateSemaphoreExW(
-  LPSECURITY_ATTRIBUTES lpSemaphoreAttributes,
-  LONG lInitialCount,
-  LONG lMaximumCount,
-  LPCWSTR lpName,
-  DWORD dwFlags,
-  DWORD dwDesiredAccess
-);
-
-WINBASEAPI BOOLEAN WINAPI CreateSymbolicLinkTransactedW(
-  LPWSTR lpSymlinkFileName,
-  LPWSTR lpTargetFileName,
-  DWORD dwFlags,
-  HANDLE hTransaction
-);
-
-WINBASEAPI BOOLEAN WINAPI CreateSymbolicLinkTransactedA(
-  LPSTR lpSymlinkFileName,
-  LPSTR lpTargetFileName,
-  DWORD dwFlags,
-  HANDLE hTransaction
-);
-
-WINBASEAPI HANDLE WINAPI CreateWaitableTimerExA(
-  LPSECURITY_ATTRIBUTES lpTimerAttributes,
-  LPCSTR lpTimerName,
-  DWORD dwFlags,
-  DWORD dwDesiredAccess
-);
-
-WINBASEAPI HANDLE WINAPI CreateWaitableTimerExW(
-  LPSECURITY_ATTRIBUTES lpTimerAttributes,
-  LPCWSTR lpTimerName,
-  DWORD dwFlags,
-  DWORD dwDesiredAccess
-);
+WINBASEAPI HANDLE WINAPI CreateWaitableTimerExA(LPSECURITY_ATTRIBUTES lpTimerAttributes, LPCSTR lpTimerName, DWORD dwFlags, DWORD dwDesiredAccess);
+WINBASEAPI HANDLE WINAPI CreateWaitableTimerExW(LPSECURITY_ATTRIBUTES lpTimerAttributes, LPCWSTR lpTimerName, DWORD dwFlags, DWORD dwDesiredAccess);
 
 #define DeleteFileTransacted __MINGW_NAME_AW(DeleteFileTransacted)
 
-WINBASEAPI WINBOOL WINAPI DeleteFileTransactedW(
-  LPCWSTR lpFileName,
-  HANDLE hTransaction
-);
+WINBASEAPI WINBOOL WINAPI DeleteFileTransactedW(LPCWSTR lpFileName, HANDLE hTransaction);
+WINBASEAPI WINBOOL WINAPI DeleteFileTransactedA(LPCSTR lpFileName, HANDLE hTransaction);
 
-WINBASEAPI WINBOOL WINAPI DeleteFileTransactedA(
-  LPCSTR lpFileName,
-  HANDLE hTransaction
-);
+WINBASEAPI VOID WINAPI DestroyThreadpoolEnvironment(PTP_CALLBACK_ENVIRON pcbe);
 
-WINBASEAPI VOID WINAPI DestroyThreadpoolEnvironment(
-  PTP_CALLBACK_ENVIRON pcbe
-);
-
-WINBASEAPI VOID WINAPI DisassociateCurrentThreadFromCallback(
-  PTP_CALLBACK_INSTANCE pci
-);
+WINBASEAPI VOID WINAPI DisassociateCurrentThreadFromCallback(PTP_CALLBACK_INSTANCE pci);
 
 typedef enum _FILE_ID_TYPE {
   FileIdType,
@@ -3605,6 +3556,12 @@ WINBASEAPI WINBOOL WINAPI GetVolumeInformationByHandleW(
   DWORD nFileSystemNameSize
 );
 
+WINBASEAPI WINBOOL WINAPI InitializeCriticalSectionEx(
+  LPCRITICAL_SECTION lpCriticalSection,
+  DWORD dwSpinCount,
+  DWORD Flags
+);
+
 WINBASEAPI VOID WINAPI LeaveCriticalSectionWhenCallbackReturns(
   PTP_CALLBACK_INSTANCE pci,
   PCRITICAL_SECTION pcs
@@ -4048,6 +4005,24 @@ WINBASEAPI PUMS_CONTEXT GetCurrentUmsThread(void);
 
 #endif /* _WIN64 */
 #endif /*(_WIN32_WINNT >= 0x0601)*/
+
+#if (_WIN32_WINNT >= 0x0602)
+typedef struct _CREATEFILE2_EXTENDED_PARAMETERS {
+  DWORD                 dwSize;
+  DWORD                 dwFileAttributes;
+  DWORD                 dwFileFlags;
+  DWORD                 dwSecurityQosFlags;
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes;
+  HANDLE                hTemplateFile;
+} CREATEFILE2_EXTENDED_PARAMETERS, *PCREATEFILE2_EXTENDED_PARAMETERS, *LPCREATEFILE2_EXTENDED_PARAMETERS;
+
+WINBASEAPI HANDLE WINAPI CreateFile2(LPCWSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, DWORD dwCreationDisposition, LPCREATEFILE2_EXTENDED_PARAMETERS pCreateExParams);
+
+HMODULE WINAPI LoadPackagedLibrary(LPCWSTR lpwLibFileName, DWORD Reserved);
+
+WINBASEAPI VOID WINAPI GetSystemTimePreciseAsFileTime(LPFILETIME lpSystemTimeAsFileTime);
+
+#endif /*(_WIN32_WINNT >= 0x0602)*/
 
 #ifdef __cplusplus
 }

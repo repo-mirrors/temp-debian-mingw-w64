@@ -272,6 +272,8 @@ peimg_show (pe_image *ppeimg, FILE *outfp)
   if (hdr_cha != 0)
     {
       fprintf (outfp, "  Optional Characteristics:\n   ");
+      if ((hdr_cha & 0x20) != 0)
+	fprintf (outfp, " large-address-aware");
       if ((hdr_cha & 0x40) != 0)
         fprintf (outfp, " dynamic-base");
       if ((hdr_cha & 0x80) != 0)
@@ -284,11 +286,13 @@ peimg_show (pe_image *ppeimg, FILE *outfp)
         fprintf (outfp, " no-SEH");
       if ((hdr_cha & 0x800) != 0)
         fprintf (outfp, " no-BIND");
+      if ((hdr_cha & 0x1000) != 0)
+	fprintf (outfp, " app-container");
       if ((hdr_cha & 0x2000) != 0)
         fprintf (outfp, " wdm-Driver");
       if ((hdr_cha & 0x8000) != 0)
         fprintf (outfp, " terminal-server-aware");
-      hdr_cha &= ~(0x63f);
+      hdr_cha &= ~(0xbfef);
       if (hdr_cha)
         fprintf (outfp, " unknown(0x%x)", hdr_cha);
       fprintf (outfp, "\n");
