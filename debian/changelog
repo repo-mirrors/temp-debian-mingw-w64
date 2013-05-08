@@ -1,8 +1,9 @@
-mingw-w64 (2.0.4-1) unstable; urgency=low
+mingw-w64 (2.0.8-1) UNRELEASED; urgency=low
 
   * New upstream release.
+  * Switch to my Debian address and drop DM-Upload-Allowed.
 
- -- Stephen Kitt <steve@sk2.org>  Sat, 14 Jul 2012 19:47:29 +0200
+ -- Stephen Kitt <skitt@debian.org>  Wed, 08 May 2013 18:11:07 +0200
 
 mingw-w64 (2.0.3-1) unstable; urgency=low
 
