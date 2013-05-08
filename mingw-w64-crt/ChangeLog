@@ -1,3 +1,28 @@
+2013-03-21  Ozkan Sezer  <sezeroz@gmail.com>
+
+	Partial merge from trunk r5541:
+	2012-01-16  Rafaël Carré <funman@videolan.org>
+	* lib32/msvcr90d.def: Mark atexit with DATA.
+	* lib64/msvcr90d.def: Likewise.
+
+2013-03-21  Ozkan Sezer  <sezeroz@gmail.com>
+
+	Merge from trunk revs.5540 & 5613:
+	2013-02-23  David Nadlinger  <code@klickverbot.at>
+	* crt/tlssup.c (_tls_used): Remove +1 form _tls_start to avoid
+	section-relative offset displacement.
+
+	2013-01-14  Kai Tietz  <ktietz@redhat.com>
+	* crt/tlssup.c (_tls_start,_tls_end): Make variables
+	pointer-typed, so that alignment for start-address is
+	on pointer-alignment.
+
+2012-11-05  Ozkan Sezer  <sezeroz@gmail.com>
+
+	Merge from trunk rev. 5436:
+	Jonathan Yong  <jon_y@users.sourceforge.net>
+	* iphlpapi.def: Fix double @nn, add missing @0, regenerate from Win7.
+
 2012-09-12  Dongsheng Song  <dongsheng@users.sourceforge.net>
 
 	* lib32/msvcr110.def: New.
