@@ -1,3 +1,8 @@
+2012-08-07  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* getopt.h (optreset): Define as __mingw_optreset regardless of
+	_BSD_SOURCE being defined. (bug #3554856.)
+
 2012-07-04  Ozkan Sezer  <sezeroz@gmail.com>
 
 	* _mingw.h.in (__MINGW_GCC_VERSION): New macro.
@@ -7,6 +12,10 @@
 	    Tristan Gingold <gingold@adacore.com>
 
 	* setjmp.h (setjmp): Use frame-address builtin.
+
+2012-04-10  Ozkan Sezer  <sezeroz@gmail.com>
+
+	* _mingw.h (__int128, __SIZEOF_INT128__): Handle clang.
 
 2012-04-03  Ozkan Sezer  <sezeroz@gmail.com>
 
