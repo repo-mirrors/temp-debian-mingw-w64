@@ -32,14 +32,19 @@ export CFLAGS CPPFLAGS CXXFLAGS FFLAGS LDFLAGS
 clean:
 	dh_testdir
 	dh_testroot
+	dh_autoreconf_clean
 	dh_clean
 	rm -rf $(build_dir) $(upstream_dir) autotools_files series tmp *-stamp
 
 CONFFLAGS = --prefix=/usr
 
+autoreconf-stamp:
+	dh_autoreconf
+	touch $@
+
 # Build and install the headers first, so the remaining subprojects can use
 # them during the build
-headers-stamp:
+headers-stamp: autoreconf-stamp
 	for target in $(targets); do \
 		dh_auto_configure -D$(top_dir)/mingw-w64-headers -B$(build_dir)/$$target/headers -- --host=$$target --enable-sdk=all --enable-secure-api && \
 		dh_auto_build -D$(top_dir)/mingw-w64-headers -B$(build_dir)/$$target/headers && \
@@ -48,7 +53,7 @@ headers-stamp:
 	touch $@
 
 # Build the two arch-dependent subprojects
-build-arch-stamp:
+build-arch-stamp: autoreconf-stamp
 	for tool_dir in $(top_dir)/mingw-w64-tools/*; do \
 		dh_auto_configure -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir) && \
 		dh_auto_build -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir) && \
@@ -58,7 +63,7 @@ build-arch-stamp:
 
 # Build the arch-independent subprojects, with different options for each
 # target architecture
-build-indep-stamp: headers-stamp
+build-indep-stamp: autoreconf-stamp headers-stamp
 	# When bootstrapping, the extra libraries can't be built, so try
 	# configuring with libraries and if that fails without
 	CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(target32)/include" dh_auto_configure -B$(build_dir)/$(target32)/all -- --host=$(target32) --with-libraries=all --enable-lib32 --disable-lib64 --enable-sdk=all --enable-secure-api || \

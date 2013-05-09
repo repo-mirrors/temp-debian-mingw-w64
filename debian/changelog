@@ -2,6 +2,8 @@ mingw-w64 (2.0.8-1) UNRELEASED; urgency=low
 
   * New upstream release.
   * Switch to my Debian address and drop DM-Upload-Allowed.
+  * Use dh_autoreconf to update all the autotools-generated files and
+    allow multiple builds in a row.
 
  -- Stephen Kitt <skitt@debian.org>  Wed, 08 May 2013 18:11:07 +0200
 
