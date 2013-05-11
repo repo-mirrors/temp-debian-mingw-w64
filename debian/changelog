@@ -5,6 +5,9 @@ mingw-w64 (2.0.8-1) UNRELEASED; urgency=low
   * Use dh_autoreconf to update all the autotools-generated files and
     allow multiple builds in a row.
   * Use canonical VCS URIs.
+  * Build libmangle for the current architecture, it's intended for
+    gendef; use it to build gendef.
+  * Enable hardened builds for gendef and genidl.
 
  -- Stephen Kitt <skitt@debian.org>  Wed, 08 May 2013 18:11:07 +0200
 

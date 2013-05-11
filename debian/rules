@@ -19,7 +19,7 @@ target32 := i686-w64-mingw32
 target64 := x86_64-w64-mingw32
 targets := $(target32) $(target64)
 
-# No hardening support for now
+# No hardening support for now, except in the tools (build-arch-stamp)
 dpkg_buildflags = DEB_BUILD_MAINT_OPTIONS="hardening=-all" dpkg-buildflags
 
 CFLAGS = $(shell $(dpkg_buildflags) --get CFLAGS)
@@ -52,10 +52,16 @@ headers-stamp: autoreconf-stamp
 	done
 	touch $@
 
-# Build the two arch-dependent subprojects
+# Build the arch-dependent subprojects: libmangle and the tools
+# (in that order since gendef uses libmangle)
 build-arch-stamp: autoreconf-stamp
+	for lib_dir in $(top_dir)/mingw-w64-libraries/libmangle; do \
+		dh_auto_configure -D$$lib_dir -B$(build_dir)/$$(basename $$lib_dir) -- $(shell dpkg-buildflags --export=configure) && \
+		dh_auto_build -D$$lib_dir -B$(build_dir)/$$(basename $$lib_dir) && \
+		dh_auto_install -D$$lib_dir -B$(build_dir)/$$(basename $$lib_dir); \
+	done
 	for tool_dir in $(top_dir)/mingw-w64-tools/*; do \
-		dh_auto_configure -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir) && \
+		dh_auto_configure -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir) -- --with-mangle=$(top_dir)/debian/tmp/usr $(shell dpkg-buildflags --export=configure) && \
 		dh_auto_build -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir) && \
 		dh_auto_install -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir); \
 	done
