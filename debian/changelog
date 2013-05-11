@@ -1,4 +1,4 @@
-mingw-w64 (2.0.8-1) UNRELEASED; urgency=low
+mingw-w64 (2.0.8-1) unstable; urgency=low
 
   * New upstream release.
   * Switch to my Debian address and drop DM-Upload-Allowed.
@@ -9,8 +9,9 @@ mingw-w64 (2.0.8-1) UNRELEASED; urgency=low
     gendef; use it to build gendef.
   * Enable hardened builds for gendef and genidl.
   * Fix another spelling mistake in gendef (via libmangle).
+  * Standards-Version 3.9.4, no change required.
 
- -- Stephen Kitt <skitt@debian.org>  Wed, 08 May 2013 18:11:07 +0200
+ -- Stephen Kitt <skitt@debian.org>  Sat, 11 May 2013 23:37:22 +0200
 
 mingw-w64 (2.0.3-1) unstable; urgency=low
 
