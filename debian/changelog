@@ -8,6 +8,7 @@ mingw-w64 (2.0.8-1) UNRELEASED; urgency=low
   * Build libmangle for the current architecture, it's intended for
     gendef; use it to build gendef.
   * Enable hardened builds for gendef and genidl.
+  * Fix another spelling mistake in gendef (via libmangle).
 
  -- Stephen Kitt <skitt@debian.org>  Wed, 08 May 2013 18:11:07 +0200
 
