@@ -1323,7 +1323,7 @@ Optional Features:
   --disable-crt           Do not use the default crt headers
   --enable-sdk=ARG        Add the desired SDK, where ARG can be one of ddk,
                           directx, no or all. Default is all.
-  --enable-idl            Enable installing idl files (default disabled)
+  --enable-idl            Enable installing idl files
   --enable-secure-api     Enable secure API by default
 
 Optional Packages:
@@ -2462,7 +2462,9 @@ $as_echo_n "checking whether to rebuild headers with widl... " >&6; }
 
 # Check whether --with-widl was given.
 if test "${with_widl+set}" = set; then :
-  withval=$with_widl;
+  withval=$with_widl; if test "x$with_widl" = xyes; then :
+  with_widl="$PATH"
+fi
 else
   with_widl=no
 fi
@@ -2470,13 +2472,16 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $with_widl" >&5
 $as_echo "$with_widl" >&6; }
 
-if test "x$with_widl" = xyes; then :
-  with_widl="$PATH"
-fi
 if test "x$with_widl" = xno; then :
 
 else
 
+  if test "x$srcdir" = x.; then :
+
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: --with-widl used in out of the tree compilation.  Existing generated files will not be modified." >&5
+$as_echo "$as_me: WARNING: --with-widl used in out of the tree compilation.  Existing generated files will not be modified." >&2;}
+fi
   for ac_prog in $host-widl widl
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
@@ -2536,16 +2541,11 @@ else
 fi
 
 
-if test ! "$with_widl" = "no" -a ! "$srcdir" = "."; then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: --with-widl used in out of the tree compilation. Existing generated files won't be modified." >&5
-$as_echo "$as_me: WARNING: --with-widl used in out of the tree compilation. Existing generated files won't be modified." >&2;}
-fi
-
 # Checks for libraries.
 
 # Checks for header files.
 
-BASEHEAD_LIST="crt/_bsd_types.h crt/_cygwin.h crt/_mingw.h crt/_mingw_mac.h crt/_mingw_print_push.h crt/_mingw_print_pop.h crt/_mingw_secapi.h crt/_mingw_unicode.h crt/_timeval.h crt/crtdefs.h crt/excpt.h crt/vadefs.h "$srcdir/include/*.h
+BASEHEAD_LIST="crt/_bsd_types.h crt/_cygwin.h crt/_mingw.h crt/_mingw_mac.h crt/_mingw_print_push.h crt/_mingw_print_pop.h crt/_mingw_secapi.h crt/_mingw_unicode.h crt/_timeval.h crt/crtdefs.h crt/excpt.h crt/intrin.h crt/vadefs.h "$srcdir/include/*.h
 SECHEAD_LIST="$srcdir/crt/sec_api/stralign_s.h"
 for i in dlg h16 hxx rh ver; do
   BASEHEAD_LIST="$BASEHEAD_LIST "$srcdir/include/*.$i
@@ -2680,7 +2680,9 @@ fi
 $as_echo_n "checking if installing idl files is enabled... " >&6; }
 # Check whether --enable-idl was given.
 if test "${enable_idl+set}" = set; then :
-  enableval=$enable_idl; enable_idl=yes
+  enableval=$enable_idl;
+else
+  enable_idl=no
 fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_idl" >&5
@@ -2696,7 +2698,9 @@ fi
 $as_echo_n "checking whether to enable the secure API... " >&6; }
 # Check whether --enable-secure-api was given.
 if test "${enable_secure_api+set}" = set; then :
-  enableval=$enable_secure_api; enable_secure_api=yes
+  enableval=$enable_secure_api;
+else
+  enable_secure_api=no
 fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_secure_api" >&5

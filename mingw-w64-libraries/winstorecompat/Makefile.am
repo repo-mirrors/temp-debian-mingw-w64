@@ -5,6 +5,8 @@ AM_CFLAGS = -Wall -Wstrict-aliasing=2 -pedantic
 lib_LIBRARIES = libwinstorecompat.a
 
 libwinstorecompat_a_SOURCES = \
+  src/_wassert.c \
+  src/GetModuleHandle.c \
   src/CreateEventW.c \
   src/CreateMutexW.c \
   src/CreateSemaphoreW.c \
@@ -13,4 +15,22 @@ libwinstorecompat_a_SOURCES = \
   src/WaitForSingleObject.c \
   src/LoadLibraryW.c \
   src/CreateFileW.c \
-  src/GetTickCount.c
+  src/GetTickCount.c \
+  src/SetUnhandledExceptionFilter.c \
+  src/UnhandledExceptionFilter.c \
+  src/TerminateProcess.c \
+  src/IsDBCSLeadByteEx.c \
+  src/SetErrorMode.c \
+  src/GetACP.c \
+  src/VirtualProtect.c \
+  src/getenv.c \
+  src/getpid.c \
+  src/LocalAlloc.c \
+  src/LocalFree.c \
+  src/Sleep.c \
+  src/SleepEx.c \
+  src/SetFilePointer.c \
+  src/GetFileSize.c \
+  src/Tls.c \
+  src/CoCreateInstance.c \
+  $(NULL)

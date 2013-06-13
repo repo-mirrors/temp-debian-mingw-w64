@@ -23,26 +23,23 @@ AC_MSG_CHECKING([whether to rebuild headers with widl])
 AC_ARG_WITH([widl],
   AS_HELP_STRING([--with-widl=PATH],
     [use widl to update idl-based headers.  Optionally search for a compatible widl in PATH]),
-  [],
+  [AS_VAR_IF([with_widl],[yes],[AS_VAR_SET([with_widl],["$PATH"])])],
   [AS_VAR_SET([with_widl],[no])])
 AC_MSG_RESULT([$with_widl])
 
-AS_VAR_IF([with_widl],[yes],[AS_VAR_SET([with_widl],["$PATH"])])
 AS_VAR_IF([with_widl],[no],[],[
+  AS_VAR_IF([srcdir],[.],[],
+    [AC_MSG_WARN([--with-widl used in out of the tree compilation.  Existing generated files will not be modified.])])
   AC_PATH_PROGS([WIDL], [$host-widl widl], [], [$with_widl])
   AS_VAR_IF([WIDL],[],[AC_MSG_ERROR([--with-widl is specified, but widl installation could not be found.])])])
 
 AM_CONDITIONAL([HAVE_WIDL],[AS_VAR_TEST_SET([WIDL])])
 
-if test ! "$with_widl" = "no" -a ! "$srcdir" = "."; then
-    AC_MSG_WARN([--with-widl used in out of the tree compilation. Existing generated files won't be modified.])
-fi
-
 # Checks for libraries.
 
 # Checks for header files.
 
-BASEHEAD_LIST="crt/_bsd_types.h crt/_cygwin.h crt/_mingw.h crt/_mingw_mac.h crt/_mingw_print_push.h crt/_mingw_print_pop.h crt/_mingw_secapi.h crt/_mingw_unicode.h crt/_timeval.h crt/crtdefs.h crt/excpt.h crt/vadefs.h "$srcdir/include/*.h
+BASEHEAD_LIST="crt/_bsd_types.h crt/_cygwin.h crt/_mingw.h crt/_mingw_mac.h crt/_mingw_print_push.h crt/_mingw_print_pop.h crt/_mingw_secapi.h crt/_mingw_unicode.h crt/_timeval.h crt/crtdefs.h crt/excpt.h crt/intrin.h crt/vadefs.h "$srcdir/include/*.h
 SECHEAD_LIST="$srcdir/crt/sec_api/stralign_s.h"
 for i in dlg h16 hxx rh ver; do
   BASEHEAD_LIST="$BASEHEAD_LIST "$srcdir/include/*.$i
@@ -130,8 +127,9 @@ AC_SUBST([MINGW_HAS_DDK])
 AC_MSG_CHECKING([if installing idl files is enabled])
 AC_ARG_ENABLE([idl],
     [AS_HELP_STRING([--enable-idl],
-        [Enable installing idl files (default disabled)])],
-    [enable_idl=yes])
+        [Enable installing idl files])],
+    [],
+    [enable_idl=no])
 AC_MSG_RESULT([$enable_idl])
 AS_VAR_IF([enable_idl],[yes],
     [IDLHEAD_LIST=$srcdir/include/*.idl],
@@ -142,7 +140,8 @@ AC_MSG_CHECKING([whether to enable the secure API])
 AC_ARG_ENABLE([secure-api],
   [AS_HELP_STRING([--enable-secure-api],
     [Enable secure API by default])],
-  [enable_secure_api=yes])
+  [],
+  [enable_secure_api=no])
 AC_MSG_RESULT([$enable_secure_api])
 AS_VAR_IF([enable_secure_api],[yes],
   [MINGW_HAS_SECURE_API="#define MINGW_HAS_SECURE_API 1"],

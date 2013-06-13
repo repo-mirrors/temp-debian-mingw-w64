@@ -1,8 +1,9 @@
+#include <intrin.h>
 
-void MemoryBarrier (void);
+/* for x86 only */
 void MemoryBarrier (void)
 {
-    long Barrier = 0;
+    __LONG32 Barrier = 0;
     __asm__ __volatile__("xchgl %%eax,%0 "
       :"=r" (Barrier));
 }
