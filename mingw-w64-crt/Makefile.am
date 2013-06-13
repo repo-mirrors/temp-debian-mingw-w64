@@ -3,7 +3,6 @@
 # Done: Turn _libm_dummy.c into a BUILT_SOURCES thing
 # Done: 32-bit runtime compatibility
 # Done: fix make dist
-# TODO: Use $(RM) instead of rm?
 # TODO: Use $(TAR) instead of tar?
 # TODO: Find a better way to handle dxerr.c -- make it dxerr.h and add to sources list?
 #
@@ -20,18 +19,10 @@ else
   withsys=
 endif
 
-if UNDERSCORES
-  cflags_underscores=
-  dlltool_underscores=
-else
-  cflags_underscores=-fno-leading-underscore
-  dlltool_underscores=--no-leading-underscore
-endif
-
 AM_CPPFLAGS=-D_CRTBLD $(sysincludes)
-AM_CFLAGS=$(cflags_underscores) -pipe -std=gnu99 @ADD_C_CXX_WARNING_FLAGS@ @ADD_C_ONLY_WARNING_FLAGS@
+AM_CFLAGS=-pipe -std=gnu99 @ADD_C_CXX_WARNING_FLAGS@ @ADD_C_ONLY_WARNING_FLAGS@
 AM_CXXFLAGS=@ADD_C_CXX_WARNING_FLAGS@ @ADD_CXX_ONLY_WARNING_FLAGS@
-AM_DLLTOOLFLAGS=$(dlltool_underscores) -k --as=$(AS) --output-lib $@
+AM_DLLTOOLFLAGS=-k --as=$(AS) --output-lib $@
 if DELAY_IMPORT_LIBS
   AM_DLLTOOLFLAGS += --output-delaylib $@.delayimp.a
 endif
@@ -46,6 +37,7 @@ DTLIB64=$(DTDEF64) $(top_srcdir)/`echo $@ | $(SED) 's|/lib|/|;s|\.a|.def|'`
 LDFLAGS32=-m32 -L$(top_builddir)/lib32
 LDFLAGS64=-m64 -L$(top_builddir)/lib64
 extra_include=-I$(top_srcdir)/include
+processed_defs=
 
 # default directx import library names
 xinput=xinput1_3
@@ -91,7 +83,6 @@ src_libmingw32=include/oscalls.h include/internal.h include/sect_attribs.h \
   crt/xtxtmode.c      crt/crt_handler.c    \
   crt/tlsthrd.c       crt/tlsmthread.c     crt/tlsmcrt.c
 
-src_libmoldname=crt/isascii.c crt/iscsym.c crt/iscsymf.c crt/toascii.c crt/strcasecmp.c crt/strncasecmp.c crt/wcscmpi.c
 src_libscrnsave=libsrc/scrnsave.c
 src_libscrnsavw=libsrc/scrnsave.c
 src_libstrmiids=libsrc/strmiids.c
@@ -183,33 +174,33 @@ src_libmingwex=\
   math/powi.def.h       math/sin.def.h     math/sqrt.def.h       \
   math/cephes_emath.h  math/cephes_mconf.h  math/fastmath.h  math/fp_consts.h  math/abs64.c \
   \
-  misc/_ctime32.c        misc/_gmtime32.c             misc/_localtime32.c         misc/_mkgmtime.c           misc/_mkgmtime32.c    \
-  misc/_mktime32.c       misc/_time32.c               misc/_wctime.c              misc/_wctime32.c           misc/alarm.c          \
-  misc/basename.c        misc/btowc.c                 misc/ctime.c                misc/delay-f.c             misc/delay-n.c        \
+                                                                                  misc/alarm.c          \
+  misc/basename.c        misc/btowc.c                                             misc/delay-f.c             misc/delay-n.c        \
   misc/delayimp.c        misc/difftime.c              misc/difftime32.c           misc/difftime64.c          misc/dirent.c         \
   misc/dirname.c         misc/execv.c                 misc/execve.c               misc/execvp.c              misc/execvpe.c        \
   misc/feclearexcept.c   misc/fegetenv.c              misc/fegetexceptflag.c      misc/fegetround.c          misc/feholdexcept.c   \
   misc/feraiseexcept.c   misc/fesetenv.c              misc/fesetexceptflag.c      misc/fesetround.c          misc/fetestexcept.c   \
   misc/feupdateenv.c     misc/ftruncate.c             misc/fwide.c                misc/getlogin.c            misc/getopt.c         \
-  misc/gettimeofday.c    misc/gmtime.c                misc/imaxabs.c              misc/imaxdiv.c             misc/isblank.c        \
-  misc/iswblank.c        misc/localtime.c             misc/mb_wc_common.h         misc/mbrtowc.c             misc/mbsinit.c        \
+  misc/gettimeofday.c                                 misc/imaxabs.c              misc/imaxdiv.c             misc/isblank.c        \
+  misc/iswblank.c                                     misc/mb_wc_common.h         misc/mbrtowc.c             misc/mbsinit.c        \
   misc/mempcpy.c         misc/mingw-aligned-malloc.c  misc/mingw-fseek.c          misc/mingw_get_codepage.c  misc/mingw_getsp.S    \
   misc/mingw_matherr.c   misc/mingw_mbwc_convert.c    misc/mingw_output_format.c  misc/mingw_usleep.c        misc/mingw_wcstod.c   \
-  misc/mingw_wcstof.c    misc/mingw_wcstold.c         misc/mktime.c               misc/seterrno.c            misc/sleep.c          \
+  misc/mingw_wcstof.c    misc/mingw_wcstold.c                                     misc/seterrno.c            misc/sleep.c          \
   misc/spawnv.c          misc/spawnve.c               misc/spawnvp.c              misc/spawnvpe.c            misc/strnlen.c        \
   misc/strsafe.c         misc/strtoimax.c             misc/strtold.c              misc/strtoumax.c           misc/tdelete.c        \
-  misc/tfind.c           misc/time.c                  misc/tsearch.c              misc/twalk.c               misc/uchar_c16rtomb.c \
+  misc/tfind.c           misc/tsearch.c               misc/twalk.c                misc/uchar_c16rtomb.c \
   misc/uchar_c32rtomb.c  misc/uchar_mbrtoc16.c        misc/uchar_mbrtoc32.c       misc/wassert.c             misc/wcrtomb.c        \
   misc/wcsnlen.c         misc/wcstof.c                misc/wcstoimax.c            misc/wcstold.c             misc/wcstoumax.c      \
   misc/wctob.c           misc/wctrans.c               misc/wctype.c               misc/wdirent.c             misc/winbs_uint64.c   \
   misc/winbs_ulong.c     misc/winbs_ushort.c          misc/wmemchr.c              misc/wmemcmp.c             misc/wmemcpy.c        \
-  misc/wmemmove.c        misc/wmempcpy.c              misc/wmemset.c              \
+  misc/wmemmove.c        misc/wmempcpy.c              misc/wmemset.c              misc/purecall.c \
   \
   stdio/mingw_pformat.h    \
   stdio/vfscanf2.S         stdio/vfwscanf2.S         stdio/vscanf2.S          stdio/vsscanf2.S          stdio/vswscanf2.S \
   stdio/vwscanf2.S         \
-  stdio/_Exit.c            stdio/_findfirst64i32.c   stdio/_findnext64i32.c   stdio/_fstat.c            \
-  stdio/_fstat64i32.c      stdio/_ftime.c            stdio/_getc_nolock.c     stdio/_getwc_nolock.c     stdio/_putc_nolock.c    \
+  stdio/_Exit.c            stdio/_findfirst64i32.c   stdio/_findnext64i32.c   stdio/_fstat.c \
+  stdio/_fstat64i32.c                                                      \
+  stdio/_ftime.c            stdio/_getc_nolock.c     stdio/_getwc_nolock.c     stdio/_putc_nolock.c    \
   stdio/_putwc_nolock.c    stdio/_stat.c             stdio/_stat64i32.c       stdio/_wfindfirst64i32.c  stdio/_wfindnext64i32.c \
   stdio/_wstat.c           stdio/_wstat64i32.c       stdio/asprintf.c         stdio/atoll.c             stdio/fgetpos64.c       \
   stdio/fopen64.c          stdio/fseeko32.c          stdio/fseeko64.c         stdio/fsetpos64.c         stdio/ftello.c          \
@@ -222,8 +213,28 @@ src_libmingwex=\
   stdio/mingw_wvfscanf.c   stdio/snprintf.c          stdio/snwprintf.c        stdio/strtof.c            stdio/truncate.c        \
   stdio/ulltoa.c           stdio/ulltow.c            stdio/vasprintf.c        stdio/vfscanf.c           stdio/vfwscanf.c        \
   stdio/vscanf.c           stdio/vsnprintf.c         stdio/vsnprintf_s.c      stdio/vsnwprintf.c        stdio/vsscanf.c         \
-  stdio/vswscanf.c         stdio/vwscanf.c           stdio/wtoll.c            \
+  stdio/vswscanf.c         stdio/vwscanf.c           stdio/wtoll.c            stdio/mingw_asprintf.c    stdio/mingw_vasprintf.c \
   \
+  secapi/_cgets_s.c secapi/_cgetws_s.c \
+  secapi/_cprintf_s.c secapi/_cprintf_s_l.c \
+  secapi/_vcprintf_s.c secapi/_vcprintf_s_l.c \
+  secapi/_cwprintf_s.c secapi/_cwprintf_s_l.c \
+  secapi/_vcwprintf_s.c secapi/_vcwprintf_s_l.c \
+  secapi/vsprintf_s.c \
+  secapi/_access_s.c secapi/_waccess_s.c \
+  secapi/_chsize_s.c secapi/_mktemp_s.c secapi/_wmktemp_s.c \
+  secapi/_umask_s.c \
+  secapi/_wctime32_s.c secapi/_ctime32_s.c \
+  secapi/_wctime64_s.c secapi/_ctime64_s.c \
+  secapi/asctime_s.c secapi/_wasctime_s.c \
+  secapi/_localtime32_s.c secapi/_localtime64_s.c \
+  secapi/_gmtime64_s.c secapi/_gmtime32_s.c \
+  secapi/_strdate_s.c secapi/_wstrdate_s.c \
+  secapi/_strtime_s.c secapi/_wstrtime_s.c \
+  secapi/wmemcpy_s.c secapi/memcpy_s.c
+
+# These intrinsics are target independent:
+src_intrincs= \
   intrincs/__movsb.c        intrincs/__movsd.c        intrincs/__movsw.c         intrincs/__stosb.c       intrincs/__stosd.c        \
   intrincs/__stosw.c        intrincs/_rotl64.c        intrincs/_rotr64.c         intrincs/bitscanfwd.c    intrincs/bitscanrev.c     \
   intrincs/bittest.c        intrincs/bittestc.c       intrincs/bittestci.c       intrincs/bittestr.c      intrincs/bittestri.c      \
@@ -237,37 +248,20 @@ src_libmingwex=\
   intrincs/outbytestring.c  intrincs/outdword.c       intrincs/outdwordstring.c  intrincs/outword.c       intrincs/outwordstring.c  \
   intrincs/rdtsc.c          intrincs/readcr0.c        intrincs/readcr2.c         intrincs/readcr3.c       intrincs/readcr4.c        \
   intrincs/readcr8.c        intrincs/readmsr.c        intrincs/writecr0.c        intrincs/writecr2.c      intrincs/writecr3.c       \
-  intrincs/writecr4.c       intrincs/writecr8.c       intrincs/writemsr.c        intrincs/RtlSecureZeroMemory.c \
-  \
-  secapi/_cgets_s.c secapi/_cgetws_s.c \
-  secapi/_cprintf_s.c secapi/_cprintf_s_l.c \
-  secapi/_vcprintf_s.c secapi/_vcprintf_s_l.c \
-  secapi/_cwprintf_s.c secapi/_cwprintf_s_l.c \
-  secapi/_vcwprintf_s.c secapi/_vcwprintf_s_l.c \
-  secapi/_access_s.c secapi/_waccess_s.c \
-  secapi/_chsize_s.c secapi/_mktemp_s.c secapi/_wmktemp_s.c \
-  secapi/_umask_s.c \
-  secapi/_wctime32_s.c secapi/_ctime32_s.c \
-  secapi/_wctime64_s.c secapi/_ctime64_s.c \
-  secapi/asctime_s.c secapi/_wasctime_s.c \
-  secapi/_localtime32_s.c secapi/_localtime64_s.c \
-  secapi/_gmtime64_s.c secapi/_gmtime32_s.c \
-  secapi/_strdate_s.c secapi/_wstrdate_s.c \
-  secapi/_strtime_s.c secapi/_wstrtime_s.c \
-  secapi/wmemcpy_s.c secapi/memcpy_s.c
+  intrincs/writecr4.c       intrincs/writecr8.c       intrincs/writemsr.c        intrincs/RtlSecureZeroMemory.c
 
 # these only go into the 64 bit version:
-src_libmingwex64=\
+src_intrincs64=\
   intrincs/bittest64.c    intrincs/bittestc64.c   intrincs/bittestr64.c   intrincs/bittestri64.c     \
   intrincs/bittests64.c   intrincs/bittestsi64.c  intrincs/bitscanfwd64.c intrincs/bitscanrev64.c    \
   intrincs/ilockadd64.c   intrincs/readgsbyte.c   intrincs/readgsword.c   intrincs/readgsdword.c     \
   intrincs/readgsqword.c  intrincs/writegsbyte.c  intrincs/writegsword.c  intrincs/writegsdword.c    \
   intrincs/writegsqword.c intrincs/mul128ex.c     intrincs/umul128ex.c    intrincs/_mul128.c         \
   intrincs/_umul128.c     intrincs/__movsq.c      intrincs/__stosq.c      intrincs/__shiftright128.c \
-  intrincs/__shiftleft128.c
+  intrincs/bittestci64.c  intrincs/__shiftleft128.c
 
 # these only go into the 32 bit version:
-src_libmingwex32=\
+src_intrincs32=\
   intrincs/membarrier.c   intrincs/readfsbyte.c   intrincs/readfsword.c   intrincs/readfsdword.c  \
   intrincs/writefsbyte.c  intrincs/writefsword.c  intrincs/writefsdword.c
 
@@ -320,7 +314,12 @@ temp= \
 dxerr.c \
 test.c
 
-lib32_LIBRARIES = lib32/libshell32.a
+lib32_LIBRARIES = lib32/libkernel32.a
+lib32_libkernel32_a_SOURCES = $(src_intrincs) $(src_intrincs32)
+lib32_libkernel32_a_AR = $(DTLIB32) && $(AR) $(ARFLAGS)
+lib32_libkernel32_a_CPPFLAGS=$(CPPFLAGS32) $(extra_include) $(AM_CPPFLAGS)
+
+lib32_LIBRARIES += lib32/libshell32.a
 lib32_libshell32_a_SOURCES = $(src_libshell32)
 lib32_libshell32_a_AR = $(DTLIB32) && $(AR) $(ARFLAGS)
 lib32_libshell32_a_CPPFLAGS=$(CPPFLAGS32) $(sysincludes)
@@ -436,22 +435,24 @@ lib32_libmingw32_a_SOURCES = $(src_libmingw32)
 
 lib32_LIBRARIES += lib32/libmingwex.a
 lib32_libmingwex_a_CPPFLAGS=$(CPPFLAGS32) $(extra_include) $(AM_CPPFLAGS)
-lib32_libmingwex_a_SOURCES = $(src_libmingwex) $(src_libmingwex32)
+lib32_libmingwex_a_SOURCES = $(src_libmingwex)
 
 lib32_LIBRARIES += lib32/libmoldname.a
 lib32_libmoldname_a_CPPFLAGS=$(CPPFLAGS32) $(extra_include) $(AM_CPPFLAGS)
-lib32_libmoldname_a_SOURCES = $(src_libmoldname)
-lib32_libmoldname_a_AR = $(DTDEF32) $(top_srcdir)/lib32/moldname-msvcrt.def -U --dllname msvcrt.dll && $(AR) $(ARFLAGS)
+lib32_libmoldname_a_SOURCES = 
 
 lib32_LIBRARIES += lib32/libmingwthrd.a
 lib32_libmingwthrd_a_SOURCES = $(src_libmingwthrd)
 lib32_libmingwthrd_a_CPPFLAGS=$(CPPFLAGS32) $(sysincludes)
+
+processed_defs += lib32/msvcrt.def lib32/msvcr80.def lib32/msvcr90.def lib32/msvcr90d.def lib32/msvcr100.def lib32/msvcr110.def
+
 endif
 
 #These defs have no accompanying sources.  Look into using the rule below to run the dlltool command
 #for all libraries, including those with sources.
 lib32_DATA = \
-  lib32/libwinusb.a    \
+  lib32/libwinusb.a    lib32/libavrt.a      \
   lib32/libaclui.a     lib32/libadvapi32.a  lib32/libapcups.a    lib32/libavicap32.a  lib32/libavifil32.a \
   lib32/libcap.a       lib32/libcfgmgr32.a  lib32/libcomctl32.a  lib32/libcomdlg32.a  lib32/libcrypt32.a  \
   lib32/libctl3d32.a   \
@@ -463,7 +464,7 @@ lib32_DATA = \
   lib32/libdxapi.a     lib32/libfaultrep.a  lib32/libgdi32.a     lib32/libglaux.a     lib32/libglu32.a    \
   lib32/libglut32.a    lib32/libhal.a       lib32/libhid.a       lib32/libhidclass.a \
   lib32/libhidparse.a  lib32/libicmui.a     lib32/libigmpagnt.a  lib32/libimagehlp.a  lib32/libimm32.a    \
-  lib32/libiphlpapi.a  lib32/libkernel32.a  lib32/libksproxy.a   lib32/libclfsw32.a   lib32/liblz32.a     \
+  lib32/libiphlpapi.a  lib32/libksproxy.a   lib32/libclfsw32.a   lib32/liblz32.a     \
   lib32/libmapi32.a    lib32/libmcd.a       lib32/libmfcuia32.a  lib32/libmgmtapi.a   lib32/libmprapi.a   \
   lib32/libmpr.a       lib32/libmqrt.a      lib32/libmsacm32.a   lib32/libmscms.a     lib32/libmsdmo.a    \
   lib32/libmsi.a       \
@@ -541,7 +542,8 @@ lib32_DATA = \
   lib32/libxapofx.a         lib32/libx3daudio.a       lib32/libd3dx9.a     \
   lib32/libd3dx10.a         lib32/libd3dx11.a         lib32/libd3dcsxd.a   \
   lib32/libd3dcompiler.a    lib32/libwinhttp.a        lib32/libmsvcr110.a  \
-  lib32/libdevmgr.a         lib32/libdevobj.a         lib32/libdevrtl.a
+  lib32/libdevmgr.a         lib32/libdevobj.a         lib32/libdevrtl.a    \
+  lib32/libruntimeobject.a
 
 if ! W32API
 lib32_DATA += lib32/libglut.a
@@ -632,7 +634,12 @@ lib64/gcrt2.o: profile/gcrt0.c
 lib64/%.o: crt/%.c
 	$(COMPILE) $(CPPFLAGS64) -c $< -o $@
 
-lib64_LIBRARIES = lib64/libshell32.a
+lib64_LIBRARIES = lib64/libkernel32.a
+lib64_libkernel32_a_SOURCES = $(src_intrincs) $(src_intrincs64)
+lib64_libkernel32_a_CPPFLAGS=$(CPPFLAGS64) $(extra_include) $(AM_CPPFLAGS)
+lib64_libkernel32_a_AR = $(DTLIB64) && $(AR) $(ARFLAGS)
+
+lib64_LIBRARIES += lib64/libshell32.a
 lib64_libshell32_a_SOURCES = $(src_libshell32)
 lib64_libshell32_a_CPPFLAGS=$(CPPFLAGS64) $(sysincludes)
 lib64_libshell32_a_AR = $(DTLIB64) && $(AR) $(ARFLAGS)
@@ -748,20 +755,22 @@ lib64_libmingw32_a_SOURCES = $(src_libmingw32)
 
 lib64_LIBRARIES += lib64/libmingwex.a
 lib64_libmingwex_a_CPPFLAGS=$(CPPFLAGS64) $(extra_include) $(AM_CPPFLAGS)
-lib64_libmingwex_a_SOURCES = $(src_libmingwex) $(src_libmingwex64)
+lib64_libmingwex_a_SOURCES = $(src_libmingwex)
 
 lib64_LIBRARIES += lib64/libmoldname.a
 lib64_libmoldname_a_CPPFLAGS=$(CPPFLAGS64) $(extra_include) $(AM_CPPFLAGS)
-lib64_libmoldname_a_SOURCES = $(src_libmoldname)
-lib64_libmoldname_a_AR = $(DTDEF64) $(top_srcdir)/lib64/moldname-msvcrt.def -U --dllname msvcrt.dll && $(AR) $(ARFLAGS)
+lib64_libmoldname_a_SOURCES = 
 
 lib64_LIBRARIES += lib64/libmingwthrd.a
 lib64_libmingwthrd_a_SOURCES = $(src_libmingwthrd)
 lib64_libmingwthrd_a_CPPFLAGS=$(CPPFLAGS64) $(sysincludes)
+
+processed_defs += lib64/msvcrt.def lib64/msvcr80.def lib64/msvcr90.def lib64/msvcr90d.def lib64/msvcr100.def lib64/msvcr110.def
+
 endif
 
 lib64_DATA = \
-  lib64/libwinusb.a \
+  lib64/libwinusb.a     lib64/libavrt.a       \
   lib64/lib6to4svc.a    lib64/libaaaamon.a    lib64/libacledit.a      lib64/libaclui.a      \
   lib64/libactiveds.a   lib64/libactxprxy.a   lib64/libadmparse.a     lib64/libadmwprox.a   lib64/libadptif.a        \
   lib64/libadrot.a      lib64/libadsiis.a     lib64/libadsiisex.a     lib64/libadsldpc.a    lib64/libadsldp.a        \
@@ -985,7 +994,7 @@ lib64_DATA = \
   lib64/libwshcon.a     lib64/libwsock32.a    lib64/libzoneoc.a       lib64/libnormaliz.a   \
   \
   lib64/libclfsw32.a    \
-  lib64/libkernel32.a   lib64/libdwmapi.a     lib64/libntoskrnl.a     lib64/libuxtheme.a    \
+  lib64/libdwmapi.a     lib64/libntoskrnl.a     lib64/libuxtheme.a    \
   lib64/libwtsapi32.a   \
   \
   lib64/libcrtdll.a     lib64/libmsvcrt.a     lib64/libmsvcr80.a     \
@@ -1035,7 +1044,8 @@ lib64_DATA = \
   lib64/libxinput.a         lib64/libxaudio.a         lib64/libxaudiod.a   \
   lib64/libxapofx.a         lib64/libx3daudio.a       lib64/libd3dx9.a     \
   lib64/libd3dx10.a         lib64/libd3dx11.a         lib64/libd3dcsxd.a   \
-  lib64/libd3dcompiler.a    lib64/libwinhttp.a        lib64/libmsvcr110.a
+  lib64/libd3dcompiler.a    lib64/libwinhttp.a        lib64/libmsvcr110.a  \
+  lib64/libruntimeobject.a
 
 lib64/libcrtdll.a lib64/libmsvcrt.a lib64/libmsvcr80.a: lib64/lib%.a: lib64/%.def
 	$(DTDEF64) $< --dllname $*.dll
@@ -1077,6 +1087,8 @@ endif
 # End 64-bit runtime
 ##########
 
+%.def: %.def.in
+	$(CPP) -x c $< -Wp,-w -I$(top_srcdir)/def-include | $(SED) 's/^#/;/' >$@
 
 # Don't compile these, but install as is:
 #
@@ -1097,7 +1109,7 @@ noinst_HEADERS = libsrc/dxerr.c \
 # Cleaning options
 #
 
-CLEANFILES = $(BUILT_SOURCES) $(crt64_DATA) $(lib64_DATA) $(crt32_DATA) $(lib32_DATA)
+CLEANFILES = $(BUILT_SOURCES) $(crt64_DATA) $(lib64_DATA) $(crt32_DATA) $(lib32_DATA) $(processed_defs)
 
 # Distribution options
 #
@@ -1108,6 +1120,9 @@ EXTRA_DIST += revstamp.h \
   $(top_srcdir)/lib64/*.def \
   $(top_srcdir)/lib64/*.mri \
   $(top_srcdir)/lib32/*.def \
+  $(top_srcdir)/lib32/*.def.in \
+  $(top_srcdir)/lib64/*.def.in \
+  $(top_srcdir)/def-include/*.def.in \
   $(top_srcdir)/lib32/*.mri \
   crt/binmode.c \
   crt/crtbegin.c \
@@ -1126,7 +1141,7 @@ EXTRA_DIST += revstamp.h \
 DISTCHECK_CONFIGURE_FLAGS = --host=$(host_triplet) $(withsys)
 
 dist-hook:
-	rm -rf `find $(top_distdir) -name ".svn"`
+	find $(top_distdir) -name ".svn" -delete
 
 
 # Testsuite options
@@ -1142,6 +1157,7 @@ testcase_progs = \
   testcases/tstmaincpp \
   testcases/tstmain_sys_xxx \
   testcases/t_ansi_io \
+  testcases/t_findfirst \
   testcases/t_float  \
   testcases/t_fstat \
   testcases/t_intrinc \

@@ -18,6 +18,7 @@ extern "C" {
 #define ANYSIZE_ARRAY 1
 
 #include <specstrings.h>
+#include <psdk_inc/intrin-mac.h>
 
 #if defined(__x86_64) && \
   !(defined(_X86_) || defined(__i386__) || defined(_IA64_))
@@ -614,6 +615,29 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define PRODUCT_PROFESSIONAL_E                    0x45
 #define PRODUCT_ENTERPRISE_E                      0x46
 #define PRODUCT_ULTIMATE_E                        0x47
+#define PRODUCT_ENTERPRISE_EVALUATION             0x48
+#define PRODUCT_MULTIPOINT_STANDARD_SERVER        0x4C
+#define PRODUCT_MULTIPOINT_PREMIUM_SERVER         0x4D
+#define PRODUCT_STANDARD_EVALUATION_SERVER        0x4F
+#define PRODUCT_DATACENTER_EVALUATION_SERVER      0x50
+#define PRODUCT_ENTERPRISE_N_EVALUATION           0x54
+#define PRODUCT_EMBEDDED_AUTOMOTIVE               0x55
+#define PRODUCT_EMBEDDED_INDUSTRY_A               0x56
+#define PRODUCT_THINPC                            0x57
+#define PRODUCT_EMBEDDED_A                        0x58
+#define PRODUCT_EMBEDDED_INDUSTRY                 0x59
+#define PRODUCT_EMBEDDED_E                        0x5A
+#define PRODUCT_EMBEDDED_INDUSTRY_E               0x5B
+#define PRODUCT_EMBEDDED_INDUSTRY_A_E             0x5C
+#define PRODUCT_STORAGE_WORKGROUP_EVALUATION_SERVER 0x5F
+#define PRODUCT_STORAGE_STANDARD_EVALUATION_SERVER 0x60
+#define PRODUCT_CORE_ARM                          0x61
+#define PRODUCT_CORE_N                            0x62
+#define PRODUCT_CORE_COUNTRYSPECIFIC              0x63
+#define PRODUCT_CORE_SINGLELANGUAGE               0x64
+#define PRODUCT_CORE                              0x65
+#define PRODUCT_PROFESSIONAL_WMC                  0x67
+#define PRODUCT_MOBILE_CORE                       0x68
 
 #define PRODUCT_UNLICENSED                        0xabcdabcd
 
@@ -628,6 +652,8 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define LANG_ARMENIAN                             0x2b
 #define LANG_ASSAMESE                             0x4d
 #define LANG_AZERI                                0x2c
+#define LANG_AZERBAIJANI			  0x2c
+#define LANG_BANGLA				  0x45
 #define LANG_BASHKIR                              0x6d
 #define LANG_BASQUE                               0x2d
 #define LANG_BELARUSIAN                           0x23
@@ -637,6 +663,8 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define LANG_BOSNIAN_NEUTRAL                    0x781a
 #define LANG_BULGARIAN                            0x02
 #define LANG_CATALAN                              0x03
+#define LANG_CENTRAL_KURDISH			  0x92
+#define LANG_CHEROKEE				  0x5c
 #define LANG_CHINESE                              0x04
 #define LANG_CHINESE_SIMPLIFIED                   0x04
 #define LANG_CHINESE_TRADITIONAL                0x7c04
@@ -655,6 +683,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define LANG_FINNISH                              0x0b
 #define LANG_FRENCH                               0x0c
 #define LANG_FRISIAN                              0x62
+#define LANG_FULAH				  0x67
 #define LANG_GALICIAN                             0x56
 #define LANG_GEORGIAN                             0x37
 #define LANG_GERMAN                               0x07
@@ -699,18 +728,22 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define LANG_NEPALI                               0x61
 #define LANG_NORWEGIAN                            0x14
 #define LANG_OCCITAN                              0x82
+#define LANG_ODIA				  0x48
 #define LANG_ORIYA                                0x48
 #define LANG_PASHTO                               0x63
 #define LANG_PERSIAN                              0x29
 #define LANG_POLISH                               0x15
 #define LANG_PORTUGUESE                           0x16
+#define LANG_PULAR				  0x67
 #define LANG_PUNJABI                              0x46
 #define LANG_QUECHUA                              0x6b
 #define LANG_ROMANIAN                             0x18
 #define LANG_ROMANSH                              0x17
 #define LANG_RUSSIAN                              0x19
+#define LANG_SAKHA				  0x85
 #define LANG_SAMI                                 0x3b
 #define LANG_SANSKRIT                             0x4f
+#define LANG_SCOTTISH_GAELIC			  0x91
 #define LANG_SERBIAN                              0x1a
 #define LANG_SERBIAN_NEUTRAL                    0x7c1a
 #define LANG_SINDHI                               0x59
@@ -730,6 +763,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define LANG_THAI                                 0x1e
 #define LANG_TIBETAN                              0x51
 #define LANG_TIGRIGNA                             0x73
+#define LANG_TIGRINYA				  0x73
 #define LANG_TSWANA                               0x32
 #define LANG_TURKISH                              0x1f
 #define LANG_TURKMEN                              0x42
@@ -738,6 +772,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define LANG_UPPER_SORBIAN                        0x2e
 #define LANG_URDU                                 0x20
 #define LANG_UZBEK                                0x43
+#define LANG_VALENCIAN				  0x03
 #define LANG_VIETNAMESE                           0x2a
 #define LANG_WELSH                                0x52
 #define LANG_WOLOF                                0x88
@@ -778,6 +813,10 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_ASSAMESE_INDIA                    0x01
 #define SUBLANG_AZERI_LATIN                       0x01
 #define SUBLANG_AZERI_CYRILLIC                    0x02
+#define SUBLANG_AZERBAIJANI_AZERBAIJAN_LATIN      0x01
+#define SUBLANG_AZERBAIJANI_AZERBAIJAN_CYRILLIC   0x02
+#define SUBLANG_BANGLA_INDIA                      0x01
+#define SUBLANG_BANGLA_BANGLADESH                 0x02
 #define SUBLANG_BASHKIR_RUSSIA                    0x01
 #define SUBLANG_BASQUE_BASQUE                     0x01
 #define SUBLANG_BELARUSIAN_BELARUS                0x01
@@ -788,6 +827,8 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_BRETON_FRANCE                     0x01
 #define SUBLANG_BULGARIAN_BULGARIA                0x01
 #define SUBLANG_CATALAN_CATALAN                   0x01
+#define SUBLANG_CENTRAL_KURDISH_IRAQ              0x01
+#define SUBLANG_CHEROKEE_CHEROKEE                 0x01
 #define SUBLANG_CHINESE_TRADITIONAL               0x01
 #define SUBLANG_CHINESE_SIMPLIFIED                0x02
 #define SUBLANG_CHINESE_HONGKONG                  0x03
@@ -798,6 +839,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_CROATIAN_CROATIA                  0x01
 #define SUBLANG_CROATIAN_BOSNIA_HERZEGOVINA_LATIN 0x04
 #define SUBLANG_DANISH_DENMARK                    0x01
+#define SUBLANG_DARI_AFGHANISTAN                  0x01
 #define SUBLANG_DIVEHI_MALDIVES                   0x01
 #define SUBLANG_DUTCH                             0x01
 #define SUBLANG_DUTCH_BELGIAN                     0x02
@@ -831,6 +873,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_FRENCH_LUXEMBOURG                 0x05
 #define SUBLANG_FRENCH_MONACO                     0x06
 #define SUBLANG_FRISIAN_NETHERLANDS               0x01
+#define SUBLANG_FULAH_SENEGAL                     0x02
 #define SUBLANG_GALICIAN_GALICIAN                 0x01
 #define SUBLANG_GEORGIAN_GEORGIA                  0x01
 #define SUBLANG_GERMAN                            0x01
@@ -843,6 +886,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_GUJARATI_INDIA                    0x01
 #define SUBLANG_HAUSA_NIGERIA_LATIN               0x01
 #define SUBLANG_HAUSA_NIGERIA    SUBLANG_HAUSA_NIGERIA_LATIN	/* SUBLANG_HAUSA_NIGERIA_LATIN is what MS defines */
+#define SUBLANG_HAWAIIAN_US                       0x01
 #define SUBLANG_HEBREW_ISRAEL                     0x01
 #define SUBLANG_HINDI_INDIA                       0x01
 #define SUBLANG_HUNGARIAN_HUNGARY                 0x01
@@ -855,6 +899,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_ITALIAN                           0x01
 #define SUBLANG_ITALIAN_SWISS                     0x02
 #define SUBLANG_JAPANESE_JAPAN                    0x01
+#define SUBLANG_KANNADA_INDIA                     0x01
 #define SUBLANG_KASHMIRI_INDIA                    0x02
 #define SUBLANG_KASHMIRI_SASIA                    0x02
 #define SUBLANG_KAZAK_KAZAKHSTAN                  0x01
@@ -898,8 +943,9 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_PORTUGUESE_PORTUGAL               0x02
 #endif /* WINVER >= 0x0600 */
 #define SUBLANG_PORTUGUESE                        0x02
+#define SUBLANG_PULAR_SENEGAL                     0x02
 #define SUBLANG_PUNJABI_INDIA                     0x01
-/* ??? #define SUBLANG_PUNJABI_PAKISTAN                  0x01 ??? */
+#define SUBLANG_PUNJABI_PAKISTAN                  0x02
 #define SUBLANG_QUECHUA_BOLIVIA                   0x01
 #define SUBLANG_QUECHUA_ECUADOR                   0x02
 #define SUBLANG_QUECHUA_PERU                      0x03
@@ -907,6 +953,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 /* ??? #define SUBLANG_ROMANIAN_MOLDOVA                  0x01 ??? */
 #define SUBLANG_ROMANSH_SWITZERLAND               0x01
 #define SUBLANG_RUSSIAN_RUSSIA                    0x01
+#define SUBLANG_SAKHA_RUSSIA                      0x01
 #define SUBLANG_SAMI_NORTHERN_NORWAY              0x01
 #define SUBLANG_SAMI_NORTHERN_SWEDEN              0x02
 #define SUBLANG_SAMI_NORTHERN_FINLAND             0x03
@@ -917,11 +964,18 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_SAMI_SKOLT_FINLAND                0x08
 #define SUBLANG_SAMI_INARI_FINLAND                0x09
 #define SUBLANG_SANSKRIT_INDIA                    0x01
+#define SUBLANG_SCOTTISH_GAELIC                    0x01
 #define SUBLANG_SERBIAN_LATIN                     0x02
 #define SUBLANG_SERBIAN_CYRILLIC                  0x03
 #define SUBLANG_SERBIAN_BOSNIA_HERZEGOVINA_LATIN  0x06
 #define SUBLANG_SERBIAN_BOSNIA_HERZEGOVINA_CYRILLIC 0x07
+#define SUBLANG_SERBIAN_MONTENEGRO_LATIN          0x0b
+#define SUBLANG_SERBIAN_MONTENEGRO_CYRILLIC       0x0c
+#define SUBLANG_SERBIAN_SERBIA_LATIN              0x09
+#define SUBLANG_SERBIAN_SERBIA_CYRILLIC           0x0a
+#define SUBLANG_SINDHI_INDIA                      0x01
 #define SUBLANG_SINDHI_AFGHANISTAN                0x02
+#define SUBLANG_SINDHI_PAKISTAN                   0x02
 #define SUBLANG_SINHALESE_SRI_LANKA               0x01
 #define SUBLANG_SOTHO_NORTHERN_SOUTH_AFRICA       0x01
 #define SUBLANG_SLOVAK_SLOVAKIA                   0x01
@@ -947,6 +1001,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_SPANISH_NICARAGUA                 0x13
 #define SUBLANG_SPANISH_PUERTO_RICO               0x14
 #define SUBLANG_SPANISH_US                        0x15
+#define SUBLANG_SWAHILI_KENYA                     0x01
 #if (WINVER >= 0x0600)
 #define SUBLANG_SWEDISH_SWEDEN                    0x01
 #endif /* WINVER >= 0x0600 */
@@ -956,13 +1011,18 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_SYRIAC_SYRIA            SUBLANG_SYRIAC		/* SUBLANG_SYRIAC_SYRIA is what MSDN mentions */
 #define SUBLANG_TAJIK_TAJIKISTAN                  0x01
 #define SUBLANG_TAMAZIGHT_ALGERIA_LATIN           0x02
+#define SUBLANG_TAMAZIGHT_MOROCCO_TIFINAGH        0x04
 #define SUBLANG_TAMIL_INDIA                       0x01
+#define SUBLANG_TAMIL_SRI_LANKA                   0x02
 #define SUBLANG_TATAR_RUSSIA                      0x01
 #define SUBLANG_TELUGU_INDIA                      0x01
 #define SUBLANG_THAI_THAILAND                     0x01
 #define SUBLANG_TIBETAN_PRC                       0x01
 #define SUBLANG_TIBETAN_BHUTAN                    0x02
 #define SUBLANG_TIGRIGNA_ERITREA                  0x02
+#define SUBLANG_TIGRINYA_ERITREA                  0x02
+#define SUBLANG_TIGRINYA_ETHIOPIA                 0x01
+#define SUBLANG_TSWANA_BOTSWANA                   0x02
 #define SUBLANG_TSWANA_SOUTH_AFRICA               0x01
 #define SUBLANG_TURKISH_TURKEY                    0x01
 #define SUBLANG_TURKMEN_TURKMENISTAN              0x01
@@ -973,6 +1033,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_URDU_INDIA                        0x02
 #define SUBLANG_UZBEK_LATIN                       0x01
 #define SUBLANG_UZBEK_CYRILLIC                    0x02
+#define SUBLANG_VALENCIAN_VALENCIA                0x02
 #define SUBLANG_VIETNAMESE_VIETNAM                0x01
 #define SUBLANG_WELSH_UNITED_KINGDOM              0x01
 #define SUBLANG_WOLOF_SENEGAL                     0x01
@@ -994,6 +1055,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SORT_CHINESE_UNICODE                      0x1
 #define SORT_CHINESE_PRC                          0x2
 #define SORT_CHINESE_BOPOMOFO                     0x3
+#define SORT_CHINESE_RADICALSTROKE		  0x4
 
 #define SORT_KOREAN_KSC                           0x0
 #define SORT_KOREAN_UNICODE                       0x1
@@ -1116,14 +1178,10 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define BitTestAndComplement _bittestandcomplement
 #define BitTestAndSet _bittestandset
 #define BitTestAndReset _bittestandreset
-#define InterlockedBitTestAndSet _interlockedbittestandset
-#define InterlockedBitTestAndReset _interlockedbittestandreset
 #define BitTest64 _bittest64
 #define BitTestAndComplement64 _bittestandcomplement64
 #define BitTestAndSet64 _bittestandset64
 #define BitTestAndReset64 _bittestandreset64
-#define InterlockedBitTestAndSet64 _interlockedbittestandset64
-#define InterlockedBitTestAndReset64 _interlockedbittestandreset64
 
     BOOLEAN _bittest(LONG const *Base,LONG Offset);
     BOOLEAN _bittestandcomplement(LONG *Base,LONG Offset);
@@ -1133,107 +1191,95 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
       int old = 0;
       __asm__ __volatile__("btl %2,%1\n\tsbbl %0,%0 "
 	:"=r" (old),"=m" ((*(volatile __LONG32 *) Base))
-	:"Ir" (Offset));
+	:"Ir" (Offset) : "memory");
       return (BOOLEAN) (old!=0);
     }
     __CRT_INLINE BOOLEAN _bittestandcomplement(LONG *Base,LONG Offset) {
       int old = 0;
       __asm__ __volatile__("btcl %2,%1\n\tsbbl %0,%0 "
 	:"=r" (old),"=m" ((*(volatile __LONG32 *) Base))
-	:"Ir" (Offset));
+	:"Ir" (Offset) : "memory");
       return (BOOLEAN) (old!=0);
     }
 #endif /* __CRT__NO_INLINE */
 
-    BOOLEAN InterlockedBitTestAndComplement(LONG *Base,LONG Bit);
     BOOLEAN _bittestandset(LONG *Base,LONG Offset);
     BOOLEAN _bittestandreset(LONG *Base,LONG Offset);
-    BOOLEAN _interlockedbittestandset(LONG *Base,LONG Offset);
-    BOOLEAN _interlockedbittestandreset(LONG *Base,LONG Offset);
+    BOOLEAN _interlockedbittestandset(__LONG32 *Base,LONG Offset);
+    BOOLEAN _interlockedbittestandreset(__LONG32 *Base,LONG Offset);
+    BOOLEAN _interlockedbittestandcomplement(__LONG32 *Base,LONG Bit);
+    BOOLEAN InterlockedBitTestAndSet(volatile __LONG32 *Base,LONG Offset);
+    BOOLEAN InterlockedBitTestAndReset(volatile __LONG32 *Base,LONG Offset);
+    BOOLEAN InterlockedBitTestAndComplement(volatile __LONG32 *Base,LONG Bit);
     BOOLEAN _bittest64(LONG64 const *Base,LONG64 Offset);
     BOOLEAN _bittestandcomplement64(LONG64 *Base,LONG64 Offset);
     BOOLEAN _bittestandset64(LONG64 *Base,LONG64 Offset);
     BOOLEAN _bittestandreset64(LONG64 *Base,LONG64 Offset);
+    BOOLEAN InterlockedBitTestAndSet64(volatile LONG64 *Base,LONG64 Offset);
+    BOOLEAN InterlockedBitTestAndReset64(volatile LONG64 *Base,LONG64 Offset);
+    BOOLEAN InterlockedBitTestAndComplement64(volatile LONG64 *Base,LONG64 Bit);
     BOOLEAN _interlockedbittestandset64(LONG64 *Base,LONG64 Offset);
     BOOLEAN _interlockedbittestandreset64(LONG64 *Base,LONG64 Offset);
+    BOOLEAN _interlockedbittestandcomplement64(LONG64 *Base,LONG64 Bit);
 #ifndef __CRT__NO_INLINE
-    __CRT_INLINE BOOLEAN InterlockedBitTestAndComplement(LONG *Base,LONG Bit) {
-      int old = 0;
-      __asm__ __volatile__("lock ; btcl %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile __LONG32 *) Base))
-	:"Ir" (Bit));
-      return (BOOLEAN) (old!=0);
-    }
     __CRT_INLINE BOOLEAN _bittestandset(LONG *Base,LONG Offset) {
       int old = 0;
       __asm__ __volatile__("btsl %2,%1\n\tsbbl %0,%0 "
 	:"=r" (old),"=m" ((*(volatile __LONG32 *) Base))
-	:"Ir" (Offset));
+	:"Ir" (Offset) : "memory");
       return (BOOLEAN) (old!=0);
     }
     __CRT_INLINE BOOLEAN _bittestandreset(LONG *Base,LONG Offset) {
       int old = 0;
       __asm__ __volatile__("btrl %2,%1\n\tsbbl %0,%0 "
 	:"=r" (old),"=m" ((*(volatile __LONG32 *) Base))
-	:"Ir" (Offset));
+	:"Ir" (Offset) : "memory");
       return (BOOLEAN) (old!=0);
     }
-    __CRT_INLINE BOOLEAN _interlockedbittestandset(LONG *Base,LONG Offset) {
-      int old = 0;
-      __asm__ __volatile__("lock ; btsl %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile __LONG32 *) Base))
-	:"Ir" (Offset));
-      return (BOOLEAN) (old!=0);
-    }
-    __CRT_INLINE BOOLEAN _interlockedbittestandreset(LONG *Base,LONG Offset) {
-      int old = 0;
-      __asm__ __volatile__("lock ; btrl %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile __LONG32 *) Base))
-	:"Ir" (Offset));
-      return (BOOLEAN) (old!=0);
-    }
+    __CRT_INLINE __buildbittesti(_interlockedbittestandset, __LONG32, "lock bts", "I", /* unused param */)
+    __CRT_INLINE __buildbittesti(_interlockedbittestandreset, __LONG32, "lock btr", "I", /* unused param */)
+    __CRT_INLINE __buildbittesti(_interlockedbittestandcomplement, __LONG32, "lock btc", "I", /* unused param */)
+
+    __CRT_INLINE __buildbittesti(InterlockedBitTestAndSet, __LONG32, "lock bts", "I", volatile)
+    __CRT_INLINE __buildbittesti(InterlockedBitTestAndReset, __LONG32, "lock btr", "I", volatile)
+    __CRT_INLINE __buildbittesti(InterlockedBitTestAndComplement, __LONG32, "lock btc", "I", volatile)
+
     __CRT_INLINE BOOLEAN _bittest64(LONG64 const *Base,LONG64 Offset) {
       int old = 0;
       __asm__ __volatile__("btq %2,%1\n\tsbbl %0,%0 "
 	:"=r" (old),"=m" ((*(volatile LONG64 *) Base))
-	:"Ir" (Offset));
+	:"Ir" (Offset) : "memory");
       return (BOOLEAN) (old!=0);
     }
     __CRT_INLINE BOOLEAN _bittestandcomplement64(LONG64 *Base,LONG64 Offset) {
       int old = 0;
       __asm__ __volatile__("btcq %2,%1\n\tsbbl %0,%0 "
 	:"=r" (old),"=m" ((*(volatile LONG64 *) Base))
-	:"Ir" (Offset));
+	:"Ir" (Offset) : "memory");
       return (BOOLEAN) (old!=0);
     }
     __CRT_INLINE BOOLEAN _bittestandset64(LONG64 *Base,LONG64 Offset) {
       int old = 0;
       __asm__ __volatile__("btsq %2,%1\n\tsbbl %0,%0 "
 	:"=r" (old),"=m" ((*(volatile LONG64 *) Base))
-	:"Ir" (Offset));
+	:"Ir" (Offset) : "memory");
       return (BOOLEAN) (old!=0);
     }
     __CRT_INLINE BOOLEAN _bittestandreset64(LONG64 *Base,LONG64 Offset) {
       int old = 0;
       __asm__ __volatile__("btrq %2,%1\n\tsbbl %0,%0 "
 	:"=r" (old),"=m" ((*(volatile LONG64 *) Base))
-	:"Ir" (Offset));
+	:"Ir" (Offset) : "memory");
       return (BOOLEAN) (old!=0);
     }
-    __CRT_INLINE BOOLEAN _interlockedbittestandset64(LONG64 *Base,LONG64 Offset) {
-      int old = 0;
-      __asm__ __volatile__("lock ; btsq %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile LONG64 *) Base))
-	:"Ir" (Offset));
-      return (BOOLEAN) (old!=0);
-    }
-    __CRT_INLINE BOOLEAN _interlockedbittestandreset64(LONG64 *Base,LONG64 Offset) {
-      int old = 0;
-      __asm__ __volatile__("lock ; btrq %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile LONG64 *) Base))
-	:"Ir" (Offset));
-      return (BOOLEAN) (old!=0);
-    }
+    __CRT_INLINE __buildbittesti(_interlockedbittestandset64, LONG64, "lock bts", "J", /* unused param */)
+    __CRT_INLINE __buildbittesti(_interlockedbittestandreset64, LONG64, "lock btr", "J", /* unused param */)
+    __CRT_INLINE __buildbittesti(_interlockedbittestandcomplement64, LONG64, "lock btc", "J", /* unused param */)
+
+    __CRT_INLINE __buildbittesti(InterlockedBitTestAndSet64, LONG64, "lock bts", "J", volatile)
+    __CRT_INLINE __buildbittesti(InterlockedBitTestAndReset64, LONG64, "lock btr", "J", volatile)
+    __CRT_INLINE __buildbittesti(InterlockedBitTestAndComplement64, LONG64, "lock btc", "J", volatile)
+
 #endif /* !__CRT__NO_INLINE */
 
 #define BitScanForward _BitScanForward
@@ -1248,19 +1294,27 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 
 #ifndef __CRT__NO_INLINE
     __CRT_INLINE BOOLEAN _BitScanForward(DWORD *Index,DWORD Mask) {
-      __asm__ __volatile__("bsfl %1,%0" : "=r" (Mask),"=m" ((*(volatile __LONG32 *)Index)));
+      DWORD n;
+      __asm__ __volatile__("bsfl %0,%1" : "+r" (Mask),"=rm" (n) : : "memory");
+      *Index = n;
       return Mask!=0;
     }
     __CRT_INLINE BOOLEAN _BitScanReverse(DWORD *Index,DWORD Mask) {
-      __asm__ __volatile__("bsrl %1,%0" : "=r" (Mask),"=m" ((*(volatile __LONG32 *)Index)));
+     DWORD n;
+      __asm__ __volatile__("bsrl %0,%1" : "+r" (Mask),"=rm" (n) : : "memory");
+      *Index = n;
       return Mask!=0;
     }
     __CRT_INLINE BOOLEAN _BitScanForward64(DWORD *Index,DWORD64 Mask) {
-      __asm__ __volatile__("bsfq %1,%0" : "=r" (Mask),"=m" ((*(volatile LONG64 *)Index)));
+      DWORD64 n;
+      __asm__ __volatile__("bsfq %0,%1" : "+r" (Mask),"=rm" (n) : : "memory");
+      *Index = (DWORD) n;
       return Mask!=0;
     }
     __CRT_INLINE BOOLEAN _BitScanReverse64(DWORD *Index,DWORD64 Mask) {
-      __asm__ __volatile__("bsrq %1,%0" : "=r" (Mask),"=m" ((*(volatile LONG64 *)Index)));
+      DWORD64 n;
+      __asm__ __volatile__("bsrq %0,%1" : "+r" (Mask),"=rm" (n) : : "memory");
+      *Index = (DWORD) n;
       return Mask!=0;
     }
 #endif /* !__CRT__NO_INLINE */
@@ -1347,37 +1401,14 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 	: "memory");
       return prev;
     }
-    __CRT_INLINE LONG InterlockedAnd(LONG volatile *Destination,LONG Value) {
-      __asm__ __volatile__("lock ; andl %0,%1"
-	: :"r"(Value),"m"(*Destination)
-	: "memory");
-      return *Destination;
-    }
-    __CRT_INLINE LONG InterlockedOr(LONG volatile *Destination,LONG Value) {
-      __asm__ __volatile__("lock ; orl %0,%1"
-	: : "r"(Value),"m"(*Destination) : "memory");
-      return *Destination;
-    }
-    __CRT_INLINE LONG InterlockedXor(LONG volatile *Destination,LONG Value) {
-      __asm__ __volatile__("lock ; xorl %0,%1"
-	: : "r"(Value),"m"(*Destination) : "memory");
-      return *Destination;
-    }
-    __CRT_INLINE LONG64 InterlockedAnd64(LONG64 volatile *Destination,LONG64 Value) {
-      __asm__ __volatile__("lock ; andq %0,%1"
-	: : "r"(Value),"m"(*Destination) : "memory");
-      return *Destination;
-    }
-    __CRT_INLINE LONG64 InterlockedOr64(LONG64 volatile *Destination,LONG64 Value) {
-      __asm__ __volatile__("lock ; orq %0,%1"
-	: : "r"(Value),"m"(*Destination) : "memory");
-      return *Destination;
-    }
-    __CRT_INLINE LONG64 InterlockedXor64(LONG64 volatile *Destination,LONG64 Value) {
-      __asm__ __volatile__("lock ; xorq %0,%1"
-	: : "r"(Value),"m"(*Destination) : "memory");
-      return *Destination;
-    }
+
+    __CRT_INLINE __buildlogicali(InterlockedAnd, LONG, and)
+    __CRT_INLINE __buildlogicali(InterlockedOr, LONG, or)
+    __CRT_INLINE __buildlogicali(InterlockedXor, LONG, xor)
+
+    __CRT_INLINE __buildlogicali(InterlockedAnd64, LONG64, and)
+    __CRT_INLINE __buildlogicali(InterlockedOr64, LONG64, or)
+    __CRT_INLINE __buildlogicali(InterlockedXor64, LONG64, xor)
 #endif /* !__CRT__NO_INLINE */
 
     LONG InterlockedExchangeAdd(LONG volatile *Addend,LONG Value);
@@ -1511,42 +1542,10 @@ extern "C" {
     VOID __stosq(PDWORD64 Destination,DWORD64 Value,SIZE_T Count);
 
 #ifndef __CRT__NO_INLINE
-    __CRT_INLINE VOID __stosb(PBYTE Dest,BYTE Data,SIZE_T Count)
-    {
-      __asm__ __volatile__
-      (
-        "rep; stosb" :
-        [Dest] "=D" (Dest), [Count] "=c" (Count) :
-        "[Dest]" (Dest), "a" (Data), "[Count]" (Count)
-      );
-    }
-    __CRT_INLINE VOID __stosw(PWORD Dest,WORD Data,SIZE_T Count)
-    {
-      __asm__ __volatile__
-      (
-        "rep; stosw" :
-        [Dest] "=D" (Dest), [Count] "=c" (Count) :
-        "[Dest]" (Dest), "a" (Data), "[Count]" (Count)
-      );
-    }
-    __CRT_INLINE VOID __stosd(PDWORD Dest,DWORD Data,SIZE_T Count)
-    {
-      __asm__ __volatile__
-      (
-        "rep; stosl" :
-        [Dest] "=D" (Dest), [Count] "=c" (Count) :
-        "[Dest]" (Dest), "a" (Data), "[Count]" (Count)
-      );
-    }
-    __CRT_INLINE VOID __stosq(PDWORD64 Dest,DWORD64 Data,SIZE_T Count)
-    {
-      __asm__ __volatile__
-      (
-        "rep; stosq" :
-        [Dest] "=D" (Dest), [Count] "=c" (Count) :
-        "[Dest]" (Dest), "a" (Data), "[Count]" (Count)
-      );
-    }
+__CRT_INLINE __buildstos(__stosb, BYTE)
+__CRT_INLINE __buildstos(__stosw, WORD)
+__CRT_INLINE __buildstos(__stosd, DWORD)
+__CRT_INLINE __buildstos(__stosq, DWORD64)
 #endif /* __CRT__NO_INLINE */
 
 #define MultiplyHigh __mulh
@@ -1794,8 +1793,6 @@ extern "C" {
 #define BitTestAndComplement _bittestandcomplement
 #define BitTestAndSet _bittestandset
 #define BitTestAndReset _bittestandreset
-#define InterlockedBitTestAndSet _interlockedbittestandset
-#define InterlockedBitTestAndReset _interlockedbittestandreset
 
 #define BitScanForward _BitScanForward
 #define BitScanReverse _BitScanReverse
@@ -1807,35 +1804,21 @@ extern "C" {
 #define InterlockedIncrementAcquire InterlockedIncrement
 #define InterlockedIncrementRelease InterlockedIncrement
 
-    BOOLEAN InterlockedBitTestAndSet(LONG *Base,LONG Bit);
-    BOOLEAN InterlockedBitTestAndReset(LONG *Base,LONG Bit);
-#ifndef __CRT__NO_INLINE
-    __CRT_INLINE BOOLEAN InterlockedBitTestAndSet(LONG *Base,LONG Bit) {
-      int old = 0;
-      __asm__ __volatile__("lock ; btsl %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile __LONG32 *) Base))
-	:"Ir" (Bit));
-      return (BOOLEAN) (old!=0);
-    }
+    BOOLEAN _interlockedbittestandset(LONG *Base,LONG Bit);
+    BOOLEAN _interlockedbittestandreset(LONG *Base,LONG Bit);
+    BOOLEAN _interlockedbittestandcomplement(LONG *Base,LONG Bit);
 
-    __CRT_INLINE BOOLEAN InterlockedBitTestAndReset(LONG *Base,LONG Bit) {
-      int old = 0;
-      __asm__ __volatile__("lock ; btrl %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile __LONG32 *) Base))
-	:"Ir" (Bit));
-      return (BOOLEAN) (old!=0);
-    }
-#endif /* __CRT__NO_INLINE */
-
-    BOOLEAN InterlockedBitTestAndComplement(LONG *Base,LONG Bit);
+    BOOLEAN InterlockedBitTestAndSet(volatile LONG *Base,LONG Bit);
+    BOOLEAN InterlockedBitTestAndReset(volatile LONG *Base,LONG Bit);
+    BOOLEAN InterlockedBitTestAndComplement(volatile LONG *Base,LONG Bit);
 #ifndef __CRT__NO_INLINE
-    __CRT_INLINE BOOLEAN InterlockedBitTestAndComplement(LONG *Base,LONG Bit) {
-      int old = 0;
-      __asm__ __volatile__("lock ; btcl %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile __LONG32 *) Base))
-	:"Ir" (Bit));
-      return (BOOLEAN) (old!=0);
-    }
+    __CRT_INLINE __buildbittesti(_interlockedbittestandset, LONG, "lock bts", "I", /* unused param */)
+    __CRT_INLINE __buildbittesti(_interlockedbittestandreset, LONG, "lock btr", "I", /* unused param */)
+    __CRT_INLINE __buildbittesti(_interlockedbittestandcomplement, LONG, "lock btc", "I", /* unused param */)
+
+    __CRT_INLINE __buildbittesti(InterlockedBitTestAndSet, LONG, "lock bts", "I", volatile)
+    __CRT_INLINE __buildbittesti(InterlockedBitTestAndReset, LONG, "lock btr", "I", volatile)
+    __CRT_INLINE __buildbittesti(InterlockedBitTestAndComplement, LONG, "lock btc", "I", volatile)
 #endif /* !__CRT__NO_INLINE */
 
 #ifdef _PREFIX_
@@ -2699,8 +2682,73 @@ extern "C" {
 #define MANDATORY_LEVEL_TO_MANDATORY_RID(IL) (IL * 0x1000)
 
     typedef enum {
-      WinNullSid = 0,WinWorldSid = 1,WinLocalSid = 2,WinCreatorOwnerSid = 3,WinCreatorGroupSid = 4,WinCreatorOwnerServerSid = 5,WinCreatorGroupServerSid = 6,WinNtAuthoritySid = 7,WinDialupSid = 8,WinNetworkSid = 9,WinBatchSid = 10,WinInteractiveSid = 11,WinServiceSid = 12,WinAnonymousSid = 13,WinProxySid = 14,WinEnterpriseControllersSid = 15,WinSelfSid = 16,WinAuthenticatedUserSid = 17,WinRestrictedCodeSid = 18,WinTerminalServerSid = 19,WinRemoteLogonIdSid = 20,WinLogonIdsSid = 21,WinLocalSystemSid = 22,WinLocalServiceSid = 23,WinNetworkServiceSid = 24,WinBuiltinDomainSid = 25,WinBuiltinAdministratorsSid = 26,WinBuiltinUsersSid = 27,WinBuiltinGuestsSid = 28,WinBuiltinPowerUsersSid = 29,WinBuiltinAccountOperatorsSid = 30,WinBuiltinSystemOperatorsSid = 31,WinBuiltinPrintOperatorsSid = 32,WinBuiltinBackupOperatorsSid = 33,WinBuiltinReplicatorSid = 34,WinBuiltinPreWindows2000CompatibleAccessSid = 35,WinBuiltinRemoteDesktopUsersSid = 36,WinBuiltinNetworkConfigurationOperatorsSid = 37,WinAccountAdministratorSid = 38,WinAccountGuestSid = 39,WinAccountKrbtgtSid = 40,WinAccountDomainAdminsSid = 41,WinAccountDomainUsersSid = 42,WinAccountDomainGuestsSid = 43,WinAccountComputersSid = 44,WinAccountControllersSid = 45,WinAccountCertAdminsSid = 46,WinAccountSchemaAdminsSid = 47,WinAccountEnterpriseAdminsSid = 48,WinAccountPolicyAdminsSid = 49,WinAccountRasAndIasServersSid = 50,WinNTLMAuthenticationSid = 51,WinDigestAuthenticationSid = 52,WinSChannelAuthenticationSid = 53,WinThisOrganizationSid = 54,WinOtherOrganizationSid = 55,WinBuiltinIncomingForestTrustBuildersSid = 56,WinBuiltinPerfMonitoringUsersSid = 57,WinBuiltinPerfLoggingUsersSid = 58,WinBuiltinAuthorizationAccessSid = 59,WinBuiltinTerminalServerLicenseServersSid = 60,WinBuiltinDCOMUsersSid = 61
-    } WELL_KNOWN_SID_TYPE;
+      WinNullSid = 0,WinWorldSid = 1,WinLocalSid = 2,WinCreatorOwnerSid = 3,
+      WinCreatorGroupSid = 4,WinCreatorOwnerServerSid = 5,
+      WinCreatorGroupServerSid = 6,WinNtAuthoritySid = 7,WinDialupSid = 8,
+      WinNetworkSid = 9,WinBatchSid = 10,WinInteractiveSid = 11,
+      WinServiceSid = 12,WinAnonymousSid = 13,WinProxySid = 14,
+      WinEnterpriseControllersSid = 15,WinSelfSid = 16,
+      WinAuthenticatedUserSid = 17,WinRestrictedCodeSid = 18,
+      WinTerminalServerSid = 19,WinRemoteLogonIdSid = 20,WinLogonIdsSid = 21,
+      WinLocalSystemSid = 22,WinLocalServiceSid = 23,WinNetworkServiceSid = 24,
+      WinBuiltinDomainSid = 25,WinBuiltinAdministratorsSid = 26,
+      WinBuiltinUsersSid = 27,WinBuiltinGuestsSid = 28,
+      WinBuiltinPowerUsersSid = 29,WinBuiltinAccountOperatorsSid = 30,
+      WinBuiltinSystemOperatorsSid = 31,WinBuiltinPrintOperatorsSid = 32,
+      WinBuiltinBackupOperatorsSid = 33,WinBuiltinReplicatorSid = 34,
+      WinBuiltinPreWindows2000CompatibleAccessSid = 35,
+      WinBuiltinRemoteDesktopUsersSid = 36,
+      WinBuiltinNetworkConfigurationOperatorsSid = 37,
+      WinAccountAdministratorSid = 38,WinAccountGuestSid = 39,
+      WinAccountKrbtgtSid = 40,WinAccountDomainAdminsSid = 41,
+      WinAccountDomainUsersSid = 42,WinAccountDomainGuestsSid = 43,
+      WinAccountComputersSid = 44,WinAccountControllersSid = 45,
+      WinAccountCertAdminsSid = 46,WinAccountSchemaAdminsSid = 47,
+      WinAccountEnterpriseAdminsSid = 48,WinAccountPolicyAdminsSid = 49,
+      WinAccountRasAndIasServersSid = 50,WinNTLMAuthenticationSid = 51,
+      WinDigestAuthenticationSid = 52,WinSChannelAuthenticationSid = 53,
+      WinThisOrganizationSid = 54,WinOtherOrganizationSid = 55,
+      WinBuiltinIncomingForestTrustBuildersSid = 56,
+      WinBuiltinPerfMonitoringUsersSid = 57,WinBuiltinPerfLoggingUsersSid = 58,
+      WinBuiltinAuthorizationAccessSid = 59,
+      WinBuiltinTerminalServerLicenseServersSid = 60,
+      WinBuiltinDCOMUsersSid = 61,WinBuiltinIUsersSid = 62,
+      WinIUserSid = 63, WinBuiltinCryptoOperatorsSid = 64,
+      WinUntrustedLabelSid = 65, WinLowLabelSid = 66, WinMediumLabelSid = 67,
+      WinHighLabelSid = 68, WinSystemLabelSid = 69, WinWriteRestrictedCodeSid = 70,
+      WinCreatorOwnerRightsSid = 71, WinCacheablePrincipalsGroupSid = 72,
+      WinNonCacheablePrincipalsGroupSid = 73, WinEnterpriseReadonlyControllersSid = 74,
+      WinAccountReadonlyControllersSid = 75, WinBuiltinEventLogReadersGroup = 76,
+      WinNewEnterpriseReadonlyControllersSid = 77, WinBuiltinCertSvcDComAccessGroup = 78,
+      WinMediumPlusLabelSid = 79, WinLocalLogonSid = 80, WinConsoleLogonSid = 81,
+      WinThisOrganizationCertificateSid = 82, WinApplicationPackageAuthoritySid = 83,
+      WinBuiltinAnyPackageSid = 84, WinCapabilityInternetClientSid = 85,
+      WinCapabilityInternetClientServerSid = 86,
+      WinCapabilityPrivateNetworkClientServerSid = 87,
+      WinCapabilityPicturesLibrarySid = 88, WinCapabilityVideosLibrarySid = 89,
+      WinCapabilityMusicLibrarySid = 90, WinCapabilityDocumentsLibrarySid = 91,
+      WinCapabilitySharedUserCertificatesSid = 92, WinCapabilityEnterpriseAuthenticationSid = 93,
+      WinCapabilityRemovableStorageSid = 94, WinBuiltinRDSRemoteAccessServersSid = 95,
+      WinBuiltinRDSEndpointServersSid = 96, WinBuiltinRDSManagementServersSid = 97,
+      WinUserModeDriversSid = 98, WinBuiltinHyperVAdminsSid = 99,
+      WinAccountCloneableControllersSid = 100,
+      WinBuiltinAccessControlAssistanceOperatorsSid = 101,
+      WinBuiltinRemoteManagementUsersSid = 102, WinAuthenticationAuthorityAssertedSid = 103,
+      WinAuthenticationServiceAssertedSid = 104
+} WELL_KNOWN_SID_TYPE;
+
+#define SECURITY_SCOPED_POLICY_ID_AUTHORITY { 0, 0, 0, 0, 0, 17 }
+#define SECURITY_AUTHENTICATION_AUTHORITY   { 0, 0, 0, 0, 0, 18 }
+
+#define SECURITY_AUTHENTICATION_AUTHORITY_RID_COUNT    (__MSABI_LONG(1))
+#define SECURITY_AUTHENTICATION_AUTHORITY_ASSERTED_RID (__MSABI_LONG(0x1))
+#define SECURITY_AUTHENTICATION_SERVICE_ASSERTED_RID   (__MSABI_LONG(0x2))
+
+#define SECURITY_TRUSTED_INSTALLER_RID1 956008885
+#define SECURITY_TRUSTED_INSTALLER_RID2 3418522649
+#define SECURITY_TRUSTED_INSTALLER_RID3 1831038044
+#define SECURITY_TRUSTED_INSTALLER_RID4 1853292631
+#define SECURITY_TRUSTED_INSTALLER_RID5 2271478464
 
 #define SYSTEM_LUID { 0x3E7,0x0 }
 #define ANONYMOUS_LOGON_LUID { 0x3e6,0x0 }

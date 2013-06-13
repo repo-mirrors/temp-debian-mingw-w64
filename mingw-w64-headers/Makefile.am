@@ -58,14 +58,21 @@ EXTRA_HEADERS = \
 if HAVE_WIDL
 
 IDL_SRCS = \
+  include/activation.idl \
   include/audioclient.idl \
   include/audiopolicy.idl \
   include/ctfutb.idl \
   include/docobj.idl \
   include/devicetopology.idl \
   include/downloadmgr.idl \
+  include/dxva2api.idl \
   include/endpointvolume.idl \
   include/fusion.idl \
+  include/fwptypes.idl \
+  include/hstring.idl \
+  include/iketypes.idl \
+  include/inputscope.idl \
+  include/inspectable.idl \
   include/oaidl.idl \
   include/ocidl.idl \
   include/comcat.idl \

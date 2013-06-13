@@ -8,27 +8,7 @@
 
 #include <_mingw_unicode.h>
 
-#ifndef WINADVAPI
-#ifndef _ADVAPI32_
-#define WINADVAPI DECLSPEC_IMPORT
-#else
-#define WINADVAPI
-#endif
-#endif
-
-#ifndef WINBASEAPI
-#ifndef _KERNEL32_
-#define WINBASEAPI DECLSPEC_IMPORT
-#else
-#define WINBASEAPI
-#endif
-#endif
-
-#ifndef _ZAWPROXY_
-#define ZAWPROXYAPI DECLSPEC_IMPORT
-#else
-#define ZAWPROXYAPI
-#endif
+#include <apisetcconv.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -140,6 +120,10 @@ extern "C" {
 #define PIPE_READMODE_MESSAGE 0x2
 #define PIPE_TYPE_BYTE 0x0
 #define PIPE_TYPE_MESSAGE 0x4
+#if (_WIN32_WINNT >= 0x0600)
+#define PIPE_ACCEPT_REMOTE_CLIENTS 0x0
+#define PIPE_REJECT_REMOTE_CLIENTS 0x8
+#endif
 
 #define PIPE_UNLIMITED_INSTANCES 255
 
@@ -2106,6 +2090,11 @@ extern "C" {
   WINBASEAPI DWORD WINAPI GetFullPathNameA(LPCSTR lpFileName,DWORD nBufferLength,LPSTR lpBuffer,LPSTR *lpFilePart);
   WINBASEAPI DWORD WINAPI GetFullPathNameW(LPCWSTR lpFileName,DWORD nBufferLength,LPWSTR lpBuffer,LPWSTR *lpFilePart);
 
+#define BASE_SEARCH_PATH_ENABLE_SAFE_SEARCHMODE  0x00000001
+#define BASE_SEARCH_PATH_DISABLE_SAFE_SEARCHMODE 0x00010000
+#define BASE_SEARCH_PATH_PERMANENT               0x00008000
+  WINBASEAPI WINBOOL WINAPI SetSearchPathMode(DWORD dwFlags);
+
 #define DDD_RAW_TARGET_PATH 0x1
 #define DDD_REMOVE_DEFINITION 0x2
 #define DDD_EXACT_MATCH_ON_REMOVE 0x4
@@ -3498,6 +3487,42 @@ WINBOOL WINAPI GetPhysicallyInstalledSystemMemory(
 );
 
 typedef LPVOID PPROC_THREAD_ATTRIBUTE_LIST, LPPROC_THREAD_ATTRIBUTE_LIST;
+
+#define PROC_THREAD_ATTRIBUTE_NUMBER    0x0000ffff
+#define PROC_THREAD_ATTRIBUTE_THREAD    0x00010000
+#define PROC_THREAD_ATTRIBUTE_INPUT     0x00020000
+#define PROC_THREAD_ATTRIBUTE_ADDITIVE  0x00040000
+
+typedef enum _PROC_THREAD_ATTRIBUTE_NUM {
+    ProcThreadAttributeParentProcess = 0,
+    ProcThreadAttributeExtendedFlags,
+    ProcThreadAttributeHandleList,
+    ProcThreadAttributeGroupAffinity,
+    ProcThreadAttributePreferredNode,
+    ProcThreadAttributeIdealProcessor,
+    ProcThreadAttributeUmsThread,
+    ProcThreadAttributeMitigationPolicy,
+    ProcThreadAttributeMax
+} PROC_THREAD_ATTRIBUTE_NUM;
+
+#define ProcThreadAttributeValue(number, thread, input, additive) \
+    (((number)   & PROC_THREAD_ATTRIBUTE_NUMBER) \
+    |((thread)   ? PROC_THREAD_ATTRIBUTE_THREAD : 0) \
+    |((input)    ? PROC_THREAD_ATTRIBUTE_INPUT : 0) \
+    |((additive) ? PROC_THREAD_ATTRIBUTE_ADDITIVE : 0))
+
+#define PROC_THREAD_ATTRIBUTE_PARENT_PROCESS    ProcThreadAttributeValue(ProcThreadAttributeParentProcess,FALSE,TRUE,FALSE)
+#define PROC_THREAD_ATTRIBUTE_EXTENDED_FLAGS    ProcThreadAttributeValue(ProcThreadAttributeExtendedFlags,FALSE,TRUE,TRUE)
+#define PROC_THREAD_ATTRIBUTE_HANDLE_LIST       ProcThreadAttributeValue(ProcThreadAttributeHandleList,FALSE,TRUE,FALSE)
+#define PROC_THREAD_ATTRIBUTE_GROUP_AFFINITY    ProcThreadAttributeValue(ProcThreadAttributeGroupAffinity,TRUE,TRUE,FALSE)
+#define PROC_THREAD_ATTRIBUTE_PREFERRED_NODE    ProcThreadAttributeValue(ProcThreadAttributePreferredNode,FALSE,TRUE,FALSE)
+#define PROC_THREAD_ATTRIBUTE_IDEAL_PROCESSOR   ProcThreadAttributeValue(ProcThreadAttributeIdealProcessor,TRUE,TRUE,FALSE)
+#define PROC_THREAD_ATTRIBUTE_UMS_THREAD        ProcThreadAttributeValue(ProcThreadAttributeUmsThread,TRUE,TRUE,FALSE)
+#define PROC_THREAD_ATTRIBUTE_MITIGATION_POLICY ProcThreadAttributeValue(ProcThreadAttributeMitigationPolicy,FALSE,TRUE,FALSE)
+
+#define PROCESS_CREATION_MITIGATION_POLICY_DEP_ENABLE           0x0001
+#define PROCESS_CREATION_MITIGATION_POLICY_DEP_ATL_THUNK_ENABLE 0x0002
+#define PROCESS_CREATION_MITIGATION_POLICY_SEHOP_ENABLE         0x0004
 
 WINBASEAPI WINBOOL WINAPI UpdateProcThreadAttribute(
   LPPROC_THREAD_ATTRIBUTE_LIST lpAttributeList,
