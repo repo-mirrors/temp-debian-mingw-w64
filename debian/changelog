@@ -2,6 +2,7 @@ mingw-w64 (3.0~svn5914-1) UNRELEASED; urgency=low
 
   * New upstream trunk snapshot.
   * Switch to my Debian address.
+  * Drop DM-Upload-Allowed.
 
  -- Stephen Kitt <skitt@debian.org>  Wed, 19 Jun 2013 19:20:00 +0200
 
