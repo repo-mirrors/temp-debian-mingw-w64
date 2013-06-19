@@ -12,3 +12,14 @@ Author: Stephen Kitt <steve@sk2.org>
  	  return 0;
          }
        gendef_addpath_def (next);
+--- mingw-w64.orig/mingw-w64-libraries/libmangle/src/m_ms.c
++++ mingw-w64/mingw-w64-libraries/libmangle/src/m_ms.c
+@@ -685,7 +685,7 @@
+               return m_oper (c, m_rtti (c, "complete_object_locator"));
+           }
+         DEC_CHAR (c);
+-        fprintf (stderr, " *** Unkown RTTI %c\n", ch);
++        fprintf (stderr, " *** Unknown RTTI %c\n", ch);
+         c->err = 2;
+         return NULL;
+       case 'S':

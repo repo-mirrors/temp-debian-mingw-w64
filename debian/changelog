@@ -4,6 +4,13 @@ mingw-w64 (3.0~svn5914-1) UNRELEASED; urgency=low
   * Switch to my Debian address.
   * Drop DM-Upload-Allowed.
   * Use canonical VCS URIs.
+  * Merge from 2.0.8-1:
+    - Use dh_autoreconf to update all the autotools-generated files and
+      allow multiple builds in a row.
+    - Build libmangle for the current architecture, it's intended for
+      gendef; use it to build gendef.
+    - Enable hardened builds for gendef and genidl.
+    - Fix another spelling mistake in gendef (via libmangle).
 
  -- Stephen Kitt <skitt@debian.org>  Wed, 19 Jun 2013 19:20:00 +0200
 

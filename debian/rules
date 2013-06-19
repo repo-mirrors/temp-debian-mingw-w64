@@ -18,7 +18,7 @@ target32 := i686-w64-mingw32
 target64 := x86_64-w64-mingw32
 targets := $(target32) $(target64)
 
-# No hardening support for now
+# No hardening support for now, except in the tools (build-arch-stamp)
 dpkg_buildflags = DEB_BUILD_MAINT_OPTIONS="hardening=-all" dpkg-buildflags
 
 CFLAGS = $(shell $(dpkg_buildflags) --get CFLAGS)
@@ -31,14 +31,19 @@ export CFLAGS CPPFLAGS CXXFLAGS FFLAGS LDFLAGS
 clean:
 	dh_testdir
 	dh_testroot
+	dh_autoreconf_clean
 	dh_clean
 	rm -rf $(build_dir) $(upstream_dir) autotools_files series tmp *-stamp
 
 CONFFLAGS = --prefix=/usr
 
+autoreconf-stamp:
+	dh_autoreconf
+	touch $@
+
 # Build and install the headers first, so the remaining subprojects can use
 # them during the build
-headers-stamp:
+headers-stamp: autoreconf-stamp
 	for target in $(targets); do \
 		dh_auto_configure -D$(top_dir)/mingw-w64-headers -B$(build_dir)/$$target/headers -- --prefix=/usr/$$target --host=$$target --enable-sdk=all --enable-secure-api && \
 		dh_auto_build -D$(top_dir)/mingw-w64-headers -B$(build_dir)/$$target/headers && \
@@ -46,21 +51,22 @@ headers-stamp:
 	done
 	touch $@
 
-# Build the arch-dependent subprojects
-build-arch-stamp:
-	export CFLAGS="$(shell dpkg-buildflags --get CFLAGS)"; \
-	export CPPFLAGS="$(shell dpkg-buildflags --get CPPFLAGS)"; \
-	export CXXFLAGS="$(shell dpkg-buildflags --get CXXFLAGS)"; \
-	export FFLAGS="$(shell dpkg-buildflags --get FFLAGS)"; \
-	export LDFLAGS="$(shell dpkg-buildflags --get LDFLAGS)"; \
+# Build the arch-dependent subprojects: libmangle and the tools
+# (in that order since gendef uses libmangle)
+build-arch-stamp: autoreconf-stamp
+	for lib_dir in $(top_dir)/mingw-w64-libraries/libmangle; do \
+		dh_auto_configure -D$$lib_dir -B$(build_dir)/$$(basename $$lib_dir) -- $(shell dpkg-buildflags --export=configure) && \
+		dh_auto_build -D$$lib_dir -B$(build_dir)/$$(basename $$lib_dir) && \
+		dh_auto_install -D$$lib_dir -B$(build_dir)/$$(basename $$lib_dir); \
+	done
 	for tool_dir in $(top_dir)/mingw-w64-tools/gendef $(top_dir)/mingw-w64-tools/genidl; do \
-		dh_auto_configure -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir) && \
+		dh_auto_configure -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir) -- --with-mangle=$(top_dir)/debian/tmp/usr $(shell dpkg-buildflags --export=configure) && \
 		dh_auto_build -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir) && \
 		dh_auto_install -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir); \
 	done; \
 	for target in $(targets); do \
 		for tool_dir in $(top_dir)/mingw-w64-tools/widl; do \
-			dh_auto_configure -D$$tool_dir -B$(build_dir)/$$target-$$(basename $$tool_dir) -- --target=$$target && \
+			dh_auto_configure -D$$tool_dir -B$(build_dir)/$$target-$$(basename $$tool_dir) -- --target=$$target $(shell dpkg-buildflags --export=configure) && \
 			dh_auto_build -D$$tool_dir -B$(build_dir)/$$target-$$(basename $$tool_dir) && \
 			dh_auto_install -D$$tool_dir -B$(build_dir)/$$target-$$(basename $$tool_dir); \
 		done; \
@@ -69,7 +75,7 @@ build-arch-stamp:
 
 # Build the arch-independent subprojects, with different options for each
 # target architecture
-build-indep-stamp: headers-stamp
+build-indep-stamp: autoreconf-stamp headers-stamp
 	# When bootstrapping, the extra libraries can't be built, so try
 	# configuring with libraries and if that fails without
 	CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(target32)/include" dh_auto_configure -B$(build_dir)/$(target32)/all -- --prefix=/usr/$(target32) --host=$(target32) --with-libraries=all --enable-lib32 --disable-lib64 --enable-sdk=all --enable-secure-api || \
