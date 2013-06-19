@@ -1540,7 +1540,6 @@ extern "C" {
     VOID __stosw(PWORD Destination,WORD Value,SIZE_T Count);
     VOID __stosd(PDWORD Destination,DWORD Value,SIZE_T Count);
     VOID __stosq(PDWORD64 Destination,DWORD64 Value,SIZE_T Count);
-
 #ifndef __CRT__NO_INLINE
 __CRT_INLINE __buildstos(__stosb, BYTE)
 __CRT_INLINE __buildstos(__stosw, WORD)
@@ -2535,7 +2534,7 @@ __CRT_INLINE __buildstos(__stosq, DWORD64)
 #define SECURITY_MAX_SID_SIZE (sizeof(SID) - sizeof(DWORD) + (SID_MAX_SUB_AUTHORITIES *sizeof(DWORD)))
 
     typedef enum _SID_NAME_USE {
-      SidTypeUser = 1,SidTypeGroup,SidTypeDomain,SidTypeAlias,SidTypeWellKnownGroup,SidTypeDeletedAccount,SidTypeInvalid,SidTypeUnknown,SidTypeComputer
+      SidTypeUser = 1,SidTypeGroup,SidTypeDomain,SidTypeAlias,SidTypeWellKnownGroup,SidTypeDeletedAccount,SidTypeInvalid,SidTypeUnknown,SidTypeComputer,SidTypeLabel
     } SID_NAME_USE,*PSID_NAME_USE;
 
     typedef struct _SID_AND_ATTRIBUTES {
@@ -3967,6 +3966,8 @@ __CRT_INLINE __buildstos(__stosq, DWORD64)
 
 #define MAXIMUM_REPARSE_DATA_BUFFER_SIZE (16 *1024)
 
+#define SYMLINK_FLAG_RELATIVE   1
+
 #define IO_REPARSE_TAG_RESERVED_ZERO (0)
 #define IO_REPARSE_TAG_RESERVED_ONE (1)
 
@@ -3985,6 +3986,8 @@ __CRT_INLINE __buildstos(__stosq, DWORD64)
 #define IO_REPARSE_TAG_FILTER_MANAGER (__MSABI_LONG(0x8000000B))
 #define IO_REPARSE_TAG_DFSR (__MSABI_LONG(0x80000012))
 #define IO_REPARSE_TAG_SYMLINK (__MSABI_LONG(0xA000000C))
+#define IO_REPARSE_TAG_IIS_CACHE (__MSABI_LONG(0xA0000010))
+#define IO_REPARSE_TAG_DRIVE_EXTENDER (__MSABI_LONG(0x80000005))
 
 #define IO_COMPLETION_MODIFY_STATE 0x0002
 #define IO_COMPLETION_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3)

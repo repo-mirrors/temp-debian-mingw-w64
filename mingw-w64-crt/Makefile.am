@@ -117,6 +117,46 @@ src_libws2_32=libsrc/ws2_32.c \
   libsrc/wspiapi/WspiapiLoad.c               libsrc/wspiapi/WspiapiGetAddrInfo.c       libsrc/wspiapi/WspiapiGetNameInfo.c        \
   libsrc/wspiapi/WspiapiFreeAddrInfo.c
 
+src_msvcrt=\
+  misc/invalid_parameter_handler.c \
+  misc/lc_locale_func.c \
+  misc/output_format.c \
+  secapi/_access_s.c \
+  secapi/_cgets_s.c \
+  secapi/_cgetws_s.c \
+  secapi/_chsize_s.c \
+  secapi/_cprintf_s.c \
+  secapi/_cprintf_s_l.c \
+  secapi/_ctime32_s.c \
+  secapi/_ctime64_s.c \
+  secapi/_cwprintf_s.c \
+  secapi/_cwprintf_s_l.c \
+  secapi/_gmtime32_s.c \
+  secapi/_gmtime64_s.c \
+  secapi/_localtime32_s.c \
+  secapi/_localtime64_s.c \
+  secapi/_mktemp_s.c \
+  secapi/_strdate_s.c \
+  secapi/_strtime_s.c \
+  secapi/_umask_s.c \
+  secapi/_vcprintf_s.c \
+  secapi/_vcprintf_s_l.c \
+  secapi/_vcwprintf_s.c \
+  secapi/_vcwprintf_s_l.c \
+  secapi/_waccess_s.c \
+  secapi/_wasctime_s.c \
+  secapi/_wctime32_s.c \
+  secapi/_wctime64_s.c \
+  secapi/_wstrtime_s.c \
+  secapi/_wmktemp_s.c \
+  secapi/_wstrdate_s.c \
+  secapi/asctime_s.c \
+  secapi/memcpy_s.c \
+  secapi/rand_s.c \
+  secapi/vsprintf_s.c \
+  secapi/wmemcpy_s.c
+
+
 src_libmingwex=\
   crt/dllentry.c        crt/dllmain.c \
   \
@@ -183,8 +223,8 @@ src_libmingwex=\
   misc/feupdateenv.c     misc/ftruncate.c             misc/fwide.c                misc/getlogin.c            misc/getopt.c         \
   misc/gettimeofday.c                                 misc/imaxabs.c              misc/imaxdiv.c             misc/isblank.c        \
   misc/iswblank.c                                     misc/mb_wc_common.h         misc/mbrtowc.c             misc/mbsinit.c        \
-  misc/mempcpy.c         misc/mingw-aligned-malloc.c  misc/mingw-fseek.c          misc/mingw_get_codepage.c  misc/mingw_getsp.S    \
-  misc/mingw_matherr.c   misc/mingw_mbwc_convert.c    misc/mingw_output_format.c  misc/mingw_usleep.c        misc/mingw_wcstod.c   \
+  misc/mempcpy.c         misc/mingw-aligned-malloc.c  misc/mingw-fseek.c          misc/mingw_getsp.S    \
+  misc/mingw_matherr.c   misc/mingw_mbwc_convert.c    misc/mingw_usleep.c        misc/mingw_wcstod.c   \
   misc/mingw_wcstof.c    misc/mingw_wcstold.c                                     misc/seterrno.c            misc/sleep.c          \
   misc/spawnv.c          misc/spawnve.c               misc/spawnvp.c              misc/spawnvpe.c            misc/strnlen.c        \
   misc/strsafe.c         misc/strtoimax.c             misc/strtold.c              misc/strtoumax.c           misc/tdelete.c        \
@@ -213,25 +253,7 @@ src_libmingwex=\
   stdio/mingw_wvfscanf.c   stdio/snprintf.c          stdio/snwprintf.c        stdio/strtof.c            stdio/truncate.c        \
   stdio/ulltoa.c           stdio/ulltow.c            stdio/vasprintf.c        stdio/vfscanf.c           stdio/vfwscanf.c        \
   stdio/vscanf.c           stdio/vsnprintf.c         stdio/vsnprintf_s.c      stdio/vsnwprintf.c        stdio/vsscanf.c         \
-  stdio/vswscanf.c         stdio/vwscanf.c           stdio/wtoll.c            stdio/mingw_asprintf.c    stdio/mingw_vasprintf.c \
-  \
-  secapi/_cgets_s.c secapi/_cgetws_s.c \
-  secapi/_cprintf_s.c secapi/_cprintf_s_l.c \
-  secapi/_vcprintf_s.c secapi/_vcprintf_s_l.c \
-  secapi/_cwprintf_s.c secapi/_cwprintf_s_l.c \
-  secapi/_vcwprintf_s.c secapi/_vcwprintf_s_l.c \
-  secapi/vsprintf_s.c \
-  secapi/_access_s.c secapi/_waccess_s.c \
-  secapi/_chsize_s.c secapi/_mktemp_s.c secapi/_wmktemp_s.c \
-  secapi/_umask_s.c \
-  secapi/_wctime32_s.c secapi/_ctime32_s.c \
-  secapi/_wctime64_s.c secapi/_ctime64_s.c \
-  secapi/asctime_s.c secapi/_wasctime_s.c \
-  secapi/_localtime32_s.c secapi/_localtime64_s.c \
-  secapi/_gmtime64_s.c secapi/_gmtime32_s.c \
-  secapi/_strdate_s.c secapi/_wstrdate_s.c \
-  secapi/_strtime_s.c secapi/_wstrtime_s.c \
-  secapi/wmemcpy_s.c secapi/memcpy_s.c
+  stdio/vswscanf.c         stdio/vwscanf.c           stdio/wtoll.c            stdio/mingw_asprintf.c    stdio/mingw_vasprintf.c
 
 # These intrinsics are target independent:
 src_intrincs= \
@@ -239,7 +261,8 @@ src_intrincs= \
   intrincs/__stosw.c        intrincs/_rotl64.c        intrincs/_rotr64.c         intrincs/bitscanfwd.c    intrincs/bitscanrev.c     \
   intrincs/bittest.c        intrincs/bittestc.c       intrincs/bittestci.c       intrincs/bittestr.c      intrincs/bittestri.c      \
   intrincs/bittests.c       intrincs/bittestsi.c      intrincs/cpuid.c           intrincs/currentfiber.c  intrincs/currentteb.c     \
-  intrincs/fiberdata.c      intrincs/ilockadd.c       intrincs/ilockand.c        intrincs/ilockand64.c    intrincs/ilockcxch.c      \
+  intrincs/fiberdata.c      intrincs/ilockadd.c       intrincs/ilockand.c        intrincs/ilockand64.c \
+  intrincs/ilockcxch.c      intrincs/ilockcxch2.c \
   intrincs/ilockcxch16.c    intrincs/ilockcxch64.c    intrincs/ilockcxchptr.c    intrincs/ilockdec.c      intrincs/ilockdec16.c     \
   intrincs/ilockdec64.c     intrincs/ilockexch.c      intrincs/ilockexch64.c     intrincs/ilockexchadd.c  intrincs/ilockexchadd64.c \
   intrincs/ilockexchptr.c   intrincs/ilockinc.c       intrincs/ilockinc16.c      intrincs/ilockinc64.c    intrincs/ilockor.c        \
@@ -318,6 +341,12 @@ lib32_LIBRARIES = lib32/libkernel32.a
 lib32_libkernel32_a_SOURCES = $(src_intrincs) $(src_intrincs32)
 lib32_libkernel32_a_AR = $(DTLIB32) && $(AR) $(ARFLAGS)
 lib32_libkernel32_a_CPPFLAGS=$(CPPFLAGS32) $(extra_include) $(AM_CPPFLAGS)
+
+lib32_LIBRARIES += lib32/libmsvcrt.a
+lib32_libmsvcrt_a_SOURCES = $(src_msvcrt) lib32/msvcrt.def.in
+lib32_libmsvcrt_a_AR = $(DTDEF32) lib32/msvcrt.def && $(AR) $(ARFLAGS)
+lib32_libmsvcrt_a_CPPFLAGS=$(CPPFLAGS32) -D__LIBMSVCRT__ $(extra_include) $(sysincludes)
+EXTRA_lib32_libmsvcrt_a_DEPENDENCIES=lib32/msvcrt.def
 
 lib32_LIBRARIES += lib32/libshell32.a
 lib32_libshell32_a_SOURCES = $(src_libshell32)
@@ -486,7 +515,7 @@ lib32_DATA = \
   lib32/libgpapi.a     lib32/libgpedit.a    lib32/libgpprefcl.a  lib32/libgpscript.a \
   lib32/libgptext.a    lib32/libmshtml.a    lib32/libmshtmled.a  \
   \
-  lib32/libcrtdll.a    lib32/libmsvcrt.a    lib32/libmsvcr80.a   \
+  lib32/libcrtdll.a    lib32/libmsvcr80.a   \
   \
   lib32/libbcrypt.a    lib32/libbthprops.a  lib32/libclusapi.a   lib32/libcmutil.a    \
   lib32/libcredui.a    lib32/libcryptnet.a  lib32/libdavclnt.a   lib32/libdhcpcsvc6.a \
@@ -543,7 +572,8 @@ lib32_DATA = \
   lib32/libd3dx10.a         lib32/libd3dx11.a         lib32/libd3dcsxd.a   \
   lib32/libd3dcompiler.a    lib32/libwinhttp.a        lib32/libmsvcr110.a  \
   lib32/libdevmgr.a         lib32/libdevobj.a         lib32/libdevrtl.a    \
-  lib32/libruntimeobject.a
+  lib32/libapi-ms-win-core-winrt-string-l1-1-0.a lib32/libruntimeobject.a  \
+  lib32/libapi-ms-win-core-winrt-l1-1-0.a
 
 if ! W32API
 lib32_DATA += lib32/libglut.a
@@ -551,7 +581,7 @@ endif
 
 # combine these two rules with the ones for lib64
 # Use two patterns, one for 32/64 in lib32/ and lib64/
-lib32/libcrtdll.a lib32/libmsvcrt.a lib32/libmsvcr80.a: lib32/lib%.a: lib32/%.def
+lib32/libcrtdll.a lib32/libmsvcr80.a: lib32/lib%.a: lib32/%.def
 	$(DTDEF32) $< --dllname $*.dll
 
 lib32/lib%.a: lib32/%.def
@@ -638,6 +668,12 @@ lib64_LIBRARIES = lib64/libkernel32.a
 lib64_libkernel32_a_SOURCES = $(src_intrincs) $(src_intrincs64)
 lib64_libkernel32_a_CPPFLAGS=$(CPPFLAGS64) $(extra_include) $(AM_CPPFLAGS)
 lib64_libkernel32_a_AR = $(DTLIB64) && $(AR) $(ARFLAGS)
+
+lib64_LIBRARIES += lib64/libmsvcrt.a
+lib64_libmsvcrt_a_SOURCES = $(src_msvcrt) lib64/msvcrt.def.in
+lib64_libmsvcrt_a_AR = $(DTDEF64) lib64/msvcrt.def && $(AR) $(ARFLAGS)
+lib64_libmsvcrt_a_CPPFLAGS=$(CPPFLAGS64) -D__LIBMSVCRT__ $(extra_include) $(sysincludes)
+EXTRA_lib64_libmsvcrt_a_DEPENDENCIES=lib64/msvcrt.def
 
 lib64_LIBRARIES += lib64/libshell32.a
 lib64_libshell32_a_SOURCES = $(src_libshell32)
@@ -997,7 +1033,7 @@ lib64_DATA = \
   lib64/libdwmapi.a     lib64/libntoskrnl.a     lib64/libuxtheme.a    \
   lib64/libwtsapi32.a   \
   \
-  lib64/libcrtdll.a     lib64/libmsvcrt.a     lib64/libmsvcr80.a     \
+  lib64/libcrtdll.a     lib64/libmsvcr80.a     \
   \
   lib64/libbcrypt.a     lib64/libbthprops.a   lib64/libdhcpcsvc6.a   lib64/libdxva2.a       lib64/libeappcfg.a       \
   lib64/libeappgnui.a   lib64/libeapphost.a   lib64/libeappprxy.a    lib64/libevr.a         lib64/libiscsidsc.a      \
@@ -1045,9 +1081,10 @@ lib64_DATA = \
   lib64/libxapofx.a         lib64/libx3daudio.a       lib64/libd3dx9.a     \
   lib64/libd3dx10.a         lib64/libd3dx11.a         lib64/libd3dcsxd.a   \
   lib64/libd3dcompiler.a    lib64/libwinhttp.a        lib64/libmsvcr110.a  \
-  lib64/libruntimeobject.a
+  lib64/libapi-ms-win-core-winrt-string-l1-1-0.a lib64/libruntimeobject.a  \
+  lib64/libapi-ms-win-core-winrt-l1-1-0.a
 
-lib64/libcrtdll.a lib64/libmsvcrt.a lib64/libmsvcr80.a: lib64/lib%.a: lib64/%.def
+lib64/libcrtdll.a lib64/libmsvcr80.a: lib64/lib%.a: lib64/%.def
 	$(DTDEF64) $< --dllname $*.dll
 
 lib64/lib%.a: lib64/%.def
