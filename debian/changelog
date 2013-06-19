@@ -1,4 +1,4 @@
-mingw-w64 (3.0~svn5914-1) UNRELEASED; urgency=low
+mingw-w64 (3.0~svn5914-1) experimental; urgency=low
 
   * New upstream trunk snapshot.
   * Switch to my Debian address.
@@ -11,8 +11,9 @@ mingw-w64 (3.0~svn5914-1) UNRELEASED; urgency=low
       gendef; use it to build gendef.
     - Enable hardened builds for gendef and genidl.
     - Fix another spelling mistake in gendef (via libmangle).
+  * Standards-Version 3.9.4, no further change required.
 
- -- Stephen Kitt <skitt@debian.org>  Wed, 19 Jun 2013 19:20:00 +0200
+ -- Stephen Kitt <skitt@debian.org>  Wed, 19 Jun 2013 23:20:05 +0200
 
 mingw-w64 (3.0~svn5496-1) experimental; urgency=low
 
