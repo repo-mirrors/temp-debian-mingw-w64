@@ -1,7 +1,6 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
 # Build mingw-w64.
-# Copyright © 2010, 2011 Stephen Kitt <steve@sk2.org>
 
 SHELL=/bin/bash
 

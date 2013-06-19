@@ -1,3 +1,10 @@
+mingw-w64 (3.0~svn5882-1) experimental; urgency=low
+
+  * New upstream trunk snapshot.
+  * Switch to my Debian address.
+
+ -- Stephen Kitt <skitt@debian.org>  Thu, 13 Jun 2013 14:54:27 +0200
+
 mingw-w64 (3.0~svn5496-1) experimental; urgency=low
 
   * New upstream trunk snapshot.

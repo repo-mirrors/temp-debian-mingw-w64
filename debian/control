@@ -1,7 +1,7 @@
 Source: mingw-w64
 Section: devel
 Priority: extra
-Maintainer: Stephen Kitt <steve@sk2.org>
+Maintainer: Stephen Kitt <skitt@debian.org>
 Build-Depends: debhelper (>= 7.0.50~)
 Build-Depends-Indep:
  gcc-mingw-w64-i686 | gcc-mingw-w64-bootstrap (>= 4.6.0),
