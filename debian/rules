@@ -27,7 +27,7 @@ HOST_TOOLS := gendef genidl genpeimg
 TARGET_TOOLS := widl
 
 # Targetted projects
-TARGET_PROJECTS := crt libraries-libmangle libraries-winstorecompat
+TARGET_PROJECTS := crt libraries-libmangle libraries-winstorecompat libraries-winpthreads
 TARGET32_PROJECTS := libraries-pseh
 
 # No hardening support for now, except in the tools (build-arch-stamp)
@@ -96,6 +96,11 @@ $(target64)-$(target64)-crt-configure-stamp: $(target64)-$(target64)-headers-ins
 	touch $@
 
 build-indep-stamp: $(foreach target,$(targets),$(patsubst %,$(target)-$(target)-%-install-stamp,$(TARGET_PROJECTS))) $(patsubst %,$(target32)-$(target32)-%-install-stamp,$(TARGET32_PROJECTS))
+	# Move DLLs to lib
+	for target in $(targets); do \
+		mv $(top_dir)/debian/tmp/usr/$$target/bin/*.dll $(top_dir)/debian/tmp/usr/$$target/lib/; \
+		rmdir $(top_dir)/debian/tmp/usr/$$target/bin; \
+	done
 	touch $@
 
 build: build-arch
