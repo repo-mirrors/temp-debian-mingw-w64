@@ -3,7 +3,7 @@ Author: Stephen Kitt <steve@sk2.org>
 
 --- mingw-w64.orig/mingw-w64-tools/gendef/src/gendef.c
 +++ mingw-w64/mingw-w64-tools/gendef/src/gendef.c
-@@ -120,7 +120,7 @@
+@@ -114,7 +114,7 @@
      {
        if (!next)
          {
@@ -23,3 +23,14 @@ Author: Stephen Kitt <steve@sk2.org>
          c->err = 2;
          return NULL;
        case 'S':
+--- mingw-w64.orig/mingw-w64-tools/genpeimg/src/img_pe.c
++++ mingw-w64/mingw-w64-tools/genpeimg/src/img_pe.c
+@@ -282,7 +282,7 @@
+     case 14: fprintf (outfp, "XBOX\n"); break;
+     case 16: fprintf (outfp, "Windows Boot Application (16)\n"); break;
+     default:
+-      fprintf (outfp, "Unkown (%u)\n", PEIMG_GET_USHORT (ppeimg, ppeimg->optional_hdr_pos + 68));
++      fprintf (outfp, "Unknown (%u)\n", PEIMG_GET_USHORT (ppeimg, ppeimg->optional_hdr_pos + 68));
+       break;
+     }
+   hdr_cha = PEIMG_GET_USHORT (ppeimg, ppeimg->optional_hdr_pos + 70);

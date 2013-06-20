@@ -2,6 +2,7 @@ mingw-w64 (3.0~svn5914-2) UNRELEASED; urgency=low
 
   * Drop unused contexts when building widl (in particular for ia64, s390
     and s390x).
+  * Build genpeimg.
 
  -- Stephen Kitt <skitt@debian.org>  Thu, 20 Jun 2013 07:29:17 +0200
 

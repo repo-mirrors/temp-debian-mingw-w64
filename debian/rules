@@ -33,11 +33,14 @@ clean:
 	dh_testroot
 	dh_autoreconf_clean
 	dh_clean
-	rm -rf $(build_dir) $(upstream_dir) autotools_files series tmp *-stamp
+	rm -rf $(build_dir) $(upstream_dir) autotools_files series tmp *-stamp debian/autoreconf
 
 CONFFLAGS = --prefix=/usr
 
-autoreconf-stamp:
+debian/autoreconf:
+	find $(top_dir) -name configure.ac | xargs -n 1 dirname > $@
+
+autoreconf-stamp: debian/autoreconf
 	dh_autoreconf
 	touch $@
 
@@ -54,16 +57,25 @@ headers-stamp: autoreconf-stamp
 # Build the arch-dependent subprojects: libmangle and the tools
 # (in that order since gendef uses libmangle)
 build-arch-stamp: autoreconf-stamp
+	# libmangle
 	for lib_dir in $(top_dir)/mingw-w64-libraries/libmangle; do \
 		dh_auto_configure -D$$lib_dir -B$(build_dir)/$$(basename $$lib_dir) -- $(shell dpkg-buildflags --export=configure) && \
 		dh_auto_build -D$$lib_dir -B$(build_dir)/$$(basename $$lib_dir) && \
 		dh_auto_install -D$$lib_dir -B$(build_dir)/$$(basename $$lib_dir); \
 	done
-	for tool_dir in $(top_dir)/mingw-w64-tools/gendef $(top_dir)/mingw-w64-tools/genidl; do \
+	# gendef using libmangle
+	for tool_dir in $(top_dir)/mingw-w64-tools/gendef; do \
 		dh_auto_configure -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir) -- --with-mangle=$(top_dir)/debian/tmp/usr $(shell dpkg-buildflags --export=configure) && \
 		dh_auto_build -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir) && \
 		dh_auto_install -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir); \
-	done; \
+	done
+	# genidl and genpeimg
+	for tool_dir in $(top_dir)/mingw-w64-tools/genidl $(top_dir)/mingw-w64-tools/genpeimg; do \
+		dh_auto_configure -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir) -- $(shell dpkg-buildflags --export=configure) && \
+		dh_auto_build -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir) && \
+		dh_auto_install -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir); \
+	done
+	# widl, once per target
 	for target in $(targets); do \
 		for tool_dir in $(top_dir)/mingw-w64-tools/widl; do \
 			dh_auto_configure -D$$tool_dir -B$(build_dir)/$$target-$$(basename $$tool_dir) -- --target=$$target $(shell dpkg-buildflags --export=configure) && \
@@ -80,7 +92,7 @@ build-indep-stamp: autoreconf-stamp headers-stamp
 	# configuring with libraries and if that fails without
 	CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(target32)/include" dh_auto_configure -B$(build_dir)/$(target32)/all -- --prefix=/usr/$(target32) --host=$(target32) --with-libraries=all --enable-lib32 --disable-lib64 --enable-sdk=all --enable-secure-api || \
 	CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(target32)/include" dh_auto_configure -B$(build_dir)/$(target32)/all -- --prefix=/usr/$(target32) --host=$(target32) --enable-lib32 --disable-lib64 --enable-sdk=all --enable-secure-api
-	CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(target64)/include" dh_auto_configure -B$(build_dir)/$(target64)/all -- --prefix=/usr/$(target64) --host=$(target64) --with-libraries=libmangle --disable-lib32 --enable-lib64 --enable-sdk=all --enable-secure-api || \
+	CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(target64)/include" dh_auto_configure -B$(build_dir)/$(target64)/all -- --prefix=/usr/$(target64) --host=$(target64) --with-libraries=all --disable-lib32 --enable-lib64 --enable-sdk=all --enable-secure-api || \
 	CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(target64)/include" dh_auto_configure -B$(build_dir)/$(target64)/all -- --prefix=/usr/$(target64) --host=$(target64) --disable-lib32 --enable-lib64 --enable-sdk=all --enable-secure-api
 # Move headers and libraries to target-specific folders
 	set -e; \
