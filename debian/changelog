@@ -2,7 +2,7 @@ mingw-w64 (3.0~svn5914-2) UNRELEASED; urgency=low
 
   * Drop unused contexts when building widl (in particular for ia64, s390
     and s390x).
-  * Build genpeimg.
+  * Build genpeimg and libwinstorecompat.
   * Rework debian/rules to use declarative rules and recipes, working
     towards making parallel builds possible.
 

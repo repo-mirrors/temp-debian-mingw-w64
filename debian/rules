@@ -27,7 +27,7 @@ HOST_TOOLS := gendef genidl genpeimg
 TARGET_TOOLS := widl
 
 # Targetted projects
-TARGET_PROJECTS := crt libraries-libmangle
+TARGET_PROJECTS := crt libraries-libmangle libraries-winstorecompat
 TARGET32_PROJECTS := libraries-pseh
 
 # No hardening support for now, except in the tools (build-arch-stamp)
