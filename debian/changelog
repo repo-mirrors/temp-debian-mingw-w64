@@ -1,3 +1,9 @@
+mingw-w64 (3.0~svn5914-3) experimental; urgency=low
+
+  * Add missing CPU information for ia64, s390 and s390x.
+
+ -- Stephen Kitt <skitt@debian.org>  Fri, 21 Jun 2013 09:41:17 +0200
+
 mingw-w64 (3.0~svn5914-2) experimental; urgency=low
 
   * Drop unused contexts when building widl (in particular for ia64, s390
