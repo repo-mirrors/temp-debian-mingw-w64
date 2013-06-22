@@ -1,19 +1,13 @@
 #include <intrin.h>
 
-long _InterlockedCompareExchange(long volatile *Destination, long ExChange, long Comperand)
+__LONG32 _InterlockedCompareExchange(__LONG32 volatile *Destination, __LONG32 ExChange, __LONG32 Comperand)
 {
-  long prev;
+  __LONG32 prev;
   __asm__ __volatile__("lock ; cmpxchgl %1,%2" : "=a" (prev) : "q" (ExChange),"m" (*Destination), "0" (Comperand) : "memory");
   return prev;
 }
 
 #ifdef _WIN64
-long InterlockedCompareExchange(long volatile *, long, long) __attribute__((alias("_InterlockedCompareExchange")));
-#else
-long __stdcall InterlockedCompareExchange(long volatile *Destination, long ExChange, long Comperand);
-long __stdcall InterlockedCompareExchange(long volatile *Destination, long ExChange, long Comperand)
-{
-  return _InterlockedCompareExchange(Destination, ExChange, Comperand);
-}
+__LONG32 InterlockedCompareExchange(__LONG32 volatile *, __LONG32, __LONG32) __attribute__((alias("_InterlockedCompareExchange")));
 #endif
 

@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #include "cephes_mconf.h"
@@ -329,7 +329,6 @@ lsmall:
 /* This is the C99 version */
 long double lgammal(long double x)
 {
-	int local_sgngaml = 0;
-	return (__lgammal_r(x, &local_sgngaml));
+	return (__lgammal_r (x, &signgam));
 }
 

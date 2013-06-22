@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef _WINBASE_
@@ -8,9 +8,7 @@
 
 #include <_mingw_unicode.h>
 
-#define WINADVAPI DECLSPEC_IMPORT
-#define WINBASEAPI DECLSPEC_IMPORT
-#define ZAWPROXYAPI DECLSPEC_IMPORT
+#include <apisetcconv.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -122,6 +120,10 @@ extern "C" {
 #define PIPE_READMODE_MESSAGE 0x2
 #define PIPE_TYPE_BYTE 0x0
 #define PIPE_TYPE_MESSAGE 0x4
+#if (_WIN32_WINNT >= 0x0600)
+#define PIPE_ACCEPT_REMOTE_CLIENTS 0x0
+#define PIPE_REJECT_REMOTE_CLIENTS 0x8
+#endif
 
 #define PIPE_UNLIMITED_INSTANCES 255
 
@@ -212,6 +214,8 @@ extern "C" {
 #else
   typedef LPVOID LPLDT_ENTRY;
 #endif
+
+#define CRITICAL_SECTION_NO_DEBUG_INFO RTL_CRITICAL_SECTION_FLAG_NO_DEBUG_INFO
 
 #define MUTEX_MODIFY_STATE MUTANT_QUERY_STATE
 #define MUTEX_ALL_ACCESS MUTANT_ALL_ACCESS
@@ -601,7 +605,7 @@ extern "C" {
 #define DRIVE_CDROM 5
 #define DRIVE_RAMDISK 6
 
-#define GetFreeSpace(w) (0x100000L)
+#define GetFreeSpace(w) (__MSABI_LONG(0x100000))
 #define FILE_TYPE_UNKNOWN 0x0
 #define FILE_TYPE_DISK 0x1
 #define FILE_TYPE_CHAR 0x2
@@ -1069,13 +1073,13 @@ extern "C" {
   __CRT_INLINE PVOID __cdecl
   __InlineInterlockedCompareExchangePointer(PVOID volatile *Destination,PVOID ExChange,PVOID Comperand) {
     return ((PVOID)(LONG_PTR)
-	    InterlockedCompareExchange((LONG volatile *)Destination,(LONG)(LONG_PTR)ExChange,(LONG)(LONG_PTR)Comperand));
+	    InterlockedCompareExchange((LONG volatile *)(LONG_PTR)Destination,(LONG)(LONG_PTR)ExChange,(LONG)(LONG_PTR)Comperand));
   }
 #define InterlockedCompareExchangePointer __InlineInterlockedCompareExchangePointer
 #else
 #define InterlockedCompareExchangePointer(Destination,ExChange,Comperand)	\
 	   (PVOID)(LONG_PTR)							\
-	    InterlockedCompareExchange((LONG volatile *)(Destination),(LONG)(LONG_PTR)(ExChange),(LONG)(LONG_PTR)(Comperand))
+	    InterlockedCompareExchange((LONG volatile *)(LONG_PTR)(Destination),(LONG)(LONG_PTR)(ExChange),(LONG)(LONG_PTR)(Comperand))
 #endif /* __cplusplus */
 
 #define InterlockedIncrementAcquire InterlockedIncrement
@@ -1622,8 +1626,8 @@ extern "C" {
   WINBASEAPI HFILE WINAPI _lcreat(LPCSTR lpPathName,int iAttribute);
   WINBASEAPI UINT WINAPI _lread(HFILE hFile,LPVOID lpBuffer,UINT uBytes);
   WINBASEAPI UINT WINAPI _lwrite(HFILE hFile,LPCCH lpBuffer,UINT uBytes);
-  WINBASEAPI long WINAPI _hread(HFILE hFile,LPVOID lpBuffer,long lBytes);
-  WINBASEAPI long WINAPI _hwrite(HFILE hFile,LPCCH lpBuffer,long lBytes);
+  WINBASEAPI __LONG32 WINAPI _hread(HFILE hFile,LPVOID lpBuffer,__LONG32 lBytes);
+  WINBASEAPI __LONG32 WINAPI _hwrite(HFILE hFile,LPCCH lpBuffer,__LONG32 lBytes);
   WINBASEAPI HFILE WINAPI _lclose(HFILE hFile);
   WINBASEAPI LONG WINAPI _llseek(HFILE hFile,LONG lOffset,int iOrigin);
   WINADVAPI WINBOOL WINAPI IsTextUnicode(CONST VOID *lpv,int iSize,LPINT lpiResult);
@@ -2085,6 +2089,11 @@ extern "C" {
   WINBASEAPI WINBOOL WINAPI RemoveDirectoryW(LPCWSTR lpPathName);
   WINBASEAPI DWORD WINAPI GetFullPathNameA(LPCSTR lpFileName,DWORD nBufferLength,LPSTR lpBuffer,LPSTR *lpFilePart);
   WINBASEAPI DWORD WINAPI GetFullPathNameW(LPCWSTR lpFileName,DWORD nBufferLength,LPWSTR lpBuffer,LPWSTR *lpFilePart);
+
+#define BASE_SEARCH_PATH_ENABLE_SAFE_SEARCHMODE  0x00000001
+#define BASE_SEARCH_PATH_DISABLE_SAFE_SEARCHMODE 0x00010000
+#define BASE_SEARCH_PATH_PERMANENT               0x00008000
+  WINBASEAPI WINBOOL WINAPI SetSearchPathMode(DWORD dwFlags);
 
 #define DDD_RAW_TARGET_PATH 0x1
 #define DDD_REMOVE_DEFINITION 0x2
@@ -2758,6 +2767,7 @@ extern "C" {
 #define SYMBOLIC_LINK_FLAG_FILE		0x0
 #define SYMBOLIC_LINK_FLAG_DIRECTORY	0x1
 #define EXTENDED_STARTUPINFO_PRESENT	0x00080000
+#define CREATE_MUTEX_INITIAL_OWNER   0x00000001
 
 #define CreateSymbolicLink __MINGW_NAME_AW(CreateSymbolicLink)
 #define CreateBoundaryDescriptor __MINGW_NAME_AW(CreateBoundaryDescriptor)
@@ -2803,8 +2813,8 @@ WINBASEAPI BOOLEAN TryAcquireSRWLockShared(PSRWLOCK SRWLock);
 
 /*One-Time Initialization http://msdn.microsoft.com/en-us/library/aa363808(VS.85).aspx*/
 /* FIXME: See above !!! */
-#define INIT_ONCE_ASYNC 0x00000002UL
-#define INIT_ONCE_INIT_FAILED 0x00000004UL
+#define INIT_ONCE_ASYNC __MSABI_LONG(0x00000002U)
+#define INIT_ONCE_INIT_FAILED __MSABI_LONG(0x00000004U)
 
 typedef PRTL_RUN_ONCE PINIT_ONCE;
 typedef PRTL_RUN_ONCE LPINIT_ONCE;
@@ -3047,85 +3057,26 @@ WINBASEAPI WINBOOL WINAPI DeleteFileTransactedW(
   HANDLE hTransaction
 );
 
-WINBASEAPI HANDLE WINAPI CreateMutexExA(
-  LPSECURITY_ATTRIBUTES lpMutexAttributes,
-  LPCTSTR lpName,
-  DWORD dwFlags,
-  DWORD dwDesiredAccess
-);
+WINBASEAPI HANDLE WINAPI CreateMutexExA(LPSECURITY_ATTRIBUTES lpMutexAttributes, LPCTSTR lpName, DWORD dwFlags, DWORD dwDesiredAccess);
+WINBASEAPI HANDLE WINAPI CreateMutexExW(LPSECURITY_ATTRIBUTES lpMutexAttributes, LPCWSTR lpName, DWORD dwFlags, DWORD dwDesiredAccess);
 
-WINBASEAPI HANDLE WINAPI CreateMutexExW(
-  LPSECURITY_ATTRIBUTES lpMutexAttributes,
-  LPCWSTR lpName,
-  DWORD dwFlags,
-  DWORD dwDesiredAccess
-);
+WINBASEAPI HANDLE WINAPI CreateSemaphoreExA(LPSECURITY_ATTRIBUTES lpSemaphoreAttributes, LONG lInitialCount, LONG lMaximumCount, LPCSTR lpName, DWORD dwFlags, DWORD dwDesiredAccess);
+WINBASEAPI HANDLE WINAPI CreateSemaphoreExW(LPSECURITY_ATTRIBUTES lpSemaphoreAttributes, LONG lInitialCount, LONG lMaximumCount, LPCWSTR lpName, DWORD dwFlags, DWORD dwDesiredAccess);
 
-WINBASEAPI HANDLE WINAPI CreateSemaphoreExA(
-  LPSECURITY_ATTRIBUTES lpSemaphoreAttributes,
-  LONG lInitialCount,
-  LONG lMaximumCount,
-  LPCSTR lpName,
-  DWORD dwFlags,
-  DWORD dwDesiredAccess
-);
+WINBASEAPI BOOLEAN WINAPI CreateSymbolicLinkTransactedW(LPWSTR lpSymlinkFileName, LPWSTR lpTargetFileName, DWORD dwFlags, HANDLE hTransaction);
+WINBASEAPI BOOLEAN WINAPI CreateSymbolicLinkTransactedA(LPSTR lpSymlinkFileName, LPSTR lpTargetFileName, DWORD dwFlags, HANDLE hTransaction);
 
-WINBASEAPI HANDLE WINAPI CreateSemaphoreExW(
-  LPSECURITY_ATTRIBUTES lpSemaphoreAttributes,
-  LONG lInitialCount,
-  LONG lMaximumCount,
-  LPCWSTR lpName,
-  DWORD dwFlags,
-  DWORD dwDesiredAccess
-);
-
-WINBASEAPI BOOLEAN WINAPI CreateSymbolicLinkTransactedW(
-  LPWSTR lpSymlinkFileName,
-  LPWSTR lpTargetFileName,
-  DWORD dwFlags,
-  HANDLE hTransaction
-);
-
-WINBASEAPI BOOLEAN WINAPI CreateSymbolicLinkTransactedA(
-  LPSTR lpSymlinkFileName,
-  LPSTR lpTargetFileName,
-  DWORD dwFlags,
-  HANDLE hTransaction
-);
-
-WINBASEAPI HANDLE WINAPI CreateWaitableTimerExA(
-  LPSECURITY_ATTRIBUTES lpTimerAttributes,
-  LPCSTR lpTimerName,
-  DWORD dwFlags,
-  DWORD dwDesiredAccess
-);
-
-WINBASEAPI HANDLE WINAPI CreateWaitableTimerExW(
-  LPSECURITY_ATTRIBUTES lpTimerAttributes,
-  LPCWSTR lpTimerName,
-  DWORD dwFlags,
-  DWORD dwDesiredAccess
-);
+WINBASEAPI HANDLE WINAPI CreateWaitableTimerExA(LPSECURITY_ATTRIBUTES lpTimerAttributes, LPCSTR lpTimerName, DWORD dwFlags, DWORD dwDesiredAccess);
+WINBASEAPI HANDLE WINAPI CreateWaitableTimerExW(LPSECURITY_ATTRIBUTES lpTimerAttributes, LPCWSTR lpTimerName, DWORD dwFlags, DWORD dwDesiredAccess);
 
 #define DeleteFileTransacted __MINGW_NAME_AW(DeleteFileTransacted)
 
-WINBASEAPI WINBOOL WINAPI DeleteFileTransactedW(
-  LPCWSTR lpFileName,
-  HANDLE hTransaction
-);
+WINBASEAPI WINBOOL WINAPI DeleteFileTransactedW(LPCWSTR lpFileName, HANDLE hTransaction);
+WINBASEAPI WINBOOL WINAPI DeleteFileTransactedA(LPCSTR lpFileName, HANDLE hTransaction);
 
-WINBASEAPI WINBOOL WINAPI DeleteFileTransactedA(
-  LPCSTR lpFileName,
-  HANDLE hTransaction
-);
+WINBASEAPI VOID WINAPI DestroyThreadpoolEnvironment(PTP_CALLBACK_ENVIRON pcbe);
 
-WINBASEAPI VOID WINAPI DestroyThreadpoolEnvironment(
-  PTP_CALLBACK_ENVIRON pcbe
-);
-
-WINBASEAPI VOID WINAPI DisassociateCurrentThreadFromCallback(
-  PTP_CALLBACK_INSTANCE pci
-);
+WINBASEAPI VOID WINAPI DisassociateCurrentThreadFromCallback(PTP_CALLBACK_INSTANCE pci);
 
 typedef enum _FILE_ID_TYPE {
   FileIdType,
@@ -3537,6 +3488,42 @@ WINBOOL WINAPI GetPhysicallyInstalledSystemMemory(
 
 typedef LPVOID PPROC_THREAD_ATTRIBUTE_LIST, LPPROC_THREAD_ATTRIBUTE_LIST;
 
+#define PROC_THREAD_ATTRIBUTE_NUMBER    0x0000ffff
+#define PROC_THREAD_ATTRIBUTE_THREAD    0x00010000
+#define PROC_THREAD_ATTRIBUTE_INPUT     0x00020000
+#define PROC_THREAD_ATTRIBUTE_ADDITIVE  0x00040000
+
+typedef enum _PROC_THREAD_ATTRIBUTE_NUM {
+    ProcThreadAttributeParentProcess = 0,
+    ProcThreadAttributeExtendedFlags,
+    ProcThreadAttributeHandleList,
+    ProcThreadAttributeGroupAffinity,
+    ProcThreadAttributePreferredNode,
+    ProcThreadAttributeIdealProcessor,
+    ProcThreadAttributeUmsThread,
+    ProcThreadAttributeMitigationPolicy,
+    ProcThreadAttributeMax
+} PROC_THREAD_ATTRIBUTE_NUM;
+
+#define ProcThreadAttributeValue(number, thread, input, additive) \
+    (((number)   & PROC_THREAD_ATTRIBUTE_NUMBER) \
+    |((thread)   ? PROC_THREAD_ATTRIBUTE_THREAD : 0) \
+    |((input)    ? PROC_THREAD_ATTRIBUTE_INPUT : 0) \
+    |((additive) ? PROC_THREAD_ATTRIBUTE_ADDITIVE : 0))
+
+#define PROC_THREAD_ATTRIBUTE_PARENT_PROCESS    ProcThreadAttributeValue(ProcThreadAttributeParentProcess,FALSE,TRUE,FALSE)
+#define PROC_THREAD_ATTRIBUTE_EXTENDED_FLAGS    ProcThreadAttributeValue(ProcThreadAttributeExtendedFlags,FALSE,TRUE,TRUE)
+#define PROC_THREAD_ATTRIBUTE_HANDLE_LIST       ProcThreadAttributeValue(ProcThreadAttributeHandleList,FALSE,TRUE,FALSE)
+#define PROC_THREAD_ATTRIBUTE_GROUP_AFFINITY    ProcThreadAttributeValue(ProcThreadAttributeGroupAffinity,TRUE,TRUE,FALSE)
+#define PROC_THREAD_ATTRIBUTE_PREFERRED_NODE    ProcThreadAttributeValue(ProcThreadAttributePreferredNode,FALSE,TRUE,FALSE)
+#define PROC_THREAD_ATTRIBUTE_IDEAL_PROCESSOR   ProcThreadAttributeValue(ProcThreadAttributeIdealProcessor,TRUE,TRUE,FALSE)
+#define PROC_THREAD_ATTRIBUTE_UMS_THREAD        ProcThreadAttributeValue(ProcThreadAttributeUmsThread,TRUE,TRUE,FALSE)
+#define PROC_THREAD_ATTRIBUTE_MITIGATION_POLICY ProcThreadAttributeValue(ProcThreadAttributeMitigationPolicy,FALSE,TRUE,FALSE)
+
+#define PROCESS_CREATION_MITIGATION_POLICY_DEP_ENABLE           0x0001
+#define PROCESS_CREATION_MITIGATION_POLICY_DEP_ATL_THUNK_ENABLE 0x0002
+#define PROCESS_CREATION_MITIGATION_POLICY_SEHOP_ENABLE         0x0004
+
 WINBASEAPI WINBOOL WINAPI UpdateProcThreadAttribute(
   LPPROC_THREAD_ATTRIBUTE_LIST lpAttributeList,
   DWORD dwFlags,
@@ -3592,6 +3579,12 @@ WINBASEAPI WINBOOL WINAPI GetVolumeInformationByHandleW(
   LPDWORD lpFileSystemFlags,
   LPWSTR lpFileSystemNameBuffer,
   DWORD nFileSystemNameSize
+);
+
+WINBASEAPI WINBOOL WINAPI InitializeCriticalSectionEx(
+  LPCRITICAL_SECTION lpCriticalSection,
+  DWORD dwSpinCount,
+  DWORD Flags
 );
 
 WINBASEAPI VOID WINAPI LeaveCriticalSectionWhenCallbackReturns(
@@ -3747,7 +3740,7 @@ WINBASEAPI WINBOOL WINAPI SetFileIoOverlappedRange(
   ULONG Length
 );
 
-#define PROCESS_AFFINITY_ENABLE_AUTO_UPDATE 0x00000001UL
+#define PROCESS_AFFINITY_ENABLE_AUTO_UPDATE __MSABI_LONG(0x00000001U)
 
 WINBASEAPI WINBOOL WINAPI SetProcessAffinityUpdateMode(
   HANDLE ProcessHandle,
@@ -4038,9 +4031,124 @@ WINBASEAPI PUMS_CONTEXT GetCurrentUmsThread(void);
 #endif /* _WIN64 */
 #endif /*(_WIN32_WINNT >= 0x0601)*/
 
+#if (_WIN32_WINNT >= 0x0602)
+typedef struct _CREATEFILE2_EXTENDED_PARAMETERS {
+  DWORD                 dwSize;
+  DWORD                 dwFileAttributes;
+  DWORD                 dwFileFlags;
+  DWORD                 dwSecurityQosFlags;
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes;
+  HANDLE                hTemplateFile;
+} CREATEFILE2_EXTENDED_PARAMETERS, *PCREATEFILE2_EXTENDED_PARAMETERS, *LPCREATEFILE2_EXTENDED_PARAMETERS;
+
+WINBASEAPI HANDLE WINAPI CreateFile2(LPCWSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, DWORD dwCreationDisposition, LPCREATEFILE2_EXTENDED_PARAMETERS pCreateExParams);
+
+HMODULE WINAPI LoadPackagedLibrary(LPCWSTR lpwLibFileName, DWORD Reserved);
+
+WINBASEAPI VOID WINAPI GetSystemTimePreciseAsFileTime(LPFILETIME lpSystemTimeAsFileTime);
+
+#endif /*(_WIN32_WINNT >= 0x0602)*/
+
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* _WINBASE_ */
 
+#if !defined(NOWINBASEINTERLOCK) && !defined(MICROSOFT_WINDOWS_WINBASE_INTERLOCKED_CPLUSPLUS_H_INCLUDED)
+#define MICROSOFT_WINDOWS_WINBASE_INTERLOCKED_CPLUSPLUS_H_INCLUDED
+
+#ifdef __cplusplus
+
+extern "C++" {
+    FORCEINLINE unsigned InterlockedIncrement(unsigned volatile *Addend) {
+        return (unsigned)InterlockedIncrement((volatile LONG*)Addend);
+    }
+
+    FORCEINLINE unsigned long InterlockedIncrement(unsigned long volatile *Addend) {
+        return (unsigned long)InterlockedIncrement((volatile LONG*)Addend);
+    }
+
+    FORCEINLINE unsigned __int64 InterlockedIncrement(unsigned __int64 volatile *Addend) {
+        return (unsigned __int64)InterlockedIncrement64((volatile LONGLONG*)Addend);
+    }
+
+    FORCEINLINE unsigned InterlockedDecrement(unsigned volatile *Addend) {
+        return (unsigned long)InterlockedDecrement((volatile LONG*)Addend);
+    }
+
+    FORCEINLINE unsigned long InterlockedDecrement(unsigned long volatile *Addend) {
+        return (unsigned long)InterlockedDecrement((volatile LONG*)Addend);
+    }
+
+    FORCEINLINE unsigned __int64 InterlockedDecrement(unsigned __int64 volatile *Addend) {
+        return (unsigned __int64)InterlockedDecrement64((volatile LONGLONG*)Addend);
+    }
+
+    FORCEINLINE unsigned InterlockedExchange(unsigned volatile *Target, unsigned Value) {
+        return (unsigned)InterlockedExchange((volatile LONG*) Target, (LONG)Value);
+    }
+
+    FORCEINLINE unsigned long InterlockedExchange(unsigned long volatile *Target, unsigned long Value) {
+        return (unsigned long)InterlockedExchange((volatile LONG*)Target, (LONG)Value);
+    }
+
+    FORCEINLINE unsigned __int64 InterlockedExchange(unsigned __int64 volatile *Target, unsigned __int64 Value) {
+        return (unsigned __int64)InterlockedExchange64((volatile LONGLONG*)Target, (LONGLONG)Value);
+    }
+
+    FORCEINLINE unsigned InterlockedExchangeAdd(unsigned volatile *Addend, unsigned Value) {
+        return (unsigned)InterlockedExchangeAdd((volatile LONG*)Addend, (LONG)Value);
+    }
+
+    FORCEINLINE unsigned InterlockedExchangeSubtract(unsigned volatile *Addend, unsigned Value) {
+        return (unsigned)InterlockedExchangeAdd((volatile LONG*)Addend, -(LONG)Value);
+    }
+
+    FORCEINLINE unsigned long InterlockedExchangeAdd(unsigned long volatile *Addend, unsigned long Value) {
+        return (unsigned long)InterlockedExchangeAdd((volatile LONG*)Addend, (LONG)Value);
+    }
+
+    FORCEINLINE unsigned long InterlockedExchangeSubtract(unsigned long volatile *Addend, unsigned long Value) {
+        return (unsigned long)InterlockedExchangeAdd((volatile LONG*)Addend, -(LONG)Value);
+    }
+
+    FORCEINLINE unsigned __int64 InterlockedExchangeAdd(unsigned __int64 volatile *Addend, unsigned __int64 Value) {
+        return (unsigned __int64)InterlockedExchangeAdd64((volatile LONGLONG*)Addend,  (LONGLONG)Value);
+    }
+
+    FORCEINLINE unsigned __int64 InterlockedExchangeSubtract(unsigned __int64 volatile *Addend, unsigned __int64 Value) {
+        return (unsigned __int64)InterlockedExchangeAdd64((volatile LONGLONG*)Addend, -(LONGLONG)Value);
+    }
+
+    FORCEINLINE unsigned InterlockedCompareExchange(unsigned volatile *Destination, unsigned Exchange, unsigned Comperand) {
+        return (unsigned)InterlockedCompareExchange((volatile LONG*)Destination, (LONG)Exchange, (LONG)Comperand);
+    }
+
+    FORCEINLINE unsigned long InterlockedCompareExchange(unsigned long volatile *Destination, unsigned long Exchange,
+                                                         unsigned long Comperand) {
+        return (unsigned long)InterlockedCompareExchange((volatile LONG*)Destination, (LONG)Exchange, (LONG)Comperand);
+    }
+
+    FORCEINLINE unsigned __int64 InterlockedAnd(unsigned __int64 volatile *Destination, unsigned __int64 Value) {
+        return (unsigned __int64)InterlockedAnd64((volatile LONGLONG*)Destination, (LONGLONG)Value);
+    }
+
+    FORCEINLINE unsigned __int64 InterlockedOr(unsigned __int64 volatile *Destination, unsigned __int64 Value) {
+        return (unsigned __int64)InterlockedOr64((volatile LONGLONG*)Destination, (LONGLONG)Value);
+    }
+
+    FORCEINLINE unsigned __int64 InterlockedXor(unsigned __int64 volatile *Destination, unsigned __int64 Value) {
+        return (unsigned __int64)InterlockedXor64((volatile LONGLONG*)Destination, (LONGLONG)Value);
+    }
+
+    FORCEINLINE unsigned __int64 InterlockedCompareExchange(unsigned __int64 volatile *Destination, unsigned __int64 Exchange,
+                                                            unsigned __int64 Comperand) {
+        return (unsigned __int64)InterlockedCompareExchange64((volatile LONGLONG*)Destination, (LONGLONG)Exchange,
+                                                              (LONGLONG)Comperand);
+    }
+}
+
+#endif /* __cplusplus */
+
+#endif /* !defined(NOWINBASEINTERLOCK) && !defined(MICROSOFT_WINDOWS_WINBASE_INTERLOCKED_CPLUSPLUS_H_INCLUDED) */

@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef _IO_H_
@@ -332,7 +332,6 @@ _CRTIMP char* __cdecl _getcwd (char*, int);
 #ifndef _FILE_OFFSET_BITS_SET_LSEEK
 #define _FILE_OFFSET_BITS_SET_LSEEK
 #if (defined(_FILE_OFFSET_BITS) && (_FILE_OFFSET_BITS == 64))
-/*#define lseek(_FileHandle,_DstBuf,_MaxCharCount) lseek64(_FileHandle,_DstBuf,_MaxCharCount)*/
 #define lseek lseek64
 #endif /* (defined(_FILE_OFFSET_BITS) && (_FILE_OFFSET_BITS == 64)) */
 #endif /* _FILE_OFFSET_BITS_SET_LSEEK */

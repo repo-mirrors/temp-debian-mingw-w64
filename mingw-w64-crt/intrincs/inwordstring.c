@@ -1,12 +1,12 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 
 #include <intrin.h>
 
-void __inwordstring(unsigned short Port,unsigned short *Buffer,unsigned long Count)
+void __inwordstring(unsigned short Port,unsigned short *Buffer,unsigned __LONG32 Count)
 {
     __asm__ __volatile__ (
         "cld ; rep ; insw " 

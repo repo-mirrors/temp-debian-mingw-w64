@@ -1,14 +1,14 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 
 #include <intrin.h>
 
-void __writemsr (unsigned long msr, unsigned __int64 Value)
+void __writemsr (unsigned __LONG32 msr, unsigned __int64 Value)
 {
-    unsigned long val1 = Value, val2 = Value >> 32;
+    unsigned __LONG32 val1 = Value, val2 = Value >> 32;
    __asm__ __volatile__ (
        "wrmsr"
        :

@@ -1,13 +1,13 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef _INC_MFPLAY
 #define _INC_MFPLAY
 #include <evr.h>
 
-#if (_WIN32_WINNT >= 0x0601)
+#if (WINVER >= 0x0601)
 
 typedef enum _MFP_CREATION_OPTIONS {
   MFP_OPTION_NONE                             = 0,
@@ -31,17 +31,6 @@ typedef enum _MFP_CREDENTIAL_FLAGS {
   MFP_CREDENTIAL_PROXY            = 0x00000010,
   MFP_CREDENTIAL_LOGGED_ON_USER   = 0x00000020 
 } _MFP_CREDENTIAL_FLAGS;
-
-enum _MFT_ENUM_FLAG {
-  MFT_ENUM_FLAG_SYNCMFT          = 0x00000001,
-  MFT_ENUM_FLAG_ASYNCMFT         = 0x00000002,
-  MFT_ENUM_FLAG_HARDWARE         = 0x00000004,
-  MFT_ENUM_FLAG_FIELDOFUSE       = 0x00000008,
-  MFT_ENUM_FLAG_LOCALMFT         = 0x00000010,
-  MFT_ENUM_FLAG_TRANSCODE_ONLY   = 0x00000020,
-  MFT_ENUM_FLAG_SORTANDFILTER    = 0x00000040,
-  MFT_ENUM_FLAG_ALL              = 0x0000003F 
-};
 
 typedef enum MFP_EVENT_TYPE {
   MFP_EVENT_TYPE_PLAY                      = 0,
@@ -358,6 +347,6 @@ HRESULT WINAPI MFPCreateMediaPlayer(LPCWSTR pwszURL,WINBOOL fStartPlayback,MFP_C
 }
 #endif
 
-#endif /*(_WIN32_WINNT >= 0x0601)*/
+#endif /*(WINVER >= 0x0601)*/
 
 #endif /*_INC_MFPLAY*/

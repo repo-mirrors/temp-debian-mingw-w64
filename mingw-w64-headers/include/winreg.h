@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef _WINREG_
@@ -332,25 +332,8 @@ WINADVAPI LONG WINAPI RegLoadAppKeyW(
 
 #define RegLoadAppKey __MINGW_NAME_AW(RegLoadAppKey)
 
-WINADVAPI LONG WINAPI RegLoadMUIStringA(
-  HKEY hKey,
-  LPCSTR pszValue,
-  LPSTR pszOutBuf,
-  DWORD cbOutBuf,
-  LPDWORD pcbData,
-  DWORD Flags,
-  LPCSTR pszDirectory
-);
-
-WINADVAPI LONG WINAPI RegLoadMUIStringW(
-  HKEY hKey,
-  LPCWSTR pszValue,
-  LPWSTR pszOutBuf,
-  DWORD cbOutBuf,
-  LPDWORD pcbData,
-  DWORD Flags,
-  LPCWSTR pszDirectory
-);
+WINADVAPI LONG WINAPI RegLoadMUIStringA(HKEY hKey, LPCSTR pszValue, LPSTR pszOutBuf, DWORD cbOutBuf, LPDWORD pcbData, DWORD Flags, LPCSTR pszDirectory);
+WINADVAPI LONG WINAPI RegLoadMUIStringW(HKEY hKey, LPCWSTR pszValue, LPWSTR pszOutBuf, DWORD cbOutBuf, LPDWORD pcbData, DWORD Flags, LPCWSTR pszDirectory);
 
 #define RegLoadMUIString __MINGW_NAME_AW(RegLoadMUIString)
 

@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 
@@ -36,7 +36,7 @@ extern "C" {
 
 #define ckidAVINEWINDEX mmioFOURCC('i','d','x','1')
 
-#define streamtypeANY 0UL
+#define streamtypeANY __MSABI_LONG(0U)
 #define streamtypeVIDEO mmioFOURCC('v','i','d','s')
 #define streamtypeAUDIO mmioFOURCC('a','u','d','s')
 #define streamtypeMIDI mmioFOURCC('m','i','d','s')
@@ -102,11 +102,11 @@ extern "C" {
     RECT rcFrame;
   } AVIStreamHeader;
 
-#define AVIIF_LIST 0x00000001L
-#define AVIIF_KEYFRAME 0x00000010L
+#define AVIIF_LIST __MSABI_LONG(0x00000001)
+#define AVIIF_KEYFRAME __MSABI_LONG(0x00000010)
 
-#define AVIIF_NOTIME 0x00000100L
-#define AVIIF_COMPUSE 0x0FFF0000L
+#define AVIIF_NOTIME __MSABI_LONG(0x00000100)
+#define AVIIF_COMPUSE __MSABI_LONG(0x0FFF0000)
 
   typedef struct {
     DWORD ckid;

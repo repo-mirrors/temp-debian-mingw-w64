@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef _UNISTD_H
@@ -29,10 +29,15 @@
 extern "C" {
 #endif
 
+#pragma push_macro("sleep")
+#undef sleep
+unsigned int __cdecl sleep (unsigned int);
+#pragma pop_macro("sleep")
+
 #if !defined __NO_ISOCEXT
 #include <sys/types.h> /* For useconds_t. */
 
-int __cdecl __MINGW_NOTHROW usleep(useconds_t useconds);
+int __cdecl __MINGW_NOTHROW usleep(useconds_t);
 #endif  /* Not __NO_ISOCEXT */
 
 #ifndef FTRUNCATE_DEFINED

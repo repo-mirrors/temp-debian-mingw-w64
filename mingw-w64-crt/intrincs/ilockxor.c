@@ -1,11 +1,7 @@
 #include <intrin.h>
+#include <psdk_inc/intrin-mac.h>
 
-long _InterlockedXor(long volatile *Destination, long Value)
-{
-  __asm__ __volatile__("lock ; xorl %0,%1"
-    : : "r"(Value),"m"(*Destination) : "memory");
-  return *Destination;
-}
+__buildlogicali(_InterlockedXor, __LONG32, xor)
 
-long InterlockedXor(long volatile *, long) __attribute__((alias("_InterlockedXor")));
+__LONG32 InterlockedXor(__LONG32 volatile *, __LONG32) __attribute__((alias("_InterlockedXor")));
 

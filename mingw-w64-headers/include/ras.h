@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef _RAS_H_
@@ -135,6 +135,9 @@ typedef struct in6_addr RASIPV6ADDR;
     WCHAR szDomain[DNLEN + 1 ];
     DWORD dwSubEntry;
     ULONG_PTR dwCallbackId;
+#if _WIN32_WINNT >= 0x0601
+    DWORD dwIfIndex;
+#endif
   };
 
 #define RASDIALPARAMSA struct tagRASDIALPARAMSA
@@ -148,6 +151,9 @@ typedef struct in6_addr RASIPV6ADDR;
     CHAR szDomain[DNLEN + 1 ];
     DWORD dwSubEntry;
     ULONG_PTR dwCallbackId;
+#if _WIN32_WINNT >= 0x0601
+    DWORD dwIfIndex;
+#endif
   };
 
 #define RASDIALPARAMS __MINGW_NAME_AW(RASDIALPARAMS)

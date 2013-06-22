@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 
@@ -10,10 +10,19 @@
 #define __STRINGIFY(x) #x
 #define __MINGW64_STRINGIFY(x) __STRINGIFY(x)
 
-#define __MINGW64_VERSION_MAJOR	2
+#define __MINGW64_VERSION_MAJOR	3
 #define __MINGW64_VERSION_MINOR	0
+
+/* This macro holds an monotonic increasing value, which indicates
+   a specific fix/patch is present on trunk.  This value isn't related to
+   minor/major version-macros.  It is increased on demand, if a big
+   fix was applied to trunk.  This macro gets just increased on trunk.  For
+   other branches its value won't be modified.  */
+
+#define __MINGW64_VERSION_RC    1
+
 #define __MINGW64_VERSION_STR	__MINGW64_STRINGIFY(__MINGW64_VERSION_MAJOR) "." __MINGW64_STRINGIFY(__MINGW64_VERSION_MINOR)
-#define __MINGW64_VERSION_STATE	"stable"
+#define __MINGW64_VERSION_STATE	"alpha"
 
 /* mingw.org's version macros: these make gcc to define
    MINGW32_SUPPORTS_MT_EH and to use the _CRT_MT global
@@ -61,11 +70,6 @@
 #define __MINGW_LSYMBOL(sym) sym
 #endif
 
-/* Use alias for msvcr80 export of get/set_output_format.  */
-#ifndef __USE_MINGW_OUTPUT_FORMAT_EMU
-#define __USE_MINGW_OUTPUT_FORMAT_EMU 1
-#endif
-
 /* Set VC specific compiler target macros.  */
 #if defined(__x86_64) && defined(_X86_)
 #undef _X86_	/* _X86_ is not for __x86_64 */
@@ -93,6 +97,13 @@
 #if defined(__ia64__) && !defined(_M_IX86) && !defined(_M_IA64) \
    && !defined(_M_AMD64) && !defined(_X86_) && !defined(__x86_64)
 #define _M_IA64 100
+#endif
+
+#if defined(__arm__) && !defined(_M_ARM)
+#define _M_ARM 100
+#ifndef _ARM_
+#define _ARM_ 1
+#endif
 #endif
 
 #ifndef __PTRDIFF_TYPE__
@@ -130,7 +141,20 @@
 #define __C89_NAMELESS __MINGW_EXTENSION
 
 #define __C89_NAMELESSSTRUCTNAME
+#define __C89_NAMELESSSTRUCTNAME1
+#define __C89_NAMELESSSTRUCTNAME2
+#define __C89_NAMELESSSTRUCTNAME3
+#define __C89_NAMELESSSTRUCTNAME4
+#define __C89_NAMELESSSTRUCTNAME5
 #define __C89_NAMELESSUNIONNAME
+#define __C89_NAMELESSUNIONNAME1
+#define __C89_NAMELESSUNIONNAME2
+#define __C89_NAMELESSUNIONNAME3
+#define __C89_NAMELESSUNIONNAME4
+#define __C89_NAMELESSUNIONNAME5
+#define __C89_NAMELESSUNIONNAME6
+#define __C89_NAMELESSUNIONNAME7
+#define __C89_NAMELESSUNIONNAME8
 #endif
 
 #ifndef __GNU_EXTENSION
@@ -149,6 +173,76 @@
 #else
 #define __MINGW_POISON_NAME(__IFACE)\
   __IFACE##_layout_has_not_been_verified_and_its_declaration_is_most_likely_incorrect
+#endif
+
+#ifndef __MSABI_LONG
+#ifndef __LP64__
+#define __MSABI_LONG(x)  x ## l
+#else
+#define __MSABI_LONG(x)  x
+#endif
+#endif
+
+#if __GNUC__
+#define __MINGW_GCC_VERSION	(__GNUC__	* 10000	+ \
+				 __GNUC_MINOR__	* 100	+ \
+				 __GNUC_PATCHLEVEL__)
+#else
+#define __MINGW_GCC_VERSION				0
+#endif
+
+#if defined (__GNUC__) && defined (__GNUC_MINOR__)
+#define __MINGW_GNUC_PREREQ(major, minor) \
+  (__GNUC__ > (major) \
+   || (__GNUC__ == (major) && __GNUC_MINOR__ >= (minor)))
+#else
+#define __MINGW_GNUC_PREREQ(major, minor)  0
+#endif
+
+#if defined (_MSC_VER)
+#define __MINGW_MSC_PREREQ(major, minor) \
+  (_MSC_VER >= (major * 100 + minor * 10))
+#else
+#define __MINGW_MSC_PREREQ(major, minor)   0
+#endif
+
+#ifdef __MINGW_MSVC_COMPAT_WARNINGS
+# if __MINGW_GNUC_PREREQ (4, 5)
+#  define __MINGW_ATTRIB_DEPRECATED_STR(X) __attribute__ ((__deprecated__ (X)))
+# else
+#  define __MINGW_ATTRIB_DEPRECATED_STR(X) __MINGW_ATTRIB_DEPRECATED
+# endif
+#else
+# define __MINGW_ATTRIB_DEPRECATED_STR(X)
+#endif
+
+#define __MINGW_SEC_WARN_STR "This function or variable may be unsafe, use _CRT_SECURE_NO_WARNINGS to disable deprecation"
+#define __MINGW_MSVC2005_DEPREC_STR "This POSIX function is deprecated beginning in Visual C++ 2005, use _CRT_NONSTDC_NO_DEPRECATE to disable deprecation"
+
+#if !defined (_CRT_NONSTDC_NO_DEPRECATE)
+# define __MINGW_ATTRIB_DEPRECATED_MSVC2005 __MINGW_ATTRIB_DEPRECATED_STR (__MINGW_MSVC2005_DEPREC_STR)
+#else
+# define __MINGW_ATTRIB_DEPRECATED_MSVC2005
+#endif
+
+#if !defined (_CRT_SECURE_NO_WARNINGS) || (_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES == 0)
+# define __MINGW_ATTRIB_DEPRECATED_SEC_WARN __MINGW_ATTRIB_DEPRECATED_STR (__MINGW_SEC_WARN_STR)
+#else
+# define __MINGW_ATTRIB_DEPRECATED_SEC_WARN
+#endif
+
+#define __MINGW_MS_PRINTF(__format,__args)  __attribute__((__format__(ms_printf, __format,__args)))
+#define __MINGW_MS_SCANF(__format,__args)   __attribute__((__format__(ms_scanf,  __format,__args)))
+#define __MINGW_GNU_PRINTF(__format,__args) __attribute__((__format__(gnu_printf,__format,__args)))
+#define __MINGW_GNU_SCANF(__format,__args)  __attribute__((__format__(gnu_scanf, __format,__args)))
+
+#undef __mingw_ovr
+#ifdef __cplusplus
+#define __mingw_ovr  inline __cdecl
+#elif defined (__GNUC__)
+#define __mingw_ovr static __attribute__ ((__unused__)) __inline__ __cdecl
+#else
+#define __mingw_ovr static __cdecl
 #endif
 
 #endif	/* _INC_CRTDEFS_MACRO */

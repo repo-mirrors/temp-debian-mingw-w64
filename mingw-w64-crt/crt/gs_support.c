@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 
@@ -97,10 +97,10 @@ __security_init_cookie (void)
 #define _AddressOfReturnAddress()	__builtin_frame_address (0)
 #endif /* __GNUC__ */
 
-__declspec(noreturn) void __cdecl __report_gsfailure (ULONGLONG);
+__declspec(noreturn) void __cdecl __report_gsfailure (ULONG_PTR);
 
 __declspec(noreturn) void __cdecl
-__report_gsfailure (ULONGLONG StackCookie)
+__report_gsfailure (ULONG_PTR StackCookie)
 {
   volatile UINT_PTR cookie[2] __MINGW_ATTRIB_UNUSED;
 #ifdef _WIN64

@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef __WINE_D3D9_H
-#define __WINE_D3D9_H
+#ifndef _D3D9_H_
+#define _D3D9_H_
 
 #ifndef DIRECT3D_VERSION
 #define DIRECT3D_VERSION  0x0900
@@ -29,30 +29,32 @@
 
 #define COM_NO_WINDOWS_H
 #include <objbase.h>
-
-#ifndef __WINESRC__
-# include <windows.h>
-#endif
-
+#include <windows.h>
 #include <d3d9types.h>
 #include <d3d9caps.h>
 
 /*****************************************************************************
  * Behavior Flags for IDirect3D8::CreateDevice
  */
-#define D3DCREATE_FPU_PRESERVE                  0x00000002L
-#define D3DCREATE_MULTITHREADED                 0x00000004L
-#define D3DCREATE_PUREDEVICE                    0x00000010L
-#define D3DCREATE_SOFTWARE_VERTEXPROCESSING     0x00000020L
-#define D3DCREATE_HARDWARE_VERTEXPROCESSING     0x00000040L
-#define D3DCREATE_MIXED_VERTEXPROCESSING        0x00000080L
-#define D3DCREATE_DISABLE_DRIVER_MANAGEMENT     0x00000100L
-#define D3DCREATE_ADAPTERGROUP_DEVICE           0x00000200L
+#define D3DCREATE_FPU_PRESERVE                  __MSABI_LONG(0x00000002)
+#define D3DCREATE_MULTITHREADED                 __MSABI_LONG(0x00000004)
+#define D3DCREATE_PUREDEVICE                    __MSABI_LONG(0x00000010)
+#define D3DCREATE_SOFTWARE_VERTEXPROCESSING     __MSABI_LONG(0x00000020)
+#define D3DCREATE_HARDWARE_VERTEXPROCESSING     __MSABI_LONG(0x00000040)
+#define D3DCREATE_MIXED_VERTEXPROCESSING        __MSABI_LONG(0x00000080)
+#define D3DCREATE_DISABLE_DRIVER_MANAGEMENT     __MSABI_LONG(0x00000100)
+#define D3DCREATE_ADAPTERGROUP_DEVICE           __MSABI_LONG(0x00000200)
+#define D3DCREATE_DISABLE_DRIVER_MANAGEMENT_EX  __MSABI_LONG(0x00000400)
+#define D3DCREATE_NOWINDOWCHANGES               __MSABI_LONG(0x00000800)
+#define D3DCREATE_DISABLE_PSGP_THREADING        __MSABI_LONG(0x00002000)
+#define D3DCREATE_ENABLE_PRESENTSTATS           __MSABI_LONG(0x00004000)
+#define D3DCREATE_DISABLE_PRINTSCREEN           __MSABI_LONG(0x00008000)
+#define D3DCREATE_SCREENSAVER                   __MSABI_LONG(0x10000000)
 
 /*****************************************************************************
  * Flags for SetPrivateData
  */
-#define D3DSPD_IUNKNOWN                         0x00000001L
+#define D3DSPD_IUNKNOWN                         __MSABI_LONG(0x00000001)
 
 
 /*****************************************************************************
@@ -60,10 +62,10 @@
  */
 #define D3D_SDK_VERSION                         32
 #define D3DADAPTER_DEFAULT                      0
-#define D3DENUM_NO_WHQL_LEVEL                   0x00000002L
-#define D3DPRESENT_BACK_BUFFERS_MAX             3L
-#define D3DSGR_NO_CALIBRATION                   0x00000000L
-#define D3DSGR_CALIBRATE                        0x00000001L
+#define D3DENUM_NO_WHQL_LEVEL                   __MSABI_LONG(0x00000002)
+#define D3DPRESENT_BACK_BUFFERS_MAX             __MSABI_LONG(3)
+#define D3DSGR_NO_CALIBRATION                   __MSABI_LONG(0x00000000)
+#define D3DSGR_CALIBRATE                        __MSABI_LONG(0x00000001)
 
 #define _FACD3D  0x876
 #define MAKE_D3DHRESULT( code )                 MAKE_HRESULT( 1, _FACD3D, code )
@@ -2041,4 +2043,4 @@ IDirect3D9* WINAPI Direct3DCreate9(UINT SDKVersion);
 #endif /* defined(__cplusplus) */
 
 
-#endif /* __WINE_D3D9_H */
+#endif /* _D3D9_H_ */

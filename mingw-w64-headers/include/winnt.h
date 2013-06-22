@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef _WINNT_
@@ -18,6 +18,7 @@ extern "C" {
 #define ANYSIZE_ARRAY 1
 
 #include <specstrings.h>
+#include <psdk_inc/intrin-mac.h>
 
 #if defined(__x86_64) && \
   !(defined(_X86_) || defined(__i386__) || defined(_IA64_))
@@ -88,10 +89,12 @@ extern "C" {
 
 #include <basetsd.h>
 
+#ifndef DECLSPEC_IMPORT
 #if defined(_X86_) || defined(__ia64__) || defined(__x86_64)
 #define DECLSPEC_IMPORT __declspec(dllimport)
 #else
 #define DECLSPEC_IMPORT
+#endif
 #endif
 
 #ifndef DECLSPEC_NORETURN
@@ -175,14 +178,19 @@ extern "C" {
 #define FASTCALL
 #endif
 #define NTAPI __stdcall
+#if !defined(_NTSYSTEM_)
 #define NTSYSAPI DECLSPEC_IMPORT
 #define NTSYSCALLAPI DECLSPEC_IMPORT
+#else
+#define NTSYSAPI
+#define NTSYSCALLAPI
+#endif
 
 #ifndef VOID
 #define VOID void
   typedef char CHAR;
   typedef short SHORT;
-  typedef long LONG;
+  typedef __LONG32 LONG;
 #endif
 #ifndef __WCHAR_DEFINED
 #define __WCHAR_DEFINED
@@ -607,6 +615,29 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define PRODUCT_PROFESSIONAL_E                    0x45
 #define PRODUCT_ENTERPRISE_E                      0x46
 #define PRODUCT_ULTIMATE_E                        0x47
+#define PRODUCT_ENTERPRISE_EVALUATION             0x48
+#define PRODUCT_MULTIPOINT_STANDARD_SERVER        0x4C
+#define PRODUCT_MULTIPOINT_PREMIUM_SERVER         0x4D
+#define PRODUCT_STANDARD_EVALUATION_SERVER        0x4F
+#define PRODUCT_DATACENTER_EVALUATION_SERVER      0x50
+#define PRODUCT_ENTERPRISE_N_EVALUATION           0x54
+#define PRODUCT_EMBEDDED_AUTOMOTIVE               0x55
+#define PRODUCT_EMBEDDED_INDUSTRY_A               0x56
+#define PRODUCT_THINPC                            0x57
+#define PRODUCT_EMBEDDED_A                        0x58
+#define PRODUCT_EMBEDDED_INDUSTRY                 0x59
+#define PRODUCT_EMBEDDED_E                        0x5A
+#define PRODUCT_EMBEDDED_INDUSTRY_E               0x5B
+#define PRODUCT_EMBEDDED_INDUSTRY_A_E             0x5C
+#define PRODUCT_STORAGE_WORKGROUP_EVALUATION_SERVER 0x5F
+#define PRODUCT_STORAGE_STANDARD_EVALUATION_SERVER 0x60
+#define PRODUCT_CORE_ARM                          0x61
+#define PRODUCT_CORE_N                            0x62
+#define PRODUCT_CORE_COUNTRYSPECIFIC              0x63
+#define PRODUCT_CORE_SINGLELANGUAGE               0x64
+#define PRODUCT_CORE                              0x65
+#define PRODUCT_PROFESSIONAL_WMC                  0x67
+#define PRODUCT_MOBILE_CORE                       0x68
 
 #define PRODUCT_UNLICENSED                        0xabcdabcd
 
@@ -621,6 +652,8 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define LANG_ARMENIAN                             0x2b
 #define LANG_ASSAMESE                             0x4d
 #define LANG_AZERI                                0x2c
+#define LANG_AZERBAIJANI			  0x2c
+#define LANG_BANGLA				  0x45
 #define LANG_BASHKIR                              0x6d
 #define LANG_BASQUE                               0x2d
 #define LANG_BELARUSIAN                           0x23
@@ -630,6 +663,8 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define LANG_BOSNIAN_NEUTRAL                    0x781a
 #define LANG_BULGARIAN                            0x02
 #define LANG_CATALAN                              0x03
+#define LANG_CENTRAL_KURDISH			  0x92
+#define LANG_CHEROKEE				  0x5c
 #define LANG_CHINESE                              0x04
 #define LANG_CHINESE_SIMPLIFIED                   0x04
 #define LANG_CHINESE_TRADITIONAL                0x7c04
@@ -648,6 +683,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define LANG_FINNISH                              0x0b
 #define LANG_FRENCH                               0x0c
 #define LANG_FRISIAN                              0x62
+#define LANG_FULAH				  0x67
 #define LANG_GALICIAN                             0x56
 #define LANG_GEORGIAN                             0x37
 #define LANG_GERMAN                               0x07
@@ -692,18 +728,22 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define LANG_NEPALI                               0x61
 #define LANG_NORWEGIAN                            0x14
 #define LANG_OCCITAN                              0x82
+#define LANG_ODIA				  0x48
 #define LANG_ORIYA                                0x48
 #define LANG_PASHTO                               0x63
 #define LANG_PERSIAN                              0x29
 #define LANG_POLISH                               0x15
 #define LANG_PORTUGUESE                           0x16
+#define LANG_PULAR				  0x67
 #define LANG_PUNJABI                              0x46
 #define LANG_QUECHUA                              0x6b
 #define LANG_ROMANIAN                             0x18
 #define LANG_ROMANSH                              0x17
 #define LANG_RUSSIAN                              0x19
+#define LANG_SAKHA				  0x85
 #define LANG_SAMI                                 0x3b
 #define LANG_SANSKRIT                             0x4f
+#define LANG_SCOTTISH_GAELIC			  0x91
 #define LANG_SERBIAN                              0x1a
 #define LANG_SERBIAN_NEUTRAL                    0x7c1a
 #define LANG_SINDHI                               0x59
@@ -723,6 +763,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define LANG_THAI                                 0x1e
 #define LANG_TIBETAN                              0x51
 #define LANG_TIGRIGNA                             0x73
+#define LANG_TIGRINYA				  0x73
 #define LANG_TSWANA                               0x32
 #define LANG_TURKISH                              0x1f
 #define LANG_TURKMEN                              0x42
@@ -731,6 +772,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define LANG_UPPER_SORBIAN                        0x2e
 #define LANG_URDU                                 0x20
 #define LANG_UZBEK                                0x43
+#define LANG_VALENCIAN				  0x03
 #define LANG_VIETNAMESE                           0x2a
 #define LANG_WELSH                                0x52
 #define LANG_WOLOF                                0x88
@@ -771,6 +813,10 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_ASSAMESE_INDIA                    0x01
 #define SUBLANG_AZERI_LATIN                       0x01
 #define SUBLANG_AZERI_CYRILLIC                    0x02
+#define SUBLANG_AZERBAIJANI_AZERBAIJAN_LATIN      0x01
+#define SUBLANG_AZERBAIJANI_AZERBAIJAN_CYRILLIC   0x02
+#define SUBLANG_BANGLA_INDIA                      0x01
+#define SUBLANG_BANGLA_BANGLADESH                 0x02
 #define SUBLANG_BASHKIR_RUSSIA                    0x01
 #define SUBLANG_BASQUE_BASQUE                     0x01
 #define SUBLANG_BELARUSIAN_BELARUS                0x01
@@ -781,6 +827,8 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_BRETON_FRANCE                     0x01
 #define SUBLANG_BULGARIAN_BULGARIA                0x01
 #define SUBLANG_CATALAN_CATALAN                   0x01
+#define SUBLANG_CENTRAL_KURDISH_IRAQ              0x01
+#define SUBLANG_CHEROKEE_CHEROKEE                 0x01
 #define SUBLANG_CHINESE_TRADITIONAL               0x01
 #define SUBLANG_CHINESE_SIMPLIFIED                0x02
 #define SUBLANG_CHINESE_HONGKONG                  0x03
@@ -791,6 +839,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_CROATIAN_CROATIA                  0x01
 #define SUBLANG_CROATIAN_BOSNIA_HERZEGOVINA_LATIN 0x04
 #define SUBLANG_DANISH_DENMARK                    0x01
+#define SUBLANG_DARI_AFGHANISTAN                  0x01
 #define SUBLANG_DIVEHI_MALDIVES                   0x01
 #define SUBLANG_DUTCH                             0x01
 #define SUBLANG_DUTCH_BELGIAN                     0x02
@@ -824,6 +873,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_FRENCH_LUXEMBOURG                 0x05
 #define SUBLANG_FRENCH_MONACO                     0x06
 #define SUBLANG_FRISIAN_NETHERLANDS               0x01
+#define SUBLANG_FULAH_SENEGAL                     0x02
 #define SUBLANG_GALICIAN_GALICIAN                 0x01
 #define SUBLANG_GEORGIAN_GEORGIA                  0x01
 #define SUBLANG_GERMAN                            0x01
@@ -836,6 +886,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_GUJARATI_INDIA                    0x01
 #define SUBLANG_HAUSA_NIGERIA_LATIN               0x01
 #define SUBLANG_HAUSA_NIGERIA    SUBLANG_HAUSA_NIGERIA_LATIN	/* SUBLANG_HAUSA_NIGERIA_LATIN is what MS defines */
+#define SUBLANG_HAWAIIAN_US                       0x01
 #define SUBLANG_HEBREW_ISRAEL                     0x01
 #define SUBLANG_HINDI_INDIA                       0x01
 #define SUBLANG_HUNGARIAN_HUNGARY                 0x01
@@ -848,6 +899,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_ITALIAN                           0x01
 #define SUBLANG_ITALIAN_SWISS                     0x02
 #define SUBLANG_JAPANESE_JAPAN                    0x01
+#define SUBLANG_KANNADA_INDIA                     0x01
 #define SUBLANG_KASHMIRI_INDIA                    0x02
 #define SUBLANG_KASHMIRI_SASIA                    0x02
 #define SUBLANG_KAZAK_KAZAKHSTAN                  0x01
@@ -891,8 +943,9 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_PORTUGUESE_PORTUGAL               0x02
 #endif /* WINVER >= 0x0600 */
 #define SUBLANG_PORTUGUESE                        0x02
+#define SUBLANG_PULAR_SENEGAL                     0x02
 #define SUBLANG_PUNJABI_INDIA                     0x01
-/* ??? #define SUBLANG_PUNJABI_PAKISTAN                  0x01 ??? */
+#define SUBLANG_PUNJABI_PAKISTAN                  0x02
 #define SUBLANG_QUECHUA_BOLIVIA                   0x01
 #define SUBLANG_QUECHUA_ECUADOR                   0x02
 #define SUBLANG_QUECHUA_PERU                      0x03
@@ -900,6 +953,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 /* ??? #define SUBLANG_ROMANIAN_MOLDOVA                  0x01 ??? */
 #define SUBLANG_ROMANSH_SWITZERLAND               0x01
 #define SUBLANG_RUSSIAN_RUSSIA                    0x01
+#define SUBLANG_SAKHA_RUSSIA                      0x01
 #define SUBLANG_SAMI_NORTHERN_NORWAY              0x01
 #define SUBLANG_SAMI_NORTHERN_SWEDEN              0x02
 #define SUBLANG_SAMI_NORTHERN_FINLAND             0x03
@@ -910,11 +964,18 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_SAMI_SKOLT_FINLAND                0x08
 #define SUBLANG_SAMI_INARI_FINLAND                0x09
 #define SUBLANG_SANSKRIT_INDIA                    0x01
+#define SUBLANG_SCOTTISH_GAELIC                    0x01
 #define SUBLANG_SERBIAN_LATIN                     0x02
 #define SUBLANG_SERBIAN_CYRILLIC                  0x03
 #define SUBLANG_SERBIAN_BOSNIA_HERZEGOVINA_LATIN  0x06
 #define SUBLANG_SERBIAN_BOSNIA_HERZEGOVINA_CYRILLIC 0x07
+#define SUBLANG_SERBIAN_MONTENEGRO_LATIN          0x0b
+#define SUBLANG_SERBIAN_MONTENEGRO_CYRILLIC       0x0c
+#define SUBLANG_SERBIAN_SERBIA_LATIN              0x09
+#define SUBLANG_SERBIAN_SERBIA_CYRILLIC           0x0a
+#define SUBLANG_SINDHI_INDIA                      0x01
 #define SUBLANG_SINDHI_AFGHANISTAN                0x02
+#define SUBLANG_SINDHI_PAKISTAN                   0x02
 #define SUBLANG_SINHALESE_SRI_LANKA               0x01
 #define SUBLANG_SOTHO_NORTHERN_SOUTH_AFRICA       0x01
 #define SUBLANG_SLOVAK_SLOVAKIA                   0x01
@@ -940,6 +1001,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_SPANISH_NICARAGUA                 0x13
 #define SUBLANG_SPANISH_PUERTO_RICO               0x14
 #define SUBLANG_SPANISH_US                        0x15
+#define SUBLANG_SWAHILI_KENYA                     0x01
 #if (WINVER >= 0x0600)
 #define SUBLANG_SWEDISH_SWEDEN                    0x01
 #endif /* WINVER >= 0x0600 */
@@ -949,13 +1011,18 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_SYRIAC_SYRIA            SUBLANG_SYRIAC		/* SUBLANG_SYRIAC_SYRIA is what MSDN mentions */
 #define SUBLANG_TAJIK_TAJIKISTAN                  0x01
 #define SUBLANG_TAMAZIGHT_ALGERIA_LATIN           0x02
+#define SUBLANG_TAMAZIGHT_MOROCCO_TIFINAGH        0x04
 #define SUBLANG_TAMIL_INDIA                       0x01
+#define SUBLANG_TAMIL_SRI_LANKA                   0x02
 #define SUBLANG_TATAR_RUSSIA                      0x01
 #define SUBLANG_TELUGU_INDIA                      0x01
 #define SUBLANG_THAI_THAILAND                     0x01
 #define SUBLANG_TIBETAN_PRC                       0x01
 #define SUBLANG_TIBETAN_BHUTAN                    0x02
 #define SUBLANG_TIGRIGNA_ERITREA                  0x02
+#define SUBLANG_TIGRINYA_ERITREA                  0x02
+#define SUBLANG_TIGRINYA_ETHIOPIA                 0x01
+#define SUBLANG_TSWANA_BOTSWANA                   0x02
 #define SUBLANG_TSWANA_SOUTH_AFRICA               0x01
 #define SUBLANG_TURKISH_TURKEY                    0x01
 #define SUBLANG_TURKMEN_TURKMENISTAN              0x01
@@ -966,6 +1033,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SUBLANG_URDU_INDIA                        0x02
 #define SUBLANG_UZBEK_LATIN                       0x01
 #define SUBLANG_UZBEK_CYRILLIC                    0x02
+#define SUBLANG_VALENCIAN_VALENCIA                0x02
 #define SUBLANG_VIETNAMESE_VIETNAM                0x01
 #define SUBLANG_WELSH_UNITED_KINGDOM              0x01
 #define SUBLANG_WOLOF_SENEGAL                     0x01
@@ -987,6 +1055,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SORT_CHINESE_UNICODE                      0x1
 #define SORT_CHINESE_PRC                          0x2
 #define SORT_CHINESE_BOPOMOFO                     0x3
+#define SORT_CHINESE_RADICALSTROKE		  0x4
 
 #define SORT_KOREAN_KSC                           0x0
 #define SORT_KOREAN_UNICODE                       0x1
@@ -1034,61 +1103,61 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define DEFAULT_UNREACHABLE
 
 #ifndef WIN32_NO_STATUS
-#define STATUS_WAIT_0 ((DWORD)0x00000000L)
-#define STATUS_ABANDONED_WAIT_0 ((DWORD)0x00000080L)
-#define STATUS_USER_APC ((DWORD)0x000000C0L)
-#define STATUS_TIMEOUT ((DWORD)0x00000102L)
-#define STATUS_PENDING ((DWORD)0x00000103L)
-#define DBG_EXCEPTION_HANDLED ((DWORD)0x00010001L)
-#define DBG_CONTINUE ((DWORD)0x00010002L)
-#define STATUS_SEGMENT_NOTIFICATION ((DWORD)0x40000005L)
-#define DBG_TERMINATE_THREAD ((DWORD)0x40010003L)
-#define DBG_TERMINATE_PROCESS ((DWORD)0x40010004L)
-#define DBG_CONTROL_C ((DWORD)0x40010005L)
-#define DBG_PRINTEXCEPTION_C ((DWORD)0x40010006L)
-#define DBG_RIPEXCEPTION ((DWORD)0x40010007L)
-#define DBG_CONTROL_BREAK ((DWORD)0x40010008L)
-#define DBG_COMMAND_EXCEPTION ((DWORD)0x40010009L)
-#define STATUS_GUARD_PAGE_VIOLATION ((DWORD)0x80000001L)
-#define STATUS_DATATYPE_MISALIGNMENT ((DWORD)0x80000002L)
-#define STATUS_BREAKPOINT ((DWORD)0x80000003L)
-#define STATUS_SINGLE_STEP ((DWORD)0x80000004L)
-#define STATUS_LONGJUMP ((DWORD)0x80000026L)    
-#define STATUS_UNWIND_CONSOLIDATE ((DWORD)0x80000029L)    
-#define DBG_EXCEPTION_NOT_HANDLED ((DWORD)0x80010001L)
-#define STATUS_ACCESS_VIOLATION ((DWORD)0xC0000005L)
-#define STATUS_IN_PAGE_ERROR ((DWORD)0xC0000006L)
-#define STATUS_INVALID_HANDLE ((DWORD)0xC0000008L)
-#define STATUS_INVALID_PARAMETER ((DWORD)0xC000000DL)
-#define STATUS_NO_MEMORY ((DWORD)0xC0000017L)
-#define STATUS_ILLEGAL_INSTRUCTION ((DWORD)0xC000001DL)
-#define STATUS_NONCONTINUABLE_EXCEPTION ((DWORD)0xC0000025L)
-#define STATUS_INVALID_DISPOSITION ((DWORD)0xC0000026L)
-#define STATUS_ARRAY_BOUNDS_EXCEEDED ((DWORD)0xC000008CL)
-#define STATUS_FLOAT_DENORMAL_OPERAND ((DWORD)0xC000008DL)
-#define STATUS_FLOAT_DIVIDE_BY_ZERO ((DWORD)0xC000008EL)
-#define STATUS_FLOAT_INEXACT_RESULT ((DWORD)0xC000008FL)
-#define STATUS_FLOAT_INVALID_OPERATION ((DWORD)0xC0000090L)
-#define STATUS_FLOAT_OVERFLOW ((DWORD)0xC0000091L)
-#define STATUS_FLOAT_STACK_CHECK ((DWORD)0xC0000092L)
-#define STATUS_FLOAT_UNDERFLOW ((DWORD)0xC0000093L)
-#define STATUS_INTEGER_DIVIDE_BY_ZERO ((DWORD)0xC0000094L)
-#define STATUS_INTEGER_OVERFLOW ((DWORD)0xC0000095L)
-#define STATUS_PRIVILEGED_INSTRUCTION ((DWORD)0xC0000096L)
-#define STATUS_STACK_OVERFLOW ((DWORD)0xC00000FDL)
-#define STATUS_DLL_NOT_FOUND ((DWORD)0xC0000135L)
-#define STATUS_ORDINAL_NOT_FOUND ((DWORD)0xC0000138L)
-#define STATUS_ENTRYPOINT_NOT_FOUND ((DWORD)0xC0000139L)
-#define STATUS_CONTROL_C_EXIT ((DWORD)0xC000013AL)
-#define STATUS_DLL_INIT_FAILED ((DWORD)0xC0000142L)
-#define STATUS_FLOAT_MULTIPLE_FAULTS ((DWORD)0xC00002B4L)
-#define STATUS_FLOAT_MULTIPLE_TRAPS ((DWORD)0xC00002B5L)
-#define STATUS_REG_NAT_CONSUMPTION ((DWORD)0xC00002C9L)
-#define STATUS_STACK_BUFFER_OVERRUN ((DWORD)0xC0000409L)
-#define STATUS_INVALID_CRUNTIME_PARAMETER ((DWORD)0xC0000417L)
-#define STATUS_ASSERTION_FAILURE ((DWORD)0xC0000420L)
-#define STATUS_SXS_EARLY_DEACTIVATION ((DWORD)0xC015000FL)
-#define STATUS_SXS_INVALID_DEACTIVATION ((DWORD)0xC0150010L)
+#define STATUS_WAIT_0 ((DWORD)0x00000000)
+#define STATUS_ABANDONED_WAIT_0 ((DWORD)0x00000080)
+#define STATUS_USER_APC ((DWORD)0x000000C0)
+#define STATUS_TIMEOUT ((DWORD)0x00000102)
+#define STATUS_PENDING ((DWORD)0x00000103)
+#define DBG_EXCEPTION_HANDLED ((DWORD)0x00010001)
+#define DBG_CONTINUE ((DWORD)0x00010002)
+#define STATUS_SEGMENT_NOTIFICATION ((DWORD)0x40000005)
+#define DBG_TERMINATE_THREAD ((DWORD)0x40010003)
+#define DBG_TERMINATE_PROCESS ((DWORD)0x40010004)
+#define DBG_CONTROL_C ((DWORD)0x40010005)
+#define DBG_PRINTEXCEPTION_C ((DWORD)0x40010006)
+#define DBG_RIPEXCEPTION ((DWORD)0x40010007)
+#define DBG_CONTROL_BREAK ((DWORD)0x40010008)
+#define DBG_COMMAND_EXCEPTION ((DWORD)0x40010009)
+#define STATUS_GUARD_PAGE_VIOLATION ((DWORD)0x80000001)
+#define STATUS_DATATYPE_MISALIGNMENT ((DWORD)0x80000002)
+#define STATUS_BREAKPOINT ((DWORD)0x80000003)
+#define STATUS_SINGLE_STEP ((DWORD)0x80000004)
+#define STATUS_LONGJUMP ((DWORD)0x80000026)    
+#define STATUS_UNWIND_CONSOLIDATE ((DWORD)0x80000029)    
+#define DBG_EXCEPTION_NOT_HANDLED ((DWORD)0x80010001)
+#define STATUS_ACCESS_VIOLATION ((DWORD)0xC0000005)
+#define STATUS_IN_PAGE_ERROR ((DWORD)0xC0000006)
+#define STATUS_INVALID_HANDLE ((DWORD)0xC0000008)
+#define STATUS_INVALID_PARAMETER ((DWORD)0xC000000D)
+#define STATUS_NO_MEMORY ((DWORD)0xC0000017)
+#define STATUS_ILLEGAL_INSTRUCTION ((DWORD)0xC000001D)
+#define STATUS_NONCONTINUABLE_EXCEPTION ((DWORD)0xC0000025)
+#define STATUS_INVALID_DISPOSITION ((DWORD)0xC0000026)
+#define STATUS_ARRAY_BOUNDS_EXCEEDED ((DWORD)0xC000008C)
+#define STATUS_FLOAT_DENORMAL_OPERAND ((DWORD)0xC000008D)
+#define STATUS_FLOAT_DIVIDE_BY_ZERO ((DWORD)0xC000008E)
+#define STATUS_FLOAT_INEXACT_RESULT ((DWORD)0xC000008F)
+#define STATUS_FLOAT_INVALID_OPERATION ((DWORD)0xC0000090)
+#define STATUS_FLOAT_OVERFLOW ((DWORD)0xC0000091)
+#define STATUS_FLOAT_STACK_CHECK ((DWORD)0xC0000092)
+#define STATUS_FLOAT_UNDERFLOW ((DWORD)0xC0000093)
+#define STATUS_INTEGER_DIVIDE_BY_ZERO ((DWORD)0xC0000094)
+#define STATUS_INTEGER_OVERFLOW ((DWORD)0xC0000095)
+#define STATUS_PRIVILEGED_INSTRUCTION ((DWORD)0xC0000096)
+#define STATUS_STACK_OVERFLOW ((DWORD)0xC00000FD)
+#define STATUS_DLL_NOT_FOUND ((DWORD)0xC0000135)
+#define STATUS_ORDINAL_NOT_FOUND ((DWORD)0xC0000138)
+#define STATUS_ENTRYPOINT_NOT_FOUND ((DWORD)0xC0000139)
+#define STATUS_CONTROL_C_EXIT ((DWORD)0xC000013A)
+#define STATUS_DLL_INIT_FAILED ((DWORD)0xC0000142)
+#define STATUS_FLOAT_MULTIPLE_FAULTS ((DWORD)0xC00002B4)
+#define STATUS_FLOAT_MULTIPLE_TRAPS ((DWORD)0xC00002B5)
+#define STATUS_REG_NAT_CONSUMPTION ((DWORD)0xC00002C9)
+#define STATUS_STACK_BUFFER_OVERRUN ((DWORD)0xC0000409)
+#define STATUS_INVALID_CRUNTIME_PARAMETER ((DWORD)0xC0000417)
+#define STATUS_ASSERTION_FAILURE ((DWORD)0xC0000420)
+#define STATUS_SXS_EARLY_DEACTIVATION ((DWORD)0xC015000F)
+#define STATUS_SXS_INVALID_DEACTIVATION ((DWORD)0xC0150010)
 #endif
 
 #define MAXIMUM_WAIT_OBJECTS 64
@@ -1109,14 +1178,10 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define BitTestAndComplement _bittestandcomplement
 #define BitTestAndSet _bittestandset
 #define BitTestAndReset _bittestandreset
-#define InterlockedBitTestAndSet _interlockedbittestandset
-#define InterlockedBitTestAndReset _interlockedbittestandreset
 #define BitTest64 _bittest64
 #define BitTestAndComplement64 _bittestandcomplement64
 #define BitTestAndSet64 _bittestandset64
 #define BitTestAndReset64 _bittestandreset64
-#define InterlockedBitTestAndSet64 _interlockedbittestandset64
-#define InterlockedBitTestAndReset64 _interlockedbittestandreset64
 
     BOOLEAN _bittest(LONG const *Base,LONG Offset);
     BOOLEAN _bittestandcomplement(LONG *Base,LONG Offset);
@@ -1125,66 +1190,60 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
     __CRT_INLINE BOOLEAN _bittest(LONG const *Base,LONG Offset) {
       int old = 0;
       __asm__ __volatile__("btl %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile long *) Base))
+	:"=r" (old),"=m" ((*(volatile __LONG32 *) Base))
 	:"Ir" (Offset) : "memory");
       return (BOOLEAN) (old!=0);
     }
     __CRT_INLINE BOOLEAN _bittestandcomplement(LONG *Base,LONG Offset) {
       int old = 0;
       __asm__ __volatile__("btcl %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile long *) Base))
+	:"=r" (old),"=m" ((*(volatile __LONG32 *) Base))
 	:"Ir" (Offset) : "memory");
       return (BOOLEAN) (old!=0);
     }
 #endif /* __CRT__NO_INLINE */
 
-    BOOLEAN InterlockedBitTestAndComplement(LONG *Base,LONG Bit);
     BOOLEAN _bittestandset(LONG *Base,LONG Offset);
     BOOLEAN _bittestandreset(LONG *Base,LONG Offset);
-    BOOLEAN _interlockedbittestandset(LONG *Base,LONG Offset);
-    BOOLEAN _interlockedbittestandreset(LONG *Base,LONG Offset);
+    BOOLEAN _interlockedbittestandset(__LONG32 *Base,LONG Offset);
+    BOOLEAN _interlockedbittestandreset(__LONG32 *Base,LONG Offset);
+    BOOLEAN _interlockedbittestandcomplement(__LONG32 *Base,LONG Bit);
+    BOOLEAN InterlockedBitTestAndSet(volatile __LONG32 *Base,LONG Offset);
+    BOOLEAN InterlockedBitTestAndReset(volatile __LONG32 *Base,LONG Offset);
+    BOOLEAN InterlockedBitTestAndComplement(volatile __LONG32 *Base,LONG Bit);
     BOOLEAN _bittest64(LONG64 const *Base,LONG64 Offset);
     BOOLEAN _bittestandcomplement64(LONG64 *Base,LONG64 Offset);
     BOOLEAN _bittestandset64(LONG64 *Base,LONG64 Offset);
     BOOLEAN _bittestandreset64(LONG64 *Base,LONG64 Offset);
+    BOOLEAN InterlockedBitTestAndSet64(volatile LONG64 *Base,LONG64 Offset);
+    BOOLEAN InterlockedBitTestAndReset64(volatile LONG64 *Base,LONG64 Offset);
+    BOOLEAN InterlockedBitTestAndComplement64(volatile LONG64 *Base,LONG64 Bit);
     BOOLEAN _interlockedbittestandset64(LONG64 *Base,LONG64 Offset);
     BOOLEAN _interlockedbittestandreset64(LONG64 *Base,LONG64 Offset);
+    BOOLEAN _interlockedbittestandcomplement64(LONG64 *Base,LONG64 Bit);
 #ifndef __CRT__NO_INLINE
-    __CRT_INLINE BOOLEAN InterlockedBitTestAndComplement(LONG *Base,LONG Bit) {
-      int old = 0;
-      __asm__ __volatile__("lock ; btcl %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile long *) Base))
-	:"Ir" (Bit) : "memory");
-      return (BOOLEAN) (old!=0);
-    }
     __CRT_INLINE BOOLEAN _bittestandset(LONG *Base,LONG Offset) {
       int old = 0;
       __asm__ __volatile__("btsl %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile long *) Base))
+	:"=r" (old),"=m" ((*(volatile __LONG32 *) Base))
 	:"Ir" (Offset) : "memory");
       return (BOOLEAN) (old!=0);
     }
     __CRT_INLINE BOOLEAN _bittestandreset(LONG *Base,LONG Offset) {
       int old = 0;
       __asm__ __volatile__("btrl %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile long *) Base))
+	:"=r" (old),"=m" ((*(volatile __LONG32 *) Base))
 	:"Ir" (Offset) : "memory");
       return (BOOLEAN) (old!=0);
     }
-    __CRT_INLINE BOOLEAN _interlockedbittestandset(LONG *Base,LONG Offset) {
-      int old = 0;
-      __asm__ __volatile__("lock ; btsl %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile long *) Base))
-	:"Ir" (Offset) : "memory");
-      return (BOOLEAN) (old!=0);
-    }
-    __CRT_INLINE BOOLEAN _interlockedbittestandreset(LONG *Base,LONG Offset) {
-      int old = 0;
-      __asm__ __volatile__("lock ; btrl %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile long *) Base))
-	:"Ir" (Offset) : "memory");
-      return (BOOLEAN) (old!=0);
-    }
+    __CRT_INLINE __buildbittesti(_interlockedbittestandset, __LONG32, "lock bts", "I", /* unused param */)
+    __CRT_INLINE __buildbittesti(_interlockedbittestandreset, __LONG32, "lock btr", "I", /* unused param */)
+    __CRT_INLINE __buildbittesti(_interlockedbittestandcomplement, __LONG32, "lock btc", "I", /* unused param */)
+
+    __CRT_INLINE __buildbittesti(InterlockedBitTestAndSet, __LONG32, "lock bts", "I", volatile)
+    __CRT_INLINE __buildbittesti(InterlockedBitTestAndReset, __LONG32, "lock btr", "I", volatile)
+    __CRT_INLINE __buildbittesti(InterlockedBitTestAndComplement, __LONG32, "lock btc", "I", volatile)
+
     __CRT_INLINE BOOLEAN _bittest64(LONG64 const *Base,LONG64 Offset) {
       int old = 0;
       __asm__ __volatile__("btq %2,%1\n\tsbbl %0,%0 "
@@ -1213,20 +1272,14 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 	:"Ir" (Offset) : "memory");
       return (BOOLEAN) (old!=0);
     }
-    __CRT_INLINE BOOLEAN _interlockedbittestandset64(LONG64 *Base,LONG64 Offset) {
-      int old = 0;
-      __asm__ __volatile__("lock ; btsq %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile LONG64 *) Base))
-	:"Ir" (Offset) : "memory");
-      return (BOOLEAN) (old!=0);
-    }
-    __CRT_INLINE BOOLEAN _interlockedbittestandreset64(LONG64 *Base,LONG64 Offset) {
-      int old = 0;
-      __asm__ __volatile__("lock ; btrq %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile LONG64 *) Base))
-	:"Ir" (Offset) : "memory");
-      return (BOOLEAN) (old!=0);
-    }
+    __CRT_INLINE __buildbittesti(_interlockedbittestandset64, LONG64, "lock bts", "J", /* unused param */)
+    __CRT_INLINE __buildbittesti(_interlockedbittestandreset64, LONG64, "lock btr", "J", /* unused param */)
+    __CRT_INLINE __buildbittesti(_interlockedbittestandcomplement64, LONG64, "lock btc", "J", /* unused param */)
+
+    __CRT_INLINE __buildbittesti(InterlockedBitTestAndSet64, LONG64, "lock bts", "J", volatile)
+    __CRT_INLINE __buildbittesti(InterlockedBitTestAndReset64, LONG64, "lock btr", "J", volatile)
+    __CRT_INLINE __buildbittesti(InterlockedBitTestAndComplement64, LONG64, "lock btc", "J", volatile)
+
 #endif /* !__CRT__NO_INLINE */
 
 #define BitScanForward _BitScanForward
@@ -1348,37 +1401,14 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 	: "memory");
       return prev;
     }
-    __CRT_INLINE LONG InterlockedAnd(LONG volatile *Destination,LONG Value) {
-      __asm__ __volatile__("lock ; andl %0,%1"
-	: :"r"(Value),"m"(*Destination)
-	: "memory");
-      return *Destination;
-    }
-    __CRT_INLINE LONG InterlockedOr(LONG volatile *Destination,LONG Value) {
-      __asm__ __volatile__("lock ; orl %0,%1"
-	: : "r"(Value),"m"(*Destination) : "memory");
-      return *Destination;
-    }
-    __CRT_INLINE LONG InterlockedXor(LONG volatile *Destination,LONG Value) {
-      __asm__ __volatile__("lock ; xorl %0,%1"
-	: : "r"(Value),"m"(*Destination) : "memory");
-      return *Destination;
-    }
-    __CRT_INLINE LONG64 InterlockedAnd64(LONG64 volatile *Destination,LONG64 Value) {
-      __asm__ __volatile__("lock ; andq %0,%1"
-	: : "r"(Value),"m"(*Destination) : "memory");
-      return *Destination;
-    }
-    __CRT_INLINE LONG64 InterlockedOr64(LONG64 volatile *Destination,LONG64 Value) {
-      __asm__ __volatile__("lock ; orq %0,%1"
-	: : "r"(Value),"m"(*Destination) : "memory");
-      return *Destination;
-    }
-    __CRT_INLINE LONG64 InterlockedXor64(LONG64 volatile *Destination,LONG64 Value) {
-      __asm__ __volatile__("lock ; xorq %0,%1"
-	: : "r"(Value),"m"(*Destination) : "memory");
-      return *Destination;
-    }
+
+    __CRT_INLINE __buildlogicali(InterlockedAnd, LONG, and)
+    __CRT_INLINE __buildlogicali(InterlockedOr, LONG, or)
+    __CRT_INLINE __buildlogicali(InterlockedXor, LONG, xor)
+
+    __CRT_INLINE __buildlogicali(InterlockedAnd64, LONG64, and)
+    __CRT_INLINE __buildlogicali(InterlockedOr64, LONG64, or)
+    __CRT_INLINE __buildlogicali(InterlockedXor64, LONG64, xor)
 #endif /* !__CRT__NO_INLINE */
 
     LONG InterlockedExchangeAdd(LONG volatile *Addend,LONG Value);
@@ -1451,7 +1481,18 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 
     VOID _ReadWriteBarrier(VOID);
 
-#include <intrin.h>
+/* Don't include intrin.h on Cygwin.  It pulls in unneeded stuff. */
+#ifdef __CYGWIN__
+# if defined(__cplusplus)
+extern "C" {
+# endif
+# include <x86intrin.h>
+# if defined(__cplusplus)
+}
+# endif
+#else /* !__CYGWIN__ */
+# include <intrin.h>
+#endif /* __CYGWIN__ */
 
 #define FastFence __faststorefence
 #define LoadFence _mm_lfence
@@ -1491,7 +1532,6 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 
 #define ReadTimeStampCounter() __rdtsc()
 
-    __MINGW_EXTENSION unsigned __int64 __rdtsc(void);
     VOID __movsb(PBYTE Destination,BYTE const *Source,SIZE_T Count);
     VOID __movsw(PWORD Destination,WORD const *Source,SIZE_T Count);
     VOID __movsd(PDWORD Destination,DWORD const *Source,SIZE_T Count);
@@ -1500,44 +1540,11 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
     VOID __stosw(PWORD Destination,WORD Value,SIZE_T Count);
     VOID __stosd(PDWORD Destination,DWORD Value,SIZE_T Count);
     VOID __stosq(PDWORD64 Destination,DWORD64 Value,SIZE_T Count);
-
 #ifndef __CRT__NO_INLINE
-    __CRT_INLINE VOID __stosb(PBYTE Dest,BYTE Data,SIZE_T Count)
-    {
-      __asm__ __volatile__
-      (
-        "rep; stosb" :
-        [Dest] "=D" (Dest), [Count] "=c" (Count) :
-        "[Dest]" (Dest), "a" (Data), "[Count]" (Count)
-      );
-    }
-    __CRT_INLINE VOID __stosw(PWORD Dest,WORD Data,SIZE_T Count)
-    {
-      __asm__ __volatile__
-      (
-        "rep; stosw" :
-        [Dest] "=D" (Dest), [Count] "=c" (Count) :
-        "[Dest]" (Dest), "a" (Data), "[Count]" (Count)
-      );
-    }
-    __CRT_INLINE VOID __stosd(PDWORD Dest,DWORD Data,SIZE_T Count)
-    {
-      __asm__ __volatile__
-      (
-        "rep; stosl" :
-        [Dest] "=D" (Dest), [Count] "=c" (Count) :
-        "[Dest]" (Dest), "a" (Data), "[Count]" (Count)
-      );
-    }
-    __CRT_INLINE VOID __stosq(PDWORD64 Dest,DWORD64 Data,SIZE_T Count)
-    {
-      __asm__ __volatile__
-      (
-        "rep; stosq" :
-        [Dest] "=D" (Dest), [Count] "=c" (Count) :
-        "[Dest]" (Dest), "a" (Data), "[Count]" (Count)
-      );
-    }
+__CRT_INLINE __buildstos(__stosb, BYTE)
+__CRT_INLINE __buildstos(__stosw, WORD)
+__CRT_INLINE __buildstos(__stosd, DWORD)
+__CRT_INLINE __buildstos(__stosq, DWORD64)
 #endif /* __CRT__NO_INLINE */
 
 #define MultiplyHigh __mulh
@@ -1581,48 +1588,48 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
       extractedProduct = ShiftRight128(lowProduct,highProduct,Shift);
       return extractedProduct;
     }
+#endif
 
     __CRT_INLINE BYTE __readgsbyte(DWORD Offset) {
       BYTE ret;
       __asm__ volatile ("movb	%%gs:%1,%0"
-	: "=r" (ret) ,"=m" ((*(volatile long *) (DWORD64) Offset)));
+	: "=r" (ret) ,"=m" ((*(volatile __LONG32 *) (DWORD64) Offset)));
       return ret;
     }
     __CRT_INLINE WORD __readgsword(DWORD Offset) {
       WORD ret;
       __asm__ volatile ("movw	%%gs:%1,%0"
-	: "=r" (ret) ,"=m" ((*(volatile long *) (DWORD64) Offset)));
+	: "=r" (ret) ,"=m" ((*(volatile __LONG32 *) (DWORD64) Offset)));
       return ret;
     }
     __CRT_INLINE DWORD __readgsdword(DWORD Offset) {
       DWORD ret;
       __asm__ volatile ("movl	%%gs:%1,%0"
-	: "=r" (ret) ,"=m" ((*(volatile long *) (DWORD64) Offset)));
+	: "=r" (ret) ,"=m" ((*(volatile __LONG32 *) (DWORD64) Offset)));
       return ret;
     }
     __CRT_INLINE DWORD64 __readgsqword(DWORD Offset) {
       void *ret;
       __asm__ volatile ("movq	%%gs:%1,%0"
-	: "=r" (ret) ,"=m" ((*(volatile long *) (DWORD64) Offset)));
+	: "=r" (ret) ,"=m" ((*(volatile __LONG32 *) (DWORD64) Offset)));
       return (DWORD64) ret;
     }
     __CRT_INLINE VOID __writegsbyte(DWORD Offset,BYTE Data) {
       __asm__ volatile ("movb	%0,%%gs:%1"
-	: "=r" (Data) ,"=m" ((*(volatile long *) (DWORD64) Offset)));
+	: "=r" (Data) ,"=m" ((*(volatile __LONG32 *) (DWORD64) Offset)));
     }
     __CRT_INLINE VOID __writegsword(DWORD Offset,WORD Data) {
       __asm__ volatile ("movw	%0,%%gs:%1"
-	: "=r" (Data) ,"=m" ((*(volatile long *) (DWORD64) Offset)));
+	: "=r" (Data) ,"=m" ((*(volatile __LONG32 *) (DWORD64) Offset)));
     }
     __CRT_INLINE VOID __writegsdword(DWORD Offset,DWORD Data) {
       __asm__ volatile ("movl	%0,%%gs:%1"
-	: "=r" (Data) ,"=m" ((*(volatile long *) (DWORD64) Offset)));
+	: "=r" (Data) ,"=m" ((*(volatile __LONG32 *) (DWORD64) Offset)));
     }
     __CRT_INLINE VOID __writegsqword(DWORD Offset,DWORD64 Data) {
       __asm__ volatile ("movq	%0,%%gs:%1"
-	: "=r" (Data) ,"=m" ((*(volatile long *) (DWORD64) Offset)));
+	: "=r" (Data) ,"=m" ((*(volatile __LONG32 *) (DWORD64) Offset)));
     }
-#endif /* !__CRT__NO_INLINE */
 
 #ifdef __cplusplus
   }
@@ -1637,11 +1644,11 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 
 #define CONTEXT_AMD64 0x100000
 
-#define CONTEXT_CONTROL (CONTEXT_AMD64 | 0x1L)
-#define CONTEXT_INTEGER (CONTEXT_AMD64 | 0x2L)
-#define CONTEXT_SEGMENTS (CONTEXT_AMD64 | 0x4L)
-#define CONTEXT_FLOATING_POINT (CONTEXT_AMD64 | 0x8L)
-#define CONTEXT_DEBUG_REGISTERS (CONTEXT_AMD64 | 0x10L)
+#define CONTEXT_CONTROL (CONTEXT_AMD64 | __MSABI_LONG(0x1))
+#define CONTEXT_INTEGER (CONTEXT_AMD64 | __MSABI_LONG(0x2))
+#define CONTEXT_SEGMENTS (CONTEXT_AMD64 | __MSABI_LONG(0x4))
+#define CONTEXT_FLOATING_POINT (CONTEXT_AMD64 | __MSABI_LONG(0x8))
+#define CONTEXT_DEBUG_REGISTERS (CONTEXT_AMD64 | __MSABI_LONG(0x10))
 
 #define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_INTEGER | CONTEXT_FLOATING_POINT)
 #define CONTEXT_ALL (CONTEXT_CONTROL | CONTEXT_INTEGER | CONTEXT_SEGMENTS | CONTEXT_FLOATING_POINT | CONTEXT_DEBUG_REGISTERS)
@@ -1785,8 +1792,6 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define BitTestAndComplement _bittestandcomplement
 #define BitTestAndSet _bittestandset
 #define BitTestAndReset _bittestandreset
-#define InterlockedBitTestAndSet _interlockedbittestandset
-#define InterlockedBitTestAndReset _interlockedbittestandreset
 
 #define BitScanForward _BitScanForward
 #define BitScanReverse _BitScanReverse
@@ -1798,35 +1803,21 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define InterlockedIncrementAcquire InterlockedIncrement
 #define InterlockedIncrementRelease InterlockedIncrement
 
-    BOOLEAN InterlockedBitTestAndSet(LONG *Base,LONG Bit);
-    BOOLEAN InterlockedBitTestAndReset(LONG *Base,LONG Bit);
-#ifndef __CRT__NO_INLINE
-    __CRT_INLINE BOOLEAN InterlockedBitTestAndSet(LONG *Base,LONG Bit) {
-      int old = 0;
-      __asm__ __volatile__("lock ; btsl %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile long *) Base))
-	:"Ir" (Bit) : "memory");
-      return (BOOLEAN) (old!=0);
-    }
+    BOOLEAN _interlockedbittestandset(LONG *Base,LONG Bit);
+    BOOLEAN _interlockedbittestandreset(LONG *Base,LONG Bit);
+    BOOLEAN _interlockedbittestandcomplement(LONG *Base,LONG Bit);
 
-    __CRT_INLINE BOOLEAN InterlockedBitTestAndReset(LONG *Base,LONG Bit) {
-      int old = 0;
-      __asm__ __volatile__("lock ; btrl %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile long *) Base))
-	:"Ir" (Bit) : "memory");
-      return (BOOLEAN) (old!=0);
-    }
-#endif /* __CRT__NO_INLINE */
-
-    BOOLEAN InterlockedBitTestAndComplement(LONG *Base,LONG Bit);
+    BOOLEAN InterlockedBitTestAndSet(volatile LONG *Base,LONG Bit);
+    BOOLEAN InterlockedBitTestAndReset(volatile LONG *Base,LONG Bit);
+    BOOLEAN InterlockedBitTestAndComplement(volatile LONG *Base,LONG Bit);
 #ifndef __CRT__NO_INLINE
-    __CRT_INLINE BOOLEAN InterlockedBitTestAndComplement(LONG *Base,LONG Bit) {
-      int old = 0;
-      __asm__ __volatile__("lock ; btcl %2,%1\n\tsbbl %0,%0 "
-	:"=r" (old),"=m" ((*(volatile long *) Base))
-	:"Ir" (Bit));
-      return (BOOLEAN) (old!=0);
-    }
+    __CRT_INLINE __buildbittesti(_interlockedbittestandset, LONG, "lock bts", "I", /* unused param */)
+    __CRT_INLINE __buildbittesti(_interlockedbittestandreset, LONG, "lock btr", "I", /* unused param */)
+    __CRT_INLINE __buildbittesti(_interlockedbittestandcomplement, LONG, "lock btc", "I", /* unused param */)
+
+    __CRT_INLINE __buildbittesti(InterlockedBitTestAndSet, LONG, "lock bts", "I", volatile)
+    __CRT_INLINE __buildbittesti(InterlockedBitTestAndReset, LONG, "lock btr", "I", volatile)
+    __CRT_INLINE __buildbittesti(InterlockedBitTestAndComplement, LONG, "lock btc", "I", volatile)
 #endif /* !__CRT__NO_INLINE */
 
 #ifdef _PREFIX_
@@ -1868,7 +1859,6 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
   }
 #endif
 
-#ifndef __CRT__NO_INLINE
   __CRT_INLINE VOID MemoryBarrier(VOID)
   {
     LONG Barrier = 0;
@@ -1898,7 +1888,6 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 	: "=r" (ret));
     return ret;
   }
-#endif /* !__CRT__NO_INLINE */
 #endif /* defined(__i386__) && !defined(__x86_64) */
 
 #define EXCEPTION_READ_FAULT 0
@@ -1912,12 +1901,12 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define CONTEXT_i386 0x00010000
 #define CONTEXT_i486 0x00010000
 
-#define CONTEXT_CONTROL (CONTEXT_i386 | 0x00000001L)
-#define CONTEXT_INTEGER (CONTEXT_i386 | 0x00000002L)
-#define CONTEXT_SEGMENTS (CONTEXT_i386 | 0x00000004L)
-#define CONTEXT_FLOATING_POINT (CONTEXT_i386 | 0x00000008L)
-#define CONTEXT_DEBUG_REGISTERS (CONTEXT_i386 | 0x00000010L)
-#define CONTEXT_EXTENDED_REGISTERS (CONTEXT_i386 | 0x00000020L)
+#define CONTEXT_CONTROL (CONTEXT_i386 | __MSABI_LONG(0x00000001))
+#define CONTEXT_INTEGER (CONTEXT_i386 | __MSABI_LONG(0x00000002))
+#define CONTEXT_SEGMENTS (CONTEXT_i386 | __MSABI_LONG(0x00000004))
+#define CONTEXT_FLOATING_POINT (CONTEXT_i386 | __MSABI_LONG(0x00000008))
+#define CONTEXT_DEBUG_REGISTERS (CONTEXT_i386 | __MSABI_LONG(0x00000010))
+#define CONTEXT_EXTENDED_REGISTERS (CONTEXT_i386 | __MSABI_LONG(0x00000020))
 
 #define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_INTEGER | CONTEXT_SEGMENTS)
 
@@ -1972,6 +1961,10 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
     typedef CONTEXT *PCONTEXT;
 
 #endif /* end of _X86_ */
+
+  LONG WINAPI InterlockedIncrement(LONG volatile *);
+  LONG WINAPI InterlockedDecrement(LONG volatile *);
+  LONG WINAPI InterlockedExchange(LONG volatile *, LONG);
 
 #if defined(__MINGW_INTRIN_INLINE) && (defined(__i386__) || defined(__x86_64))
   __MINGW_INTRIN_INLINE LONG WINAPI InterlockedIncrement(LONG volatile *Addend) {
@@ -2099,12 +2092,12 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 
 #define CONTEXT_IA64 0x00080000
 
-#define CONTEXT_CONTROL (CONTEXT_IA64 | 0x00000001L)
-#define CONTEXT_LOWER_FLOATING_POINT (CONTEXT_IA64 | 0x00000002L)
-#define CONTEXT_HIGHER_FLOATING_POINT (CONTEXT_IA64 | 0x00000004L)
-#define CONTEXT_INTEGER (CONTEXT_IA64 | 0x00000008L)
-#define CONTEXT_DEBUG (CONTEXT_IA64 | 0x00000010L)
-#define CONTEXT_IA32_CONTROL (CONTEXT_IA64 | 0x00000020L)
+#define CONTEXT_CONTROL (CONTEXT_IA64 | __MSABI_LONG(0x00000001))
+#define CONTEXT_LOWER_FLOATING_POINT (CONTEXT_IA64 | __MSABI_LONG(0x00000002))
+#define CONTEXT_HIGHER_FLOATING_POINT (CONTEXT_IA64 | __MSABI_LONG(0x00000004))
+#define CONTEXT_INTEGER (CONTEXT_IA64 | __MSABI_LONG(0x00000008))
+#define CONTEXT_DEBUG (CONTEXT_IA64 | __MSABI_LONG(0x00000010))
+#define CONTEXT_IA32_CONTROL (CONTEXT_IA64 | __MSABI_LONG(0x00000020))
 
 #define CONTEXT_FLOATING_POINT (CONTEXT_LOWER_FLOATING_POINT | CONTEXT_HIGHER_FLOATING_POINT)
 #define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_FLOATING_POINT | CONTEXT_INTEGER | CONTEXT_IA32_CONTROL)
@@ -2472,28 +2465,28 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
     typedef DWORD ACCESS_MASK;
     typedef ACCESS_MASK *PACCESS_MASK;
 
-#define DELETE (0x00010000L)
-#define READ_CONTROL (0x00020000L)
-#define WRITE_DAC (0x00040000L)
-#define WRITE_OWNER (0x00080000L)
-#define SYNCHRONIZE (0x00100000L)
+#define DELETE (__MSABI_LONG(0x00010000))
+#define READ_CONTROL (__MSABI_LONG(0x00020000))
+#define WRITE_DAC (__MSABI_LONG(0x00040000))
+#define WRITE_OWNER (__MSABI_LONG(0x00080000))
+#define SYNCHRONIZE (__MSABI_LONG(0x00100000))
 
-#define STANDARD_RIGHTS_REQUIRED (0x000F0000L)
+#define STANDARD_RIGHTS_REQUIRED (__MSABI_LONG(0x000F0000))
 #define STANDARD_RIGHTS_READ (READ_CONTROL)
 #define STANDARD_RIGHTS_WRITE (READ_CONTROL)
 #define STANDARD_RIGHTS_EXECUTE (READ_CONTROL)
-#define STANDARD_RIGHTS_ALL (0x001F0000L)
+#define STANDARD_RIGHTS_ALL (__MSABI_LONG(0x001F0000))
 
-#define SPECIFIC_RIGHTS_ALL (0x0000FFFFL)
+#define SPECIFIC_RIGHTS_ALL (__MSABI_LONG(0x0000FFFF))
 
-#define ACCESS_SYSTEM_SECURITY (0x01000000L)
+#define ACCESS_SYSTEM_SECURITY (__MSABI_LONG(0x01000000))
 
-#define MAXIMUM_ALLOWED (0x02000000L)
+#define MAXIMUM_ALLOWED (__MSABI_LONG(0x02000000))
 
-#define GENERIC_READ (0x80000000L)
-#define GENERIC_WRITE (0x40000000L)
-#define GENERIC_EXECUTE (0x20000000L)
-#define GENERIC_ALL (0x10000000L)
+#define GENERIC_READ (__MSABI_LONG(0x80000000))
+#define GENERIC_WRITE (__MSABI_LONG(0x40000000))
+#define GENERIC_EXECUTE (__MSABI_LONG(0x20000000))
+#define GENERIC_ALL (__MSABI_LONG(0x10000000))
 
     typedef struct _GENERIC_MAPPING {
       ACCESS_MASK GenericRead;
@@ -2541,7 +2534,7 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SECURITY_MAX_SID_SIZE (sizeof(SID) - sizeof(DWORD) + (SID_MAX_SUB_AUTHORITIES *sizeof(DWORD)))
 
     typedef enum _SID_NAME_USE {
-      SidTypeUser = 1,SidTypeGroup,SidTypeDomain,SidTypeAlias,SidTypeWellKnownGroup,SidTypeDeletedAccount,SidTypeInvalid,SidTypeUnknown,SidTypeComputer
+      SidTypeUser = 1,SidTypeGroup,SidTypeDomain,SidTypeAlias,SidTypeWellKnownGroup,SidTypeDeletedAccount,SidTypeInvalid,SidTypeUnknown,SidTypeComputer,SidTypeLabel
     } SID_NAME_USE,*PSID_NAME_USE;
 
     typedef struct _SID_AND_ATTRIBUTES {
@@ -2568,128 +2561,193 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define SECURITY_NON_UNIQUE_AUTHORITY {0,0,0,0,0,4}
 #define SECURITY_RESOURCE_MANAGER_AUTHORITY {0,0,0,0,0,9}
 
-#define SECURITY_NULL_RID (0x00000000L)
-#define SECURITY_WORLD_RID (0x00000000L)
-#define SECURITY_LOCAL_RID (0x00000000L)
+#define SECURITY_NULL_RID (__MSABI_LONG(0x00000000))
+#define SECURITY_WORLD_RID (__MSABI_LONG(0x00000000))
+#define SECURITY_LOCAL_RID (__MSABI_LONG(0x00000000))
 
-#define SECURITY_CREATOR_OWNER_RID (0x00000000L)
-#define SECURITY_CREATOR_GROUP_RID (0x00000001L)
+#define SECURITY_CREATOR_OWNER_RID (__MSABI_LONG(0x00000000))
+#define SECURITY_CREATOR_GROUP_RID (__MSABI_LONG(0x00000001))
 
-#define SECURITY_CREATOR_OWNER_SERVER_RID (0x00000002L)
-#define SECURITY_CREATOR_GROUP_SERVER_RID (0x00000003L)
+#define SECURITY_CREATOR_OWNER_SERVER_RID (__MSABI_LONG(0x00000002))
+#define SECURITY_CREATOR_GROUP_SERVER_RID (__MSABI_LONG(0x00000003))
 
 #define SECURITY_NT_AUTHORITY {0,0,0,0,0,5}
 
-#define SECURITY_DIALUP_RID (0x00000001L)
-#define SECURITY_NETWORK_RID (0x00000002L)
-#define SECURITY_BATCH_RID (0x00000003L)
-#define SECURITY_INTERACTIVE_RID (0x00000004L)
-#define SECURITY_LOGON_IDS_RID (0x00000005L)
-#define SECURITY_LOGON_IDS_RID_COUNT (3L)
-#define SECURITY_SERVICE_RID (0x00000006L)
-#define SECURITY_ANONYMOUS_LOGON_RID (0x00000007L)
-#define SECURITY_PROXY_RID (0x00000008L)
-#define SECURITY_ENTERPRISE_CONTROLLERS_RID (0x00000009L)
+#define SECURITY_DIALUP_RID (__MSABI_LONG(0x00000001))
+#define SECURITY_NETWORK_RID (__MSABI_LONG(0x00000002))
+#define SECURITY_BATCH_RID (__MSABI_LONG(0x00000003))
+#define SECURITY_INTERACTIVE_RID (__MSABI_LONG(0x00000004))
+#define SECURITY_LOGON_IDS_RID (__MSABI_LONG(0x00000005))
+#define SECURITY_LOGON_IDS_RID_COUNT (__MSABI_LONG(3))
+#define SECURITY_SERVICE_RID (__MSABI_LONG(0x00000006))
+#define SECURITY_ANONYMOUS_LOGON_RID (__MSABI_LONG(0x00000007))
+#define SECURITY_PROXY_RID (__MSABI_LONG(0x00000008))
+#define SECURITY_ENTERPRISE_CONTROLLERS_RID (__MSABI_LONG(0x00000009))
 #define SECURITY_SERVER_LOGON_RID SECURITY_ENTERPRISE_CONTROLLERS_RID
-#define SECURITY_PRINCIPAL_SELF_RID (0x0000000AL)
-#define SECURITY_AUTHENTICATED_USER_RID (0x0000000BL)
-#define SECURITY_RESTRICTED_CODE_RID (0x0000000CL)
-#define SECURITY_TERMINAL_SERVER_RID (0x0000000DL)
-#define SECURITY_REMOTE_LOGON_RID (0x0000000EL)
-#define SECURITY_THIS_ORGANIZATION_RID (0x0000000FL)
-#define SECURITY_IUSER_RID (0x00000011L)
+#define SECURITY_PRINCIPAL_SELF_RID (__MSABI_LONG(0x0000000A))
+#define SECURITY_AUTHENTICATED_USER_RID (__MSABI_LONG(0x0000000B))
+#define SECURITY_RESTRICTED_CODE_RID (__MSABI_LONG(0x0000000C))
+#define SECURITY_TERMINAL_SERVER_RID (__MSABI_LONG(0x0000000D))
+#define SECURITY_REMOTE_LOGON_RID (__MSABI_LONG(0x0000000E))
+#define SECURITY_THIS_ORGANIZATION_RID (__MSABI_LONG(0x0000000F))
+#define SECURITY_IUSER_RID (__MSABI_LONG(0x00000011))
 
-#define SECURITY_LOCAL_SYSTEM_RID (0x00000012L)
-#define SECURITY_LOCAL_SERVICE_RID (0x00000013L)
-#define SECURITY_NETWORK_SERVICE_RID (0x00000014L)
+#define SECURITY_LOCAL_SYSTEM_RID (__MSABI_LONG(0x00000012))
+#define SECURITY_LOCAL_SERVICE_RID (__MSABI_LONG(0x00000013))
+#define SECURITY_NETWORK_SERVICE_RID (__MSABI_LONG(0x00000014))
 
-#define SECURITY_NT_NON_UNIQUE (0x00000015L)
-#define SECURITY_NT_NON_UNIQUE_SUB_AUTH_COUNT (3L)
+#define SECURITY_NT_NON_UNIQUE (__MSABI_LONG(0x00000015))
+#define SECURITY_NT_NON_UNIQUE_SUB_AUTH_COUNT (__MSABI_LONG(3))
 
-#define SECURITY_ENTERPRISE_READONLY_CONTROLLERS_RID (0x00000016L)
+#define SECURITY_ENTERPRISE_READONLY_CONTROLLERS_RID (__MSABI_LONG(0x00000016))
 
-#define SECURITY_BUILTIN_DOMAIN_RID (0x00000020L)
-#define SECURITY_WRITE_RESTRICTED_CODE_RID (0x00000021L)
+#define SECURITY_BUILTIN_DOMAIN_RID (__MSABI_LONG(0x00000020))
+#define SECURITY_WRITE_RESTRICTED_CODE_RID (__MSABI_LONG(0x00000021))
 
-#define SECURITY_PACKAGE_BASE_RID (0x00000040L)
-#define SECURITY_PACKAGE_RID_COUNT (2L)
-#define SECURITY_PACKAGE_NTLM_RID (0x0000000AL)
-#define SECURITY_PACKAGE_SCHANNEL_RID (0x0000000EL)
-#define SECURITY_PACKAGE_DIGEST_RID (0x00000015L)
+#define SECURITY_PACKAGE_BASE_RID (__MSABI_LONG(0x00000040))
+#define SECURITY_PACKAGE_RID_COUNT (__MSABI_LONG(2))
+#define SECURITY_PACKAGE_NTLM_RID (__MSABI_LONG(0x0000000A))
+#define SECURITY_PACKAGE_SCHANNEL_RID (__MSABI_LONG(0x0000000E))
+#define SECURITY_PACKAGE_DIGEST_RID (__MSABI_LONG(0x00000015))
 
-#define SECURITY_SERVICE_ID_BASE_RID (0x00000050L)
-#define SECURITY_SERVICE_ID_RID_COUNT (6L)
+#define SECURITY_SERVICE_ID_BASE_RID (__MSABI_LONG(0x00000050))
+#define SECURITY_SERVICE_ID_RID_COUNT (__MSABI_LONG(6))
 
-#define SECURITY_RESERVED_ID_BASE_RID (0x00000051L)
+#define SECURITY_RESERVED_ID_BASE_RID (__MSABI_LONG(0x00000051))
 
-#define SECURITY_MAX_ALWAYS_FILTERED (0x000003E7L)
-#define SECURITY_MIN_NEVER_FILTERED (0x000003E8L)
+#define SECURITY_MAX_ALWAYS_FILTERED (__MSABI_LONG(0x000003E7))
+#define SECURITY_MIN_NEVER_FILTERED (__MSABI_LONG(0x000003E8))
 
-#define SECURITY_OTHER_ORGANIZATION_RID (0x000003E8L)
+#define SECURITY_OTHER_ORGANIZATION_RID (__MSABI_LONG(0x000003E8))
 
-#define FOREST_USER_RID_MAX (0x000001F3L)
+#define FOREST_USER_RID_MAX (__MSABI_LONG(0x000001F3))
 
-#define DOMAIN_USER_RID_ADMIN (0x000001F4L)
-#define DOMAIN_USER_RID_GUEST (0x000001F5L)
-#define DOMAIN_USER_RID_KRBTGT (0x000001F6L)
+#define DOMAIN_USER_RID_ADMIN (__MSABI_LONG(0x000001F4))
+#define DOMAIN_USER_RID_GUEST (__MSABI_LONG(0x000001F5))
+#define DOMAIN_USER_RID_KRBTGT (__MSABI_LONG(0x000001F6))
 
-#define DOMAIN_USER_RID_MAX (0x000003E7L)
+#define DOMAIN_USER_RID_MAX (__MSABI_LONG(0x000003E7))
 
-#define DOMAIN_GROUP_RID_ADMINS (0x00000200L)
-#define DOMAIN_GROUP_RID_USERS (0x00000201L)
-#define DOMAIN_GROUP_RID_GUESTS (0x00000202L)
-#define DOMAIN_GROUP_RID_COMPUTERS (0x00000203L)
-#define DOMAIN_GROUP_RID_CONTROLLERS (0x00000204L)
-#define DOMAIN_GROUP_RID_CERT_ADMINS (0x00000205L)
-#define DOMAIN_GROUP_RID_SCHEMA_ADMINS (0x00000206L)
-#define DOMAIN_GROUP_RID_ENTERPRISE_ADMINS (0x00000207L)
-#define DOMAIN_GROUP_RID_POLICY_ADMINS (0x00000208L)
-#define DOMAIN_GROUP_RID_READONLY_CONTROLLERS (0x00000209L)
+#define DOMAIN_GROUP_RID_ADMINS (__MSABI_LONG(0x00000200))
+#define DOMAIN_GROUP_RID_USERS (__MSABI_LONG(0x00000201))
+#define DOMAIN_GROUP_RID_GUESTS (__MSABI_LONG(0x00000202))
+#define DOMAIN_GROUP_RID_COMPUTERS (__MSABI_LONG(0x00000203))
+#define DOMAIN_GROUP_RID_CONTROLLERS (__MSABI_LONG(0x00000204))
+#define DOMAIN_GROUP_RID_CERT_ADMINS (__MSABI_LONG(0x00000205))
+#define DOMAIN_GROUP_RID_SCHEMA_ADMINS (__MSABI_LONG(0x00000206))
+#define DOMAIN_GROUP_RID_ENTERPRISE_ADMINS (__MSABI_LONG(0x00000207))
+#define DOMAIN_GROUP_RID_POLICY_ADMINS (__MSABI_LONG(0x00000208))
+#define DOMAIN_GROUP_RID_READONLY_CONTROLLERS (__MSABI_LONG(0x00000209))
 
-#define DOMAIN_ALIAS_RID_ADMINS (0x00000220L)
-#define DOMAIN_ALIAS_RID_USERS (0x00000221L)
-#define DOMAIN_ALIAS_RID_GUESTS (0x00000222L)
-#define DOMAIN_ALIAS_RID_POWER_USERS (0x00000223L)
+#define DOMAIN_ALIAS_RID_ADMINS (__MSABI_LONG(0x00000220))
+#define DOMAIN_ALIAS_RID_USERS (__MSABI_LONG(0x00000221))
+#define DOMAIN_ALIAS_RID_GUESTS (__MSABI_LONG(0x00000222))
+#define DOMAIN_ALIAS_RID_POWER_USERS (__MSABI_LONG(0x00000223))
 
-#define DOMAIN_ALIAS_RID_ACCOUNT_OPS (0x00000224L)
-#define DOMAIN_ALIAS_RID_SYSTEM_OPS (0x00000225L)
-#define DOMAIN_ALIAS_RID_PRINT_OPS (0x00000226L)
-#define DOMAIN_ALIAS_RID_BACKUP_OPS (0x00000227L)
+#define DOMAIN_ALIAS_RID_ACCOUNT_OPS (__MSABI_LONG(0x00000224))
+#define DOMAIN_ALIAS_RID_SYSTEM_OPS (__MSABI_LONG(0x00000225))
+#define DOMAIN_ALIAS_RID_PRINT_OPS (__MSABI_LONG(0x00000226))
+#define DOMAIN_ALIAS_RID_BACKUP_OPS (__MSABI_LONG(0x00000227))
 
-#define DOMAIN_ALIAS_RID_REPLICATOR (0x00000228L)
-#define DOMAIN_ALIAS_RID_RAS_SERVERS (0x00000229L)
-#define DOMAIN_ALIAS_RID_PREW2KCOMPACCESS (0x0000022AL)
-#define DOMAIN_ALIAS_RID_REMOTE_DESKTOP_USERS (0x0000022BL)
-#define DOMAIN_ALIAS_RID_NETWORK_CONFIGURATION_OPS (0x0000022CL)
-#define DOMAIN_ALIAS_RID_INCOMING_FOREST_TRUST_BUILDERS (0x0000022DL)
+#define DOMAIN_ALIAS_RID_REPLICATOR (__MSABI_LONG(0x00000228))
+#define DOMAIN_ALIAS_RID_RAS_SERVERS (__MSABI_LONG(0x00000229))
+#define DOMAIN_ALIAS_RID_PREW2KCOMPACCESS (__MSABI_LONG(0x0000022A))
+#define DOMAIN_ALIAS_RID_REMOTE_DESKTOP_USERS (__MSABI_LONG(0x0000022B))
+#define DOMAIN_ALIAS_RID_NETWORK_CONFIGURATION_OPS (__MSABI_LONG(0x0000022C))
+#define DOMAIN_ALIAS_RID_INCOMING_FOREST_TRUST_BUILDERS (__MSABI_LONG(0x0000022D))
 
-#define DOMAIN_ALIAS_RID_MONITORING_USERS (0x0000022EL)
-#define DOMAIN_ALIAS_RID_LOGGING_USERS (0x0000022FL)
-#define DOMAIN_ALIAS_RID_AUTHORIZATIONACCESS (0x00000230L)
-#define DOMAIN_ALIAS_RID_TS_LICENSE_SERVERS (0x00000231L)
-#define DOMAIN_ALIAS_RID_DCOM_USERS (0x00000232L)
+#define DOMAIN_ALIAS_RID_MONITORING_USERS (__MSABI_LONG(0x0000022E))
+#define DOMAIN_ALIAS_RID_LOGGING_USERS (__MSABI_LONG(0x0000022F))
+#define DOMAIN_ALIAS_RID_AUTHORIZATIONACCESS (__MSABI_LONG(0x00000230))
+#define DOMAIN_ALIAS_RID_TS_LICENSE_SERVERS (__MSABI_LONG(0x00000231))
+#define DOMAIN_ALIAS_RID_DCOM_USERS (__MSABI_LONG(0x00000232))
 
-#define DOMAIN_ALIAS_RID_IUSERS (0x00000238L)
-#define DOMAIN_ALIAS_RID_CRYPTO_OPERATORS (0x00000239L)
-#define DOMAIN_ALIAS_RID_CACHEABLE_PRINCIPALS_GROUP (0x0000023BL)
-#define DOMAIN_ALIAS_RID_NON_CACHEABLE_PRINCIPALS_GROUP (0x0000023CL)
-#define DOMAIN_ALIAS_RID_EVENT_LOG_READERS_GROUP (0x0000023DL)
+#define DOMAIN_ALIAS_RID_IUSERS (__MSABI_LONG(0x00000238))
+#define DOMAIN_ALIAS_RID_CRYPTO_OPERATORS (__MSABI_LONG(0x00000239))
+#define DOMAIN_ALIAS_RID_CACHEABLE_PRINCIPALS_GROUP (__MSABI_LONG(0x0000023B))
+#define DOMAIN_ALIAS_RID_NON_CACHEABLE_PRINCIPALS_GROUP (__MSABI_LONG(0x0000023C))
+#define DOMAIN_ALIAS_RID_EVENT_LOG_READERS_GROUP (__MSABI_LONG(0x0000023D))
 
 #define SECURITY_MANDATORY_LABEL_AUTHORITY {0,0,0,0,0,16}
-#define SECURITY_MANDATORY_UNTRUSTED_RID (0x00000000L)
-#define SECURITY_MANDATORY_LOW_RID (0x00001000L)
-#define SECURITY_MANDATORY_MEDIUM_RID (0x00002000L)
-#define SECURITY_MANDATORY_HIGH_RID (0x00003000L)
-#define SECURITY_MANDATORY_SYSTEM_RID (0x00004000L)
-#define SECURITY_MANDATORY_PROTECTED_PROCESS_RID (0x00005000L)
+#define SECURITY_MANDATORY_UNTRUSTED_RID (__MSABI_LONG(0x00000000))
+#define SECURITY_MANDATORY_LOW_RID (__MSABI_LONG(0x00001000))
+#define SECURITY_MANDATORY_MEDIUM_RID (__MSABI_LONG(0x00002000))
+#define SECURITY_MANDATORY_HIGH_RID (__MSABI_LONG(0x00003000))
+#define SECURITY_MANDATORY_SYSTEM_RID (__MSABI_LONG(0x00004000))
+#define SECURITY_MANDATORY_PROTECTED_PROCESS_RID (__MSABI_LONG(0x00005000))
 
 #define SECURITY_MANDATORY_MAXIMUM_USER_RID SECURITY_MANDATORY_SYSTEM_RID
 
 #define MANDATORY_LEVEL_TO_MANDATORY_RID(IL) (IL * 0x1000)
 
     typedef enum {
-      WinNullSid = 0,WinWorldSid = 1,WinLocalSid = 2,WinCreatorOwnerSid = 3,WinCreatorGroupSid = 4,WinCreatorOwnerServerSid = 5,WinCreatorGroupServerSid = 6,WinNtAuthoritySid = 7,WinDialupSid = 8,WinNetworkSid = 9,WinBatchSid = 10,WinInteractiveSid = 11,WinServiceSid = 12,WinAnonymousSid = 13,WinProxySid = 14,WinEnterpriseControllersSid = 15,WinSelfSid = 16,WinAuthenticatedUserSid = 17,WinRestrictedCodeSid = 18,WinTerminalServerSid = 19,WinRemoteLogonIdSid = 20,WinLogonIdsSid = 21,WinLocalSystemSid = 22,WinLocalServiceSid = 23,WinNetworkServiceSid = 24,WinBuiltinDomainSid = 25,WinBuiltinAdministratorsSid = 26,WinBuiltinUsersSid = 27,WinBuiltinGuestsSid = 28,WinBuiltinPowerUsersSid = 29,WinBuiltinAccountOperatorsSid = 30,WinBuiltinSystemOperatorsSid = 31,WinBuiltinPrintOperatorsSid = 32,WinBuiltinBackupOperatorsSid = 33,WinBuiltinReplicatorSid = 34,WinBuiltinPreWindows2000CompatibleAccessSid = 35,WinBuiltinRemoteDesktopUsersSid = 36,WinBuiltinNetworkConfigurationOperatorsSid = 37,WinAccountAdministratorSid = 38,WinAccountGuestSid = 39,WinAccountKrbtgtSid = 40,WinAccountDomainAdminsSid = 41,WinAccountDomainUsersSid = 42,WinAccountDomainGuestsSid = 43,WinAccountComputersSid = 44,WinAccountControllersSid = 45,WinAccountCertAdminsSid = 46,WinAccountSchemaAdminsSid = 47,WinAccountEnterpriseAdminsSid = 48,WinAccountPolicyAdminsSid = 49,WinAccountRasAndIasServersSid = 50,WinNTLMAuthenticationSid = 51,WinDigestAuthenticationSid = 52,WinSChannelAuthenticationSid = 53,WinThisOrganizationSid = 54,WinOtherOrganizationSid = 55,WinBuiltinIncomingForestTrustBuildersSid = 56,WinBuiltinPerfMonitoringUsersSid = 57,WinBuiltinPerfLoggingUsersSid = 58,WinBuiltinAuthorizationAccessSid = 59,WinBuiltinTerminalServerLicenseServersSid = 60,WinBuiltinDCOMUsersSid = 61
-    } WELL_KNOWN_SID_TYPE;
+      WinNullSid = 0,WinWorldSid = 1,WinLocalSid = 2,WinCreatorOwnerSid = 3,
+      WinCreatorGroupSid = 4,WinCreatorOwnerServerSid = 5,
+      WinCreatorGroupServerSid = 6,WinNtAuthoritySid = 7,WinDialupSid = 8,
+      WinNetworkSid = 9,WinBatchSid = 10,WinInteractiveSid = 11,
+      WinServiceSid = 12,WinAnonymousSid = 13,WinProxySid = 14,
+      WinEnterpriseControllersSid = 15,WinSelfSid = 16,
+      WinAuthenticatedUserSid = 17,WinRestrictedCodeSid = 18,
+      WinTerminalServerSid = 19,WinRemoteLogonIdSid = 20,WinLogonIdsSid = 21,
+      WinLocalSystemSid = 22,WinLocalServiceSid = 23,WinNetworkServiceSid = 24,
+      WinBuiltinDomainSid = 25,WinBuiltinAdministratorsSid = 26,
+      WinBuiltinUsersSid = 27,WinBuiltinGuestsSid = 28,
+      WinBuiltinPowerUsersSid = 29,WinBuiltinAccountOperatorsSid = 30,
+      WinBuiltinSystemOperatorsSid = 31,WinBuiltinPrintOperatorsSid = 32,
+      WinBuiltinBackupOperatorsSid = 33,WinBuiltinReplicatorSid = 34,
+      WinBuiltinPreWindows2000CompatibleAccessSid = 35,
+      WinBuiltinRemoteDesktopUsersSid = 36,
+      WinBuiltinNetworkConfigurationOperatorsSid = 37,
+      WinAccountAdministratorSid = 38,WinAccountGuestSid = 39,
+      WinAccountKrbtgtSid = 40,WinAccountDomainAdminsSid = 41,
+      WinAccountDomainUsersSid = 42,WinAccountDomainGuestsSid = 43,
+      WinAccountComputersSid = 44,WinAccountControllersSid = 45,
+      WinAccountCertAdminsSid = 46,WinAccountSchemaAdminsSid = 47,
+      WinAccountEnterpriseAdminsSid = 48,WinAccountPolicyAdminsSid = 49,
+      WinAccountRasAndIasServersSid = 50,WinNTLMAuthenticationSid = 51,
+      WinDigestAuthenticationSid = 52,WinSChannelAuthenticationSid = 53,
+      WinThisOrganizationSid = 54,WinOtherOrganizationSid = 55,
+      WinBuiltinIncomingForestTrustBuildersSid = 56,
+      WinBuiltinPerfMonitoringUsersSid = 57,WinBuiltinPerfLoggingUsersSid = 58,
+      WinBuiltinAuthorizationAccessSid = 59,
+      WinBuiltinTerminalServerLicenseServersSid = 60,
+      WinBuiltinDCOMUsersSid = 61,WinBuiltinIUsersSid = 62,
+      WinIUserSid = 63, WinBuiltinCryptoOperatorsSid = 64,
+      WinUntrustedLabelSid = 65, WinLowLabelSid = 66, WinMediumLabelSid = 67,
+      WinHighLabelSid = 68, WinSystemLabelSid = 69, WinWriteRestrictedCodeSid = 70,
+      WinCreatorOwnerRightsSid = 71, WinCacheablePrincipalsGroupSid = 72,
+      WinNonCacheablePrincipalsGroupSid = 73, WinEnterpriseReadonlyControllersSid = 74,
+      WinAccountReadonlyControllersSid = 75, WinBuiltinEventLogReadersGroup = 76,
+      WinNewEnterpriseReadonlyControllersSid = 77, WinBuiltinCertSvcDComAccessGroup = 78,
+      WinMediumPlusLabelSid = 79, WinLocalLogonSid = 80, WinConsoleLogonSid = 81,
+      WinThisOrganizationCertificateSid = 82, WinApplicationPackageAuthoritySid = 83,
+      WinBuiltinAnyPackageSid = 84, WinCapabilityInternetClientSid = 85,
+      WinCapabilityInternetClientServerSid = 86,
+      WinCapabilityPrivateNetworkClientServerSid = 87,
+      WinCapabilityPicturesLibrarySid = 88, WinCapabilityVideosLibrarySid = 89,
+      WinCapabilityMusicLibrarySid = 90, WinCapabilityDocumentsLibrarySid = 91,
+      WinCapabilitySharedUserCertificatesSid = 92, WinCapabilityEnterpriseAuthenticationSid = 93,
+      WinCapabilityRemovableStorageSid = 94, WinBuiltinRDSRemoteAccessServersSid = 95,
+      WinBuiltinRDSEndpointServersSid = 96, WinBuiltinRDSManagementServersSid = 97,
+      WinUserModeDriversSid = 98, WinBuiltinHyperVAdminsSid = 99,
+      WinAccountCloneableControllersSid = 100,
+      WinBuiltinAccessControlAssistanceOperatorsSid = 101,
+      WinBuiltinRemoteManagementUsersSid = 102, WinAuthenticationAuthorityAssertedSid = 103,
+      WinAuthenticationServiceAssertedSid = 104
+} WELL_KNOWN_SID_TYPE;
+
+#define SECURITY_SCOPED_POLICY_ID_AUTHORITY { 0, 0, 0, 0, 0, 17 }
+#define SECURITY_AUTHENTICATION_AUTHORITY   { 0, 0, 0, 0, 0, 18 }
+
+#define SECURITY_AUTHENTICATION_AUTHORITY_RID_COUNT    (__MSABI_LONG(1))
+#define SECURITY_AUTHENTICATION_AUTHORITY_ASSERTED_RID (__MSABI_LONG(0x1))
+#define SECURITY_AUTHENTICATION_SERVICE_ASSERTED_RID   (__MSABI_LONG(0x2))
+
+#define SECURITY_TRUSTED_INSTALLER_RID1 956008885
+#define SECURITY_TRUSTED_INSTALLER_RID2 3418522649
+#define SECURITY_TRUSTED_INSTALLER_RID3 1831038044
+#define SECURITY_TRUSTED_INSTALLER_RID4 1853292631
+#define SECURITY_TRUSTED_INSTALLER_RID5 2271478464
 
 #define SYSTEM_LUID { 0x3E7,0x0 }
 #define ANONYMOUS_LOGON_LUID { 0x3e6,0x0 }
@@ -2697,15 +2755,15 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define NETWORKSERVICE_LUID { 0x3e4,0x0 }
 #define IUSER_LUID { 0x3e3, 0x0 }
 
-#define SE_GROUP_MANDATORY (0x00000001L)
-#define SE_GROUP_ENABLED_BY_DEFAULT (0x00000002L)
-#define SE_GROUP_ENABLED (0x00000004L)
-#define SE_GROUP_OWNER (0x00000008L)
-#define SE_GROUP_USE_FOR_DENY_ONLY (0x00000010L)
-#define SE_GROUP_INTEGRITY (0x00000020L)
-#define SE_GROUP_INTEGRITY_ENABLED (0x00000040L)
-#define SE_GROUP_LOGON_ID (0xC0000000L)
-#define SE_GROUP_RESOURCE (0x20000000L)
+#define SE_GROUP_MANDATORY (__MSABI_LONG(0x00000001))
+#define SE_GROUP_ENABLED_BY_DEFAULT (__MSABI_LONG(0x00000002))
+#define SE_GROUP_ENABLED (__MSABI_LONG(0x00000004))
+#define SE_GROUP_OWNER (__MSABI_LONG(0x00000008))
+#define SE_GROUP_USE_FOR_DENY_ONLY (__MSABI_LONG(0x00000010))
+#define SE_GROUP_INTEGRITY (__MSABI_LONG(0x00000020))
+#define SE_GROUP_INTEGRITY_ENABLED (__MSABI_LONG(0x00000040))
+#define SE_GROUP_LOGON_ID (__MSABI_LONG(0xC0000000))
+#define SE_GROUP_RESOURCE (__MSABI_LONG(0x20000000))
 
 #define ACL_REVISION (2)
 #define ACL_REVISION_DS (4)
@@ -3005,10 +3063,10 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define ACCESS_DS_OBJECT_TYPE_NAME_A "Directory Service Object"
 #define ACCESS_DS_OBJECT_TYPE_NAME_W L"Directory Service Object"
 
-#define SE_PRIVILEGE_ENABLED_BY_DEFAULT (0x00000001L)
-#define SE_PRIVILEGE_ENABLED (0x00000002L)
+#define SE_PRIVILEGE_ENABLED_BY_DEFAULT (__MSABI_LONG(0x00000001))
+#define SE_PRIVILEGE_ENABLED (__MSABI_LONG(0x00000002))
 #define SE_PRIVILEGE_REMOVED (0X00000004L)
-#define SE_PRIVILEGE_USED_FOR_ACCESS (0x80000000L)
+#define SE_PRIVILEGE_USED_FOR_ACCESS (__MSABI_LONG(0x80000000))
 
 #define SE_PRIVILEGE_VALID_ATTRIBUTES (SE_PRIVILEGE_ENABLED_BY_DEFAULT | SE_PRIVILEGE_ENABLED | SE_PRIVILEGE_REMOVED | SE_PRIVILEGE_USED_FOR_ACCESS)
 
@@ -3262,16 +3320,16 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 
     typedef DWORD SECURITY_INFORMATION,*PSECURITY_INFORMATION;
 
-#define OWNER_SECURITY_INFORMATION (0x00000001L)
-#define GROUP_SECURITY_INFORMATION (0x00000002L)
-#define DACL_SECURITY_INFORMATION (0x00000004L)
-#define SACL_SECURITY_INFORMATION (0x00000008L)
-#define LABEL_SECURITY_INFORMATION (0x00000010L)
+#define OWNER_SECURITY_INFORMATION (__MSABI_LONG(0x00000001))
+#define GROUP_SECURITY_INFORMATION (__MSABI_LONG(0x00000002))
+#define DACL_SECURITY_INFORMATION (__MSABI_LONG(0x00000004))
+#define SACL_SECURITY_INFORMATION (__MSABI_LONG(0x00000008))
+#define LABEL_SECURITY_INFORMATION (__MSABI_LONG(0x00000010))
 
-#define PROTECTED_DACL_SECURITY_INFORMATION (0x80000000L)
-#define PROTECTED_SACL_SECURITY_INFORMATION (0x40000000L)
-#define UNPROTECTED_DACL_SECURITY_INFORMATION (0x20000000L)
-#define UNPROTECTED_SACL_SECURITY_INFORMATION (0x10000000L)
+#define PROTECTED_DACL_SECURITY_INFORMATION (__MSABI_LONG(0x80000000))
+#define PROTECTED_SACL_SECURITY_INFORMATION (__MSABI_LONG(0x40000000))
+#define UNPROTECTED_DACL_SECURITY_INFORMATION (__MSABI_LONG(0x20000000))
+#define UNPROTECTED_SACL_SECURITY_INFORMATION (__MSABI_LONG(0x10000000))
 
 #define PROCESS_TERMINATE (0x0001)
 #define PROCESS_CREATE_THREAD (0x0002)
@@ -3794,9 +3852,43 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define FILE_GENERIC_WRITE (STANDARD_RIGHTS_WRITE | FILE_WRITE_DATA | FILE_WRITE_ATTRIBUTES | FILE_WRITE_EA | FILE_APPEND_DATA | SYNCHRONIZE)
 #define FILE_GENERIC_EXECUTE (STANDARD_RIGHTS_EXECUTE | FILE_READ_ATTRIBUTES | FILE_EXECUTE | SYNCHRONIZE)
 
+#define FILE_SUPERSEDE                    0x00000000
+#define FILE_OPEN                         0x00000001
+#define FILE_CREATE                       0x00000002
+#define FILE_OPEN_IF                      0x00000003
+#define FILE_OVERWRITE                    0x00000004
+#define FILE_OVERWRITE_IF                 0x00000005
+#define FILE_MAXIMUM_DISPOSITION          0x00000005
+
+#define FILE_DIRECTORY_FILE               0x00000001
+#define FILE_WRITE_THROUGH                0x00000002
+#define FILE_SEQUENTIAL_ONLY              0x00000004
+#define FILE_NO_INTERMEDIATE_BUFFERING    0x00000008
+#define FILE_SYNCHRONOUS_IO_ALERT         0x00000010
+#define FILE_SYNCHRONOUS_IO_NONALERT      0x00000020
+#define FILE_NON_DIRECTORY_FILE           0x00000040
+#define FILE_CREATE_TREE_CONNECTION       0x00000080
+#define FILE_COMPLETE_IF_OPLOCKED         0x00000100
+#define FILE_NO_EA_KNOWLEDGE              0x00000200
+#define FILE_OPEN_REMOTE_INSTANCE         0x00000400
+#define FILE_RANDOM_ACCESS                0x00000800
+#define FILE_DELETE_ON_CLOSE              0x00001000
+#define FILE_OPEN_BY_FILE_ID              0x00002000
+#define FILE_OPEN_FOR_BACKUP_INTENT       0x00004000
+#define FILE_NO_COMPRESSION               0x00008000
+#if (NTDDI_VERSION >= NTDDI_WIN7)
+#define FILE_OPEN_REQUIRING_OPLOCK        0x00010000
+#define FILE_DISALLOW_EXCLUSIVE           0x00020000
+#endif /* (NTDDI_VERSION >= NTDDI_WIN7) */
+#define FILE_RESERVE_OPFILTER             0x00100000
+#define FILE_OPEN_REPARSE_POINT           0x00200000
+#define FILE_OPEN_NO_RECALL               0x00400000
+#define FILE_OPEN_FOR_FREE_SPACE_QUERY    0x00800000
+
 #define FILE_SHARE_READ 0x00000001
 #define FILE_SHARE_WRITE 0x00000002
 #define FILE_SHARE_DELETE 0x00000004
+#define FILE_SHARE_VALID_FLAGS 0x00000007
 #define FILE_ATTRIBUTE_READONLY 0x00000001
 #define FILE_ATTRIBUTE_HIDDEN 0x00000002
 #define FILE_ATTRIBUTE_SYSTEM 0x00000004
@@ -3874,6 +3966,8 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 
 #define MAXIMUM_REPARSE_DATA_BUFFER_SIZE (16 *1024)
 
+#define SYMLINK_FLAG_RELATIVE   1
+
 #define IO_REPARSE_TAG_RESERVED_ZERO (0)
 #define IO_REPARSE_TAG_RESERVED_ONE (1)
 
@@ -3882,16 +3976,18 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define IsReparseTagMicrosoft(_tag) (((_tag) & 0x80000000))
 #define IsReparseTagNameSurrogate(_tag) (((_tag) & 0x20000000))
 
-#define IO_REPARSE_TAG_MOUNT_POINT (0xA0000003L)
-#define IO_REPARSE_TAG_HSM (0xC0000004L)
-#define IO_REPARSE_TAG_HSM2 (0x80000006L)
-#define IO_REPARSE_TAG_SIS (0x80000007L)
-#define IO_REPARSE_TAG_WIM (0x80000008L)
-#define IO_REPARSE_TAG_CSV (0x80000009L)
-#define IO_REPARSE_TAG_DFS (0x8000000AL)
-#define IO_REPARSE_TAG_FILTER_MANAGER (0x8000000BL)
-#define IO_REPARSE_TAG_DFSR (0x80000012L)
-#define IO_REPARSE_TAG_SYMLINK (0xA000000CL)
+#define IO_REPARSE_TAG_MOUNT_POINT (__MSABI_LONG(0xA0000003))
+#define IO_REPARSE_TAG_HSM (__MSABI_LONG(0xC0000004))
+#define IO_REPARSE_TAG_HSM2 (__MSABI_LONG(0x80000006))
+#define IO_REPARSE_TAG_SIS (__MSABI_LONG(0x80000007))
+#define IO_REPARSE_TAG_WIM (__MSABI_LONG(0x80000008))
+#define IO_REPARSE_TAG_CSV (__MSABI_LONG(0x80000009))
+#define IO_REPARSE_TAG_DFS (__MSABI_LONG(0x8000000A))
+#define IO_REPARSE_TAG_FILTER_MANAGER (__MSABI_LONG(0x8000000B))
+#define IO_REPARSE_TAG_DFSR (__MSABI_LONG(0x80000012))
+#define IO_REPARSE_TAG_SYMLINK (__MSABI_LONG(0xA000000C))
+#define IO_REPARSE_TAG_IIS_CACHE (__MSABI_LONG(0xA0000010))
+#define IO_REPARSE_TAG_DRIVE_EXTENDER (__MSABI_LONG(0x80000005))
 
 #define IO_COMPLETION_MODIFY_STATE 0x0002
 #define IO_COMPLETION_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3)
@@ -6150,29 +6246,29 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
 #define KEY_WRITE ((STANDARD_RIGHTS_WRITE | KEY_SET_VALUE | KEY_CREATE_SUB_KEY) & (~SYNCHRONIZE))
 #define KEY_EXECUTE ((KEY_READ) & (~SYNCHRONIZE))
 #define KEY_ALL_ACCESS ((STANDARD_RIGHTS_ALL | KEY_QUERY_VALUE | KEY_SET_VALUE | KEY_CREATE_SUB_KEY | KEY_ENUMERATE_SUB_KEYS | KEY_NOTIFY | KEY_CREATE_LINK) & (~SYNCHRONIZE))
-#define REG_OPTION_RESERVED (0x00000000L)
+#define REG_OPTION_RESERVED (__MSABI_LONG(0x00000000))
 
-#define REG_OPTION_NON_VOLATILE (0x00000000L)
-#define REG_OPTION_VOLATILE (0x00000001L)
-#define REG_OPTION_CREATE_LINK (0x00000002L)
-#define REG_OPTION_BACKUP_RESTORE (0x00000004L)
-#define REG_OPTION_OPEN_LINK (0x00000008L)
+#define REG_OPTION_NON_VOLATILE (__MSABI_LONG(0x00000000))
+#define REG_OPTION_VOLATILE (__MSABI_LONG(0x00000001))
+#define REG_OPTION_CREATE_LINK (__MSABI_LONG(0x00000002))
+#define REG_OPTION_BACKUP_RESTORE (__MSABI_LONG(0x00000004))
+#define REG_OPTION_OPEN_LINK (__MSABI_LONG(0x00000008))
 #define REG_LEGAL_OPTION (REG_OPTION_RESERVED | REG_OPTION_NON_VOLATILE | REG_OPTION_VOLATILE | REG_OPTION_CREATE_LINK | REG_OPTION_BACKUP_RESTORE | REG_OPTION_OPEN_LINK)
-#define REG_CREATED_NEW_KEY (0x00000001L)
-#define REG_OPENED_EXISTING_KEY (0x00000002L)
+#define REG_CREATED_NEW_KEY (__MSABI_LONG(0x00000001))
+#define REG_OPENED_EXISTING_KEY (__MSABI_LONG(0x00000002))
 #define REG_STANDARD_FORMAT 1
 #define REG_LATEST_FORMAT 2
 #define REG_NO_COMPRESSION 4
-#define REG_WHOLE_HIVE_VOLATILE (0x00000001L)
-#define REG_REFRESH_HIVE (0x00000002L)
-#define REG_NO_LAZY_FLUSH (0x00000004L)
-#define REG_FORCE_RESTORE (0x00000008L)
+#define REG_WHOLE_HIVE_VOLATILE (__MSABI_LONG(0x00000001))
+#define REG_REFRESH_HIVE (__MSABI_LONG(0x00000002))
+#define REG_NO_LAZY_FLUSH (__MSABI_LONG(0x00000004))
+#define REG_FORCE_RESTORE (__MSABI_LONG(0x00000008))
 #define REG_FORCE_UNLOAD 1
 
-#define REG_NOTIFY_CHANGE_NAME (0x00000001L)
-#define REG_NOTIFY_CHANGE_ATTRIBUTES (0x00000002L)
-#define REG_NOTIFY_CHANGE_LAST_SET (0x00000004L)
-#define REG_NOTIFY_CHANGE_SECURITY (0x00000008L)
+#define REG_NOTIFY_CHANGE_NAME (__MSABI_LONG(0x00000001))
+#define REG_NOTIFY_CHANGE_ATTRIBUTES (__MSABI_LONG(0x00000002))
+#define REG_NOTIFY_CHANGE_LAST_SET (__MSABI_LONG(0x00000004))
+#define REG_NOTIFY_CHANGE_SECURITY (__MSABI_LONG(0x00000008))
 
 #define REG_LEGAL_CHANGE_FILTER (REG_NOTIFY_CHANGE_NAME | REG_NOTIFY_CHANGE_ATTRIBUTES | REG_NOTIFY_CHANGE_LAST_SET | REG_NOTIFY_CHANGE_SECURITY)
 
@@ -6232,30 +6328,30 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
       IgnoreError = SERVICE_ERROR_IGNORE,NormalError = SERVICE_ERROR_NORMAL,SevereError = SERVICE_ERROR_SEVERE,CriticalError = SERVICE_ERROR_CRITICAL
     } SERVICE_ERROR_TYPE;
 
-#define TAPE_ERASE_SHORT 0L
-#define TAPE_ERASE_LONG 1L
+#define TAPE_ERASE_SHORT __MSABI_LONG(0)
+#define TAPE_ERASE_LONG __MSABI_LONG(1)
 
     typedef struct _TAPE_ERASE {
       DWORD Type;
       BOOLEAN Immediate;
     } TAPE_ERASE,*PTAPE_ERASE;
 
-#define TAPE_LOAD 0L
-#define TAPE_UNLOAD 1L
-#define TAPE_TENSION 2L
-#define TAPE_LOCK 3L
-#define TAPE_UNLOCK 4L
-#define TAPE_FORMAT 5L
+#define TAPE_LOAD __MSABI_LONG(0)
+#define TAPE_UNLOAD __MSABI_LONG(1)
+#define TAPE_TENSION __MSABI_LONG(2)
+#define TAPE_LOCK __MSABI_LONG(3)
+#define TAPE_UNLOCK __MSABI_LONG(4)
+#define TAPE_FORMAT __MSABI_LONG(5)
 
     typedef struct _TAPE_PREPARE {
       DWORD Operation;
       BOOLEAN Immediate;
     } TAPE_PREPARE,*PTAPE_PREPARE;
 
-#define TAPE_SETMARKS 0L
-#define TAPE_FILEMARKS 1L
-#define TAPE_SHORT_FILEMARKS 2L
-#define TAPE_LONG_FILEMARKS 3L
+#define TAPE_SETMARKS __MSABI_LONG(0)
+#define TAPE_FILEMARKS __MSABI_LONG(1)
+#define TAPE_SHORT_FILEMARKS __MSABI_LONG(2)
+#define TAPE_LONG_FILEMARKS __MSABI_LONG(3)
 
     typedef struct _TAPE_WRITE_MARKS {
       DWORD Type;
@@ -6263,9 +6359,9 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
       BOOLEAN Immediate;
     } TAPE_WRITE_MARKS,*PTAPE_WRITE_MARKS;
 
-#define TAPE_ABSOLUTE_POSITION 0L
-#define TAPE_LOGICAL_POSITION 1L
-#define TAPE_PSEUDO_LOGICAL_POSITION 2L
+#define TAPE_ABSOLUTE_POSITION __MSABI_LONG(0)
+#define TAPE_LOGICAL_POSITION __MSABI_LONG(1)
+#define TAPE_PSEUDO_LOGICAL_POSITION __MSABI_LONG(2)
 
     typedef struct _TAPE_GET_POSITION {
       DWORD Type;
@@ -6273,16 +6369,16 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
       LARGE_INTEGER Offset;
     } TAPE_GET_POSITION,*PTAPE_GET_POSITION;
 
-#define TAPE_REWIND 0L
-#define TAPE_ABSOLUTE_BLOCK 1L
-#define TAPE_LOGICAL_BLOCK 2L
-#define TAPE_PSEUDO_LOGICAL_BLOCK 3L
-#define TAPE_SPACE_END_OF_DATA 4L
-#define TAPE_SPACE_RELATIVE_BLOCKS 5L
-#define TAPE_SPACE_FILEMARKS 6L
-#define TAPE_SPACE_SEQUENTIAL_FMKS 7L
-#define TAPE_SPACE_SETMARKS 8L
-#define TAPE_SPACE_SEQUENTIAL_SMKS 9L
+#define TAPE_REWIND __MSABI_LONG(0)
+#define TAPE_ABSOLUTE_BLOCK __MSABI_LONG(1)
+#define TAPE_LOGICAL_BLOCK __MSABI_LONG(2)
+#define TAPE_PSEUDO_LOGICAL_BLOCK __MSABI_LONG(3)
+#define TAPE_SPACE_END_OF_DATA __MSABI_LONG(4)
+#define TAPE_SPACE_RELATIVE_BLOCKS __MSABI_LONG(5)
+#define TAPE_SPACE_FILEMARKS __MSABI_LONG(6)
+#define TAPE_SPACE_SEQUENTIAL_FMKS __MSABI_LONG(7)
+#define TAPE_SPACE_SETMARKS __MSABI_LONG(8)
+#define TAPE_SPACE_SEQUENTIAL_SMKS __MSABI_LONG(9)
 
     typedef struct _TAPE_SET_POSITION {
       DWORD Method;
@@ -6397,9 +6493,9 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
       DWORD BlockSize;
     } TAPE_SET_MEDIA_PARAMETERS,*PTAPE_SET_MEDIA_PARAMETERS;
 
-#define TAPE_FIXED_PARTITIONS 0L
-#define TAPE_SELECT_PARTITIONS 1L
-#define TAPE_INITIATOR_PARTITIONS 2L
+#define TAPE_FIXED_PARTITIONS __MSABI_LONG(0)
+#define TAPE_SELECT_PARTITIONS __MSABI_LONG(1)
+#define TAPE_INITIATOR_PARTITIONS __MSABI_LONG(2)
 
     typedef struct _TAPE_CREATE_PARTITION {
       DWORD Method;
@@ -6407,11 +6503,11 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
       DWORD Size;
     } TAPE_CREATE_PARTITION,*PTAPE_CREATE_PARTITION;
 
-#define TAPE_QUERY_DRIVE_PARAMETERS 0L
-#define TAPE_QUERY_MEDIA_CAPACITY 1L
-#define TAPE_CHECK_FOR_DRIVE_PROBLEM 2L
-#define TAPE_QUERY_IO_ERROR_DATA 3L
-#define TAPE_QUERY_DEVICE_ERROR_DATA 4L
+#define TAPE_QUERY_DRIVE_PARAMETERS __MSABI_LONG(0)
+#define TAPE_QUERY_MEDIA_CAPACITY __MSABI_LONG(1)
+#define TAPE_CHECK_FOR_DRIVE_PROBLEM __MSABI_LONG(2)
+#define TAPE_QUERY_IO_ERROR_DATA __MSABI_LONG(3)
+#define TAPE_QUERY_DEVICE_ERROR_DATA __MSABI_LONG(4)
 
     typedef struct _TAPE_WMI_OPERATIONS {
       DWORD Method;
@@ -6427,13 +6523,11 @@ inline ENUMTYPE &operator ^= (ENUMTYPE &a, ENUMTYPE b) { return (ENUMTYPE &)(((i
     struct _TEB *NtCurrentTeb(VOID);
     PVOID GetCurrentFiber(VOID);
     PVOID GetFiberData(VOID);
-#ifndef __CRT__NO_INLINE
     __CRT_INLINE struct _TEB *NtCurrentTeb(VOID) { return (struct _TEB *)__readgsqword(FIELD_OFFSET(NT_TIB,Self)); }
     __CRT_INLINE PVOID GetCurrentFiber(VOID) { return(PVOID)__readgsqword(FIELD_OFFSET(NT_TIB,FiberData)); }
     __CRT_INLINE PVOID GetFiberData(VOID) {
       return *(PVOID *)GetCurrentFiber();
     }
-#endif /* !__CRT__NO_INLINE */
 #endif /* __x86_64 */
 
 #if (_WIN32_WINNT >= 0x0600)
@@ -6447,9 +6541,9 @@ typedef PVOID RTL_SRWLOCK;
 typedef PVOID RTL_RUN_ONCE, *PRTL_RUN_ONCE;
 typedef DWORD (WINAPI *PRTL_RUN_ONCE_INIT_FN)(PRTL_RUN_ONCE, PVOID, PVOID *);
 #define RTL_RUN_ONCE_INIT 0
-#define RTL_RUN_ONCE_CHECK_ONLY 1UL
-#define RTL_RUN_ONCE_ASYNC 2UL
-#define RTL_RUN_ONCE_INIT_FAILED 4UL
+#define RTL_RUN_ONCE_CHECK_ONLY __MSABI_LONG(1U)
+#define RTL_RUN_ONCE_ASYNC __MSABI_LONG(2U)
+#define RTL_RUN_ONCE_INIT_FAILED __MSABI_LONG(4U)
 #define RTL_RUN_ONCE_CTX_RESERVED_BITS 2
 #endif /* _RTL_RUN_ONCE_DEF */
 #define RTL_SRWLOCK_INIT 0
@@ -6541,12 +6635,12 @@ DEFINE_GUID(GUID_PCIEXPRESS_SETTINGS_SUBGROUP,0x501a4d13,0x42af,0x4429,0x9f,0xd1
 
 #define WOW64_CONTEXT_i386 0x00010000
 #define WOW64_CONTEXT_i486 0x00010000
-#define WOW64_CONTEXT_CONTROL (WOW64_CONTEXT_i386 | 0x00000001L)
-#define WOW64_CONTEXT_INTEGER (WOW64_CONTEXT_i386 | 0x00000002L)
-#define WOW64_CONTEXT_SEGMENTS (WOW64_CONTEXT_i386 | 0x00000004L)
-#define WOW64_CONTEXT_FLOATING_POINT (WOW64_CONTEXT_i386 | 0x00000008L)
-#define WOW64_CONTEXT_DEBUG_REGISTERS (WOW64_CONTEXT_i386 | 0x00000010L)
-#define WOW64_CONTEXT_EXTENDED_REGISTERS (WOW64_CONTEXT_i386 | 0x00000020L)
+#define WOW64_CONTEXT_CONTROL (WOW64_CONTEXT_i386 | __MSABI_LONG(0x00000001))
+#define WOW64_CONTEXT_INTEGER (WOW64_CONTEXT_i386 | __MSABI_LONG(0x00000002))
+#define WOW64_CONTEXT_SEGMENTS (WOW64_CONTEXT_i386 | __MSABI_LONG(0x00000004))
+#define WOW64_CONTEXT_FLOATING_POINT (WOW64_CONTEXT_i386 | __MSABI_LONG(0x00000008))
+#define WOW64_CONTEXT_DEBUG_REGISTERS (WOW64_CONTEXT_i386 | __MSABI_LONG(0x00000010))
+#define WOW64_CONTEXT_EXTENDED_REGISTERS (WOW64_CONTEXT_i386 | __MSABI_LONG(0x00000020))
 #define WOW64_CONTEXT_FULL (WOW64_CONTEXT_CONTROL | WOW64_CONTEXT_INTEGER | WOW64_CONTEXT_SEGMENTS)
 #define WOW64_CONTEXT_ALL (WOW64_CONTEXT_CONTROL | WOW64_CONTEXT_INTEGER | WOW64_CONTEXT_SEGMENTS | WOW64_CONTEXT_FLOATING_POINT | WOW64_CONTEXT_DEBUG_REGISTERS | WOW64_CONTEXT_EXTENDED_REGISTERS)
 #define WOW64_SIZE_OF_80387_REGISTERS 80
@@ -6614,11 +6708,14 @@ typedef struct _ACTIVATION_CONTEXT_COMPATIBILITY_INFORMATION {
   COMPATIBILITY_CONTEXT_ELEMENT Elements[];
 } ACTIVATION_CONTEXT_COMPATIBILITY_INFORMATION, *PACTIVATION_CONTEXT_COMPATIBILITY_INFORMATION;
 
+#ifndef ___PROCESSOR_NUMBER_DEFINED
+#define ___PROCESSOR_NUMBER_DEFINED
 typedef struct _PROCESSOR_NUMBER {
   WORD Group;
   BYTE Number;
   BYTE Reserved;
 } PROCESSOR_NUMBER, *PPROCESSOR_NUMBER;
+#endif /* !___PROCESSOR_NUMBER_DEFINED */
 
 typedef struct _PROCESSOR_GROUP_INFO {
   BYTE      MaximumProcessorCount;
@@ -6634,11 +6731,14 @@ typedef struct _GROUP_RELATIONSHIP {
   PROCESSOR_GROUP_INFO GroupInfo[];
 } GROUP_RELATIONSHIP, *PGROUP_RELATIONSHIP;
 
+#ifndef ___GROUP_AFFINITY_DEFINED
+#define ___GROUP_AFFINITY_DEFINED
 typedef struct _GROUP_AFFINITY {
   KAFFINITY Mask;
   WORD      Group;
   WORD      Reserved[3];
 } GROUP_AFFINITY, *PGROUP_AFFINITY;
+#endif /* !___GROUP_AFFINITY_DEFINED */
 
 typedef struct _CACHE_RELATIONSHIP {
   BYTE                 Level;

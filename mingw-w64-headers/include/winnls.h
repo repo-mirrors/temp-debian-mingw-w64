@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef _WINNLS_
@@ -475,6 +475,9 @@ extern "C" {
 #define IS_LOW_SURROGATE(c) (((c) & 0xFC00) == 0xDC00)
 #define IS_SURROGATE_PAIR(hc,lc) (IS_HIGH_SURROGATE(hc) && IS_LOW_SURROGATE(lc))
 
+#define IDN_ALLOW_UNASSIGNED        0x1
+#define IDN_USE_STD3_ASCII_RULES    0x2
+
   typedef DWORD LGRPID;
   typedef DWORD LCTYPE;
   typedef DWORD CALTYPE;
@@ -581,12 +584,12 @@ extern "C" {
   };
   
   typedef enum  _NORM_FORM  {
-  NormalizationOther   = 0,
-  NormalizationC       = 0x1,
-  NormalizationD       = 0x2,
-  NormalizationKC      = 0x5,
-  NormalizationKD      = 0x6 
-} NORM_FORM;
+    NormalizationOther   = 0,
+    NormalizationC       = 0x1,
+    NormalizationD       = 0x2,
+    NormalizationKC      = 0x5,
+    NormalizationKD      = 0x6 
+  } NORM_FORM;
 
   typedef WINBOOL (CALLBACK *LANGUAGEGROUP_ENUMPROCA)(LGRPID,LPSTR,LPSTR,DWORD,LONG_PTR);
   typedef WINBOOL (CALLBACK *LANGGROUPLOCALE_ENUMPROCA)(LGRPID,LCID,LPSTR,LONG_PTR);

@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef __usp10__
@@ -33,7 +33,9 @@ extern "C" {
     DWORD fNeutralOverride :1;
     DWORD fNumericOverride :1;
     DWORD fLegacyBidiClass :1;
-    DWORD fReserved :8;
+    DWORD fMergeNeutralItems :1;
+    DWORD fUseStandardBidi :1;
+    DWORD fReserved :6;
   } SCRIPT_CONTROL;
 
   typedef struct tag_SCRIPT_STATE {
@@ -148,7 +150,7 @@ extern "C" {
   } SCRIPT_FONTPROPERTIES;
 
   HRESULT WINAPI ScriptGetFontProperties(HDC hdc,SCRIPT_CACHE *psc,SCRIPT_FONTPROPERTIES *sfp);
-  HRESULT WINAPI ScriptCacheGetHeight(HDC hdc,SCRIPT_CACHE *psc,long *tmHeight);
+  HRESULT WINAPI ScriptCacheGetHeight(HDC hdc,SCRIPT_CACHE *psc,__LONG32 *tmHeight);
 
 #define SSA_PASSWORD 0x00000001
 #define SSA_TAB 0x00000002

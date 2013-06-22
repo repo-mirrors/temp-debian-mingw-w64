@@ -1,8 +1,11 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
+
+#ifndef __WIDL__
+
 #ifndef _INC_MMREG
 
 #define _INC_MMREG 158
@@ -1986,6 +1989,31 @@ extern "C" {
 
 #ifdef GUID_DEFINED
 
+#ifndef DEFINE_GUIDEX
+#define DEFINE_GUIDEX(name) EXTERN_C const CDECL GUID name
+#endif
+
+#ifndef DEFINE_GUIDSTRUCT
+#define DEFINE_GUIDSTRUCT(g,n) DEFINE_GUIDEX(n)
+#define DEFINE_GUIDNAMED(n) n
+#endif
+
+#ifndef DEFINE_WAVEFORMATEX_GUID
+#define DEFINE_WAVEFORMATEX_GUID(x) (USHORT)(x),0x0000,0x0010,0x80,0x00,0x00,0xaa,0x00,0x38,0x9b,0x71
+#endif
+
+#ifndef STATIC_KSDATAFORMAT_SUBTYPE_PCM
+#define STATIC_KSDATAFORMAT_SUBTYPE_PCM DEFINE_WAVEFORMATEX_GUID(WAVE_FORMAT_PCM)
+DEFINE_GUIDSTRUCT("00000001-0000-0010-8000-00aa00389b71", KSDATAFORMAT_SUBTYPE_PCM);
+#define KSDATAFORMAT_SUBTYPE_PCM DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_PCM)
+#endif
+
+#ifndef STATIC_KSDATAFORMAT_SUBTYPE_IEEE_FLOAT
+#define STATIC_KSDATAFORMAT_SUBTYPE_IEEE_FLOAT DEFINE_WAVEFORMATEX_GUID(WAVE_FORMAT_IEEE_FLOAT)
+DEFINE_GUIDSTRUCT("00000003-0000-0010-8000-00aa00389b71", KSDATAFORMAT_SUBTYPE_IEEE_FLOAT);
+#define KSDATAFORMAT_SUBTYPE_IEEE_FLOAT DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_IEEE_FLOAT)
+#endif
+
 #ifndef _WAVEFORMATEXTENSIBLE_
 #define _WAVEFORMATEXTENSIBLE_
   typedef struct {
@@ -2492,7 +2520,7 @@ extern "C" {
 
 #define JPEG_PROCESS_BASELINE 0
 
-#define AVIIF_CONTROLFRAME 0x00000200L
+#define AVIIF_CONTROLFRAME __MSABI_LONG(0x00000200)
 
 #define JIFMK_SOF0 0xFFC0
 #define JIFMK_SOF1 0xFFC1
@@ -2633,3 +2661,37 @@ typedef struct heaacwaveformat_tag {
 }
 #endif
 #endif
+
+#else /* __WIDL__ */
+
+cpp_quote("#if 0")
+// FIXME: #pragma pack(push, 1)
+
+typedef struct tWAVEFORMATEX {
+    WORD wFormatTag;
+    WORD nChannels;
+    DWORD nSamplesPerSec;
+    DWORD nAvgBytesPerSec;
+    WORD nBlockAlign;
+    WORD wBitsPerSample;
+    WORD cbSize;
+    [size_is(cbSize)] BYTE pExtraBytes[];
+} WAVEFORMATEX, *PWAVEFORMATEX, *NPWAVEFORMATEX, *LPWAVEFORMATEX;
+
+typedef struct {
+    WORD wFormatTag;
+    WORD nChannels;
+    DWORD nSamplesPerSec;
+    DWORD nAvgBytesPerSec;
+    WORD nBlockAlign;
+    WORD wBitsPerSample;
+    WORD cbSize;
+    WORD wValidBitsPerSample;
+    DWORD dwChannelMask;
+    GUID SubFormat;
+} WAVEFORMATEXTENSIBLE, *PWAVEFORMATEXTENSIBLE;
+
+// FIXME: #pragma pack(pop)
+cpp_quote("#endif")
+
+#endif /* __WIDL__ */

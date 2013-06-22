@@ -1,44 +1,32 @@
-/*
- * Written by J.T. Conklin <jtc@netbsd.org>.
- * Public domain.
- *
- * Changes for long double by Ulrich Drepper <drepper@cygnus.com>
- * 
- * Removed header file dependency for use in libmingwex.a by
- *   Danny Smith <dannysmith@users.sourceforge.net>
+/**
+ * This file has no copyright assigned and is placed in the Public Domain.
+ * This file is part of the mingw-w64 runtime package.
+ * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
-#include <_mingw_mac.h>
+ #include <_mingw_mac.h>
 
 	.file	"floorf.S"
 	.text
-#ifdef _WIN64
-	.align 8
-#else
-	.align 4
-#endif
+	.p2align 4,,15
 .globl __MINGW_USYMBOL(floorf)
 	.def	__MINGW_USYMBOL(floorf);	.scl	2;	.type	32;	.endef
+#ifdef _WIN64
+	.seh_proc __MINGW_USYMBOL(floorf)
+#endif
 __MINGW_USYMBOL(floorf):
 #ifdef _WIN64
-	subq	$24,%rsp
-	movss	%xmm0,8(%rsp)
-	flds	8(%rsp)
-
-	fstcw	4(%rsp)			/* store fpu control word */
-	movl	$0x400,%edx		/* round towards -oo */
-	orl	4(%rsp),%edx
-	andl	$0xf7ff,%edx
-	movl	%edx,(%rsp)
-	fldcw	(%rsp)			/* load modified control word */
-
-	frndint				/* round */
-
-	fldcw	4(%rsp)			/* restore original control word */
-
-	fstps	8(%rsp)
-	movss	8(%rsp),%xmm0
-	addq	$24,%rsp
-	ret
+        subq    $40, %rsp
+        .seh_stackalloc 40
+        .seh_endprologue
+        unpcklps        %xmm0, %xmm0
+        cvtps2pd        %xmm0, %xmm0
+        call    floor
+        unpcklpd        %xmm0, %xmm0
+        cvtpd2ps        %xmm0, %xmm0
+        addq    $40, %rsp
+        ret
+        .seh_endproc
+        .def    __MINGW_USYMBOL(floor);  .scl    2;      .type   32;     .endef
 #else
 	flds	4(%esp)
 	subl	$8,%esp
