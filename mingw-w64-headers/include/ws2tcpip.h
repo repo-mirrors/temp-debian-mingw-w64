@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef _WS2TCPIP_H_
@@ -50,19 +50,6 @@ struct ip_msfilter {
 #define IP_PKTINFO 19
 #define IP_RECEIVE_BROADCAST 22
 
-#define IPV6_HDRINCL 2
-#define IPV6_UNICAST_HOPS 4
-#define IPV6_MULTICAST_IF 9
-#define IPV6_MULTICAST_HOPS 10
-#define IPV6_MULTICAST_LOOP 11
-#define IPV6_ADD_MEMBERSHIP 12
-#define IPV6_DROP_MEMBERSHIP 13
-#define IPV6_JOIN_GROUP IPV6_ADD_MEMBERSHIP
-#define IPV6_LEAVE_GROUP IPV6_DROP_MEMBERSHIP
-#define IPV6_PKTINFO 19
-#define IPV6_HOPLIMIT 21
-#define IPV6_PROTECTION_LEVEL 23
-
 #define PROTECTION_LEVEL_UNRESTRICTED 10
 #define PROTECTION_LEVEL_DEFAULT 20
 #define PROTECTION_LEVEL_RESTRICTED 30
@@ -110,7 +97,6 @@ void IN6_SET_ADDR_LOOPBACK(struct in6_addr *);
 void IN6ADDR_SETANY(struct sockaddr_in6 *);
 void IN6ADDR_SETLOOPBACK(struct sockaddr_in6 *);
 
-#ifndef __CRT__NO_INLINE
 WS2TCPIP_INLINE int IN6_ADDR_EQUAL(const struct in6_addr *a,const struct in6_addr *b) { return (memcmp(a,b,sizeof(struct in6_addr))==0); }
 WS2TCPIP_INLINE int IN6_IS_ADDR_UNSPECIFIED(const struct in6_addr *a) { return ((a->s6_words[0]==0) && (a->s6_words[1]==0) && (a->s6_words[2]==0) && (a->s6_words[3]==0) && (a->s6_words[4]==0) && (a->s6_words[5]==0) && (a->s6_words[6]==0) && (a->s6_words[7]==0)); }
 WS2TCPIP_INLINE int IN6_IS_ADDR_LOOPBACK(const struct in6_addr *a) { return ((a->s6_words[0]==0) && (a->s6_words[1]==0) && (a->s6_words[2]==0) && (a->s6_words[3]==0) && (a->s6_words[4]==0) && (a->s6_words[5]==0) && (a->s6_words[6]==0) && (a->s6_words[7]==0x0100)); }
@@ -145,7 +131,6 @@ WS2TCPIP_INLINE void IN6ADDR_SETLOOPBACK(struct sockaddr_in6 *a) {
   IN6_SET_ADDR_LOOPBACK(&a->sin6_addr);
   a->sin6_scope_id = 0;
 }
-#endif /* !__CRT__NO_INLINE */
 
 #ifdef __cplusplus
 }
@@ -188,7 +173,7 @@ C_ASSERT(sizeof(IN6_PKTINFO)==20);
 #define EAI_SERVICE WSATYPE_NOT_FOUND
 #define EAI_SOCKTYPE WSAESOCKTNOSUPPORT
 
-#define EAI_NODATA EAI_NONAME
+#define EAI_NODATA 11004 /* WSANO_DATA */
 
 typedef struct addrinfo {
   int ai_flags;
@@ -340,23 +325,23 @@ typedef PVOID LPLOOKUPSERVICE_COMPLETION_ROUTINE; /*reserved*/
 
 WINSOCK_API_LINKAGE int WSAAPI GetAddrInfoExA(PCSTR pName, PCSTR pServiceName, DWORD dwNameSpace,
 					      LPGUID lpNspId,const ADDRINFOEXA *pHints,PADDRINFOEXA *ppResult,
-					      struct timeval *timeout,LPOVERLAPPED lpOverlapped,
+					      PTIMEVAL timeout,LPOVERLAPPED lpOverlapped,
 					      LPLOOKUPSERVICE_COMPLETION_ROUTINE lpCompletionRoutine,
 					      LPHANDLE lpNameHandle);
 WINSOCK_API_LINKAGE int WSAAPI GetAddrInfoExW(PCWSTR pName,PCWSTR pServiceName,DWORD dwNameSpace,
 					      LPGUID lpNspId,const ADDRINFOEXW *pHints,PADDRINFOEXW *ppResult,
-					      struct timeval *timeout,LPOVERLAPPED lpOverlapped,
+					      PTIMEVAL timeout,LPOVERLAPPED lpOverlapped,
 					      LPLOOKUPSERVICE_COMPLETION_ROUTINE lpCompletionRoutine,
 					      LPHANDLE lpNameHandle);
 
 WINSOCK_API_LINKAGE int WSAAPI SetAddrInfoExA(PCSTR pName, PCSTR pServiceName, SOCKET_ADDRESS *pAddresses,
 					      DWORD dwAddressCount,LPBLOB lpBlob,DWORD dwFlags,DWORD dwNameSpace,
-					      LPGUID lpNspId,struct timeval *timeout,LPOVERLAPPED lpOverlapped,
+					      LPGUID lpNspId,PTIMEVAL timeout,LPOVERLAPPED lpOverlapped,
 					      LPLOOKUPSERVICE_COMPLETION_ROUTINE lpCompletionRoutine,
 					      LPHANDLE lpNameHandle);
 WINSOCK_API_LINKAGE int WSAAPI SetAddrInfoExW(PCWSTR pName,PCWSTR pServiceName,SOCKET_ADDRESS *pAddresses,
 					      DWORD dwAddressCount,LPBLOB lpBlob,DWORD dwFlags,DWORD dwNameSpace,
-					      LPGUID lpNspId,struct timeval *timeout,LPOVERLAPPED lpOverlapped,
+					      LPGUID lpNspId,PTIMEVAL timeout,LPOVERLAPPED lpOverlapped,
 					      LPLOOKUPSERVICE_COMPLETION_ROUTINE lpCompletionRoutine,
 					      LPHANDLE lpNameHandle);
 
@@ -367,24 +352,24 @@ WINSOCK_API_LINKAGE void WSAAPI FreeAddrInfoExW(PADDRINFOEXW pAddrInfo);
 #define LPFN_GETADDRINFOEX __MINGW_NAME_AW(LPFN_GETADDRINFOEX)
   typedef int (WSAAPI *LPFN_GETADDRINFOEXA)(PCSTR pName, PCSTR pServiceName, DWORD dwNameSpace,
 					    LPGUID lpNspId,const ADDRINFOEXA *pHints,PADDRINFOEXA *ppResult,
-					    struct timeval *timeout,LPOVERLAPPED lpOverlapped,
+					    PTIMEVAL timeout,LPOVERLAPPED lpOverlapped,
 					    LPLOOKUPSERVICE_COMPLETION_ROUTINE lpCompletionRoutine,
 					    LPHANDLE lpNameHandle);
   typedef int (WSAAPI *LPFN_GETADDRINFOEXW)(PCWSTR pName,PCWSTR pServiceName,DWORD dwNameSpace,
 					    LPGUID lpNspId,const ADDRINFOEXW *pHints,PADDRINFOEXW *ppResult,
-					    struct timeval *timeout,LPOVERLAPPED lpOverlapped,
+					    PTIMEVAL timeout,LPOVERLAPPED lpOverlapped,
 					    LPLOOKUPSERVICE_COMPLETION_ROUTINE lpCompletionRoutine,
 					    LPHANDLE lpNameHandle);
 
 #define LPFN_SETADDRINFOEX __MINGW_NAME_AW(LPFN_SETADDRINFOEX)
   typedef int (WSAAPI *LPFN_SETADDRINFOEXA)(PCSTR pName, PCSTR pServiceName, SOCKET_ADDRESS *pAddresses,
 					    DWORD dwAddressCount,LPBLOB lpBlob,DWORD dwFlags,DWORD dwNameSpace,
-					    LPGUID lpNspId,struct timeval *timeout,LPOVERLAPPED lpOverlapped,
+					    LPGUID lpNspId,PTIMEVAL timeout,LPOVERLAPPED lpOverlapped,
 					    LPLOOKUPSERVICE_COMPLETION_ROUTINE lpCompletionRoutine,
 					    LPHANDLE lpNameHandle);
   typedef int (WSAAPI *LPFN_SETADDRINFOEXW)(PCWSTR pName,PCWSTR pServiceName,SOCKET_ADDRESS *pAddresses,
 					    DWORD dwAddressCount,LPBLOB lpBlob,DWORD dwFlags,DWORD dwNameSpace,
-					    LPGUID lpNspId,struct timeval *timeout,LPOVERLAPPED lpOverlapped,
+					    LPGUID lpNspId,PTIMEVAL timeout,LPOVERLAPPED lpOverlapped,
 					    LPLOOKUPSERVICE_COMPLETION_ROUTINE lpCompletionRoutine,
 					    LPHANDLE lpNameHandle);
 
@@ -427,6 +412,20 @@ WINSOCK_API_LINKAGE int WSAAPI WSASetSocketSecurity(
   LPWSAOVERLAPPED Overlapped,
   LPWSAOVERLAPPED_COMPLETION_ROUTINE CompletionRoutine
 );
+
+#define InetNtopA inet_ntop
+
+WINSOCK_API_LINKAGE LPCWSTR WSAAPI InetNtopW(INT Family, PVOID pAddr, LPWSTR pStringBuf, size_t StringBufSIze);
+WINSOCK_API_LINKAGE LPCSTR WSAAPI InetNtopA(INT Family, PVOID pAddr, LPSTR pStringBuf, size_t StringBufSize);
+
+#define InetNtop __MINGW_NAME_AW(InetNtop)
+
+#define InetPtonA inet_pton
+
+WINSOCK_API_LINKAGE INT WSAAPI InetPtonW(INT Family, LPCWSTR pStringBuf, PVOID pAddr);
+WINSOCK_API_LINKAGE INT WSAAPI InetPtonA(INT Family, LPCSTR pStringBuf, PVOID pAddr);
+
+#define InetPton __MINGW_NAME_AW(InetPton)
 
 #endif /*(_WIN32_WINNT >= 0x0600)*/
 

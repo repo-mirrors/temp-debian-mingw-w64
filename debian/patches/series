@@ -1,1 +1,4 @@
 spelling-fix.patch
+widl-no-context.patch
+disable-werror.patch
+missing-cpu-info.patch

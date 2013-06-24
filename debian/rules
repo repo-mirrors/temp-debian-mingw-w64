@@ -1,7 +1,6 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
 # Build mingw-w64.
-# Copyright © 2010, 2011 Stephen Kitt <steve@sk2.org>
 
 SHELL=/bin/bash
 
@@ -19,6 +18,18 @@ target32 := i686-w64-mingw32
 target64 := x86_64-w64-mingw32
 targets := $(target32) $(target64)
 
+# Host architecture
+host := $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+
+# Host-based tools
+HOST_TOOLS := gendef genidl genpeimg
+# Targetted tools
+TARGET_TOOLS := widl
+
+# Targetted projects
+TARGET_PROJECTS := crt libraries-libmangle libraries-winstorecompat libraries-winpthreads
+TARGET32_PROJECTS := libraries-pseh
+
 # No hardening support for now, except in the tools (build-arch-stamp)
 dpkg_buildflags = DEB_BUILD_MAINT_OPTIONS="hardening=-all" dpkg-buildflags
 
@@ -34,65 +45,61 @@ clean:
 	dh_testroot
 	dh_autoreconf_clean
 	dh_clean
-	rm -rf $(build_dir) $(upstream_dir) autotools_files series tmp *-stamp
+	rm -rf $(build_dir) $(upstream_dir) autotools_files series tmp *-stamp debian/autoreconf
 
 CONFFLAGS = --prefix=/usr
 
-autoreconf-stamp:
+debian/autoreconf:
+	find $(top_dir) -name configure.ac | xargs -n 1 dirname > $@
+
+autoreconf-stamp: debian/autoreconf
 	dh_autoreconf
 	touch $@
 
-# Build and install the headers first, so the remaining subprojects can use
-# them during the build
-headers-stamp: autoreconf-stamp
-	for target in $(targets); do \
-		dh_auto_configure -D$(top_dir)/mingw-w64-headers -B$(build_dir)/$$target/headers -- --host=$$target --enable-sdk=all --enable-secure-api && \
-		dh_auto_build -D$(top_dir)/mingw-w64-headers -B$(build_dir)/$$target/headers && \
-		dh_auto_install -D$(top_dir)/mingw-w64-headers -B$(build_dir)/$$target/headers; \
-	done
+# General rules
+# The first part of the target name is the host architecture
+# The second part of the target name is the target architecture
+# The last two parts of the target name indicate the source folder
+# e.g. mingw-w64-tools/gendef becomes tools-gendef
+rulehost = $(word 1,$(subst -, ,$(1)))-$(word 2,$(subst -, ,$(1)))-$(word 3,$(subst -, ,$(1)))
+ruletarget = $(word 4,$(subst -, ,$(1)))-$(word 5,$(subst -, ,$(1)))-$(word 6,$(subst -, ,$(1)))
+rulepart = $(word 7,$(subst -, ,$(1)))
+rulefolder = $(word 8,$(subst -, ,$(1)))
+sourcefolder = $(top_dir)/mingw-w64-$(call rulepart,$(1))/$(call rulefolder,$(1))
+buildfolder = $(build_dir)/$(call rulehost,$(1))-$(call ruletarget,$(1))-$(call rulepart,$(1))$(call rulefolder,$(1))
+
+######################################################################
+# Tools
+
+# gendef requires libmangle
+$(host)-$(host)-tools-gendef-configure-stamp: autoreconf-stamp $(host)-$(host)-libraries-libmangle-install-stamp
+	dh_auto_configure -D$(call sourcefolder,$(host)-$(host)-tools-gendef) -B$(call buildfolder,$(host)-$(host)-tools-gendef) -- --with-mangle=$(top_dir)/debian/tmp/usr $(shell dpkg-buildflags --export=configure)
 	touch $@
 
-# Build the arch-dependent subprojects: libmangle and the tools
-# (in that order since gendef uses libmangle)
-build-arch-stamp: autoreconf-stamp
-	for lib_dir in $(top_dir)/mingw-w64-libraries/libmangle; do \
-		dh_auto_configure -D$$lib_dir -B$(build_dir)/$$(basename $$lib_dir) -- $(shell dpkg-buildflags --export=configure) && \
-		dh_auto_build -D$$lib_dir -B$(build_dir)/$$(basename $$lib_dir) && \
-		dh_auto_install -D$$lib_dir -B$(build_dir)/$$(basename $$lib_dir); \
-	done
-	for tool_dir in $(top_dir)/mingw-w64-tools/*; do \
-		dh_auto_configure -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir) -- --with-mangle=$(top_dir)/debian/tmp/usr $(shell dpkg-buildflags --export=configure) && \
-		dh_auto_build -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir) && \
-		dh_auto_install -D$$tool_dir -B$(build_dir)/$$(basename $$tool_dir); \
-	done
+build-arch-stamp: $(patsubst %,$(host)-$(host)-tools-%-install-stamp,$(HOST_TOOLS)) $(foreach target,$(targets),$(patsubst %,$(host)-$(target)-tools-%-install-stamp,$(TARGET_TOOLS)))
 	touch $@
 
-# Build the arch-independent subprojects, with different options for each
-# target architecture
-build-indep-stamp: autoreconf-stamp headers-stamp
-	# When bootstrapping, the extra libraries can't be built, so try
-	# configuring with libraries and if that fails without
-	CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(target32)/include" dh_auto_configure -B$(build_dir)/$(target32)/all -- --host=$(target32) --with-libraries=all --enable-lib32 --disable-lib64 --enable-sdk=all --enable-secure-api || \
-	CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(target32)/include" dh_auto_configure -B$(build_dir)/$(target32)/all -- --host=$(target32) --enable-lib32 --disable-lib64 --enable-sdk=all --enable-secure-api
-	CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(target64)/include" dh_auto_configure -B$(build_dir)/$(target64)/all -- --host=$(target64) --with-libraries=libmangle --disable-lib32 --enable-lib64 --enable-sdk=all --enable-secure-api || \
-	CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(target64)/include" dh_auto_configure -B$(build_dir)/$(target64)/all -- --host=$(target64) --disable-lib32 --enable-lib64 --enable-sdk=all --enable-secure-api
-# Move headers and libraries to target-specific folders
-	set -e; \
+######################################################################
+# Libraries
+
+# Override the header configuration
+%-headers-configure-stamp: autoreconf-stamp
+	dh_auto_configure -D$(call sourcefolder,$*-headers) -B$(call buildfolder,$*-headers) -- --prefix=/usr/$(call ruletarget,$*-headers) --host=$(call rulehost,$*-headers) --enable-sdk=all --enable-secure-api
+	touch $*-headers-configure-stamp
+
+# Override CRT configuration to avoid multilib builds
+$(target32)-$(target32)-crt-configure-stamp: $(target32)-$(target32)-headers-install-stamp autoreconf-stamp
+	CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(call ruletarget,$(target32)-$(target32)-crt)/include" dh_auto_configure -D$(call sourcefolder,$(target32)-$(target32)-crt) -B$(call buildfolder,$(target32)-$(target32)-crt) -- --prefix=/usr/$(call ruletarget,$(target32)-$(target32)-crt) --host=$(call rulehost,$(target32)-$(target32)-crt) --target=$(call ruletarget,$(target32)-$(target32)-crt) --enable-lib32 --disable-lib64
+	touch $@
+$(target64)-$(target64)-crt-configure-stamp: $(target64)-$(target64)-headers-install-stamp autoreconf-stamp
+	CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(call ruletarget,$(target64)-$(target64)-crt)/include" dh_auto_configure -D$(call sourcefolder,$(target64)-$(target64)-crt) -B$(call buildfolder,$(target64)-$(target64)-crt) -- --prefix=/usr/$(call ruletarget,$(target64)-$(target64)-crt) --host=$(call rulehost,$(target64)-$(target64)-crt) --target=$(call ruletarget,$(target64)-$(target64)-crt) --disable-lib32 --enable-lib64
+	touch $@
+
+build-indep-stamp: $(foreach target,$(targets),$(patsubst %,$(target)-$(target)-%-install-stamp,$(TARGET_PROJECTS))) $(patsubst %,$(target32)-$(target32)-%-install-stamp,$(TARGET32_PROJECTS))
+	# Move DLLs to lib
 	for target in $(targets); do \
-		dh_auto_build -B$(build_dir)/$$target/all && \
-		dh_auto_install -B$(build_dir)/$$target/all && \
-		if [ -f $(top_dir)/debian/tmp/usr/include/libmangle.h ]; then \
-			mv $(top_dir)/debian/tmp/usr/include/libmangle.h $(top_dir)/debian/tmp/usr/$$target/include/; \
-		fi && \
-		if [ -d $(top_dir)/debian/tmp/usr/include/pseh ]; then \
-			mv $(top_dir)/debian/tmp/usr/include/pseh $(top_dir)/debian/tmp/usr/$$target/include/; \
-		fi && \
-		if [ -f $(top_dir)/debian/tmp/usr/lib/libmangle.a ]; then \
-			mv $(top_dir)/debian/tmp/usr/lib/libmangle.a $(top_dir)/debian/tmp/usr/$$target/lib/; \
-		fi && \
-		if [ -f $(top_dir)/debian/tmp/usr/lib/libpseh.a ]; then \
-			mv $(top_dir)/debian/tmp/usr/lib/libpseh.a $(top_dir)/debian/tmp/usr/$$target/lib/; \
-		fi; \
+		mv $(top_dir)/debian/tmp/usr/$$target/bin/*.dll $(top_dir)/debian/tmp/usr/$$target/lib/; \
+		rmdir $(top_dir)/debian/tmp/usr/$$target/bin; \
 	done
 	touch $@
 
@@ -107,5 +114,24 @@ binary-arch: build-arch
 	dh $@
 
 binary: binary-indep binary-arch
+
+# If we're targetting the build host, configure for hardening
+# If we're targetting the target host, disable hardening (see above),
+# change the prefix and use the new headers
+%-configure-stamp: autoreconf-stamp
+	if [ "$(call rulehost,$*)" = "$(host)" ]; then \
+		dh_auto_configure -D$(call sourcefolder,$*) -B$(call buildfolder,$*) -- $(shell dpkg-buildflags --export=configure) --host=$(call rulehost,$*) --target=$(call ruletarget,$*); \
+	else \
+		CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(call ruletarget,$*)/include" dh_auto_configure -D$(call sourcefolder,$*) -B$(call buildfolder,$*) -- --prefix=/usr/$(call ruletarget,$*) --host=$(call rulehost,$*) --target=$(call ruletarget,$*); \
+	fi
+	touch $*-configure-stamp
+
+%-build-stamp: %-configure-stamp
+	dh_auto_build -D$(call sourcefolder,$*) -B$(call buildfolder,$*)
+	touch $*-build-stamp
+
+%-install-stamp: %-build-stamp
+	dh_auto_install -D$(call sourcefolder,$*) -B$(call buildfolder,$*)
+	touch $*-install-stamp
 
 .PHONY: binary-indep binary-arch binary clean build-indep build-arch build install

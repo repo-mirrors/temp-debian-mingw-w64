@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #include "cephes_mconf.h"
@@ -271,7 +271,6 @@ lgsing:
 /* This is the C99 version */
 double lgamma(double x)
 {
-	int local_sgngam = 0;
-	return (__lgamma_r(x, &local_sgngam));
+	return (__lgamma_r(x, &signgam));
 }
 

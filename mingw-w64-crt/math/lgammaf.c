@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 /* log gamma(x+2), -.5 < x < .5 */
@@ -182,7 +182,6 @@ contz:
 /* This is the C99 version */
 float lgammaf(float x)
 {
-	int local_sgngamf = 0;
-	return (__lgammaf_r(x, &local_sgngamf));
+	return (__lgammaf_r(x, &signgam));
 }
 

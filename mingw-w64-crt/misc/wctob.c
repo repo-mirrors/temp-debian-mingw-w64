@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef WIN32_LEAN_AND_MEAN
@@ -19,7 +19,7 @@ int wctob (wint_t wc )
     wchar_t w = wc;
     char c;
     int invalid_char = 0;
-    if (!WideCharToMultiByte (__mingw_get_codepage(),
+    if (!WideCharToMultiByte (__lc_codepage_func(),
 			      0 /* Is this correct flag? */,
 			      &w, 1, &c, 1, NULL, &invalid_char)
 	 || invalid_char)

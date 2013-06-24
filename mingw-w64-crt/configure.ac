@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 # Use AM_MAINTANER_MODE somewhere in this file once reconfigurations settle down.
 
-AC_PREREQ([2.65])
-AC_INIT([mingw-w64-runtime],[2.0],[mingw-w64-public@lists.sourceforge.net])
+AC_PREREQ([2.69])
+AC_INIT([mingw-w64-runtime],[3.0b],[mingw-w64-public@lists.sourceforge.net])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_SRCDIR([ChangeLog])
 AC_CONFIG_HEADER([config.h])
@@ -16,31 +16,18 @@ AC_CANONICAL_HOST
 AC_MSG_CHECKING([for sysroot])
 AC_ARG_WITH([sysroot],
   [AS_HELP_STRING([--with-sysroot=DIR],
-    [Search for include within DIR/mingw.])],
-  [AS_CASE([$with_sysroot],
-    [no],[AC_MSG_RESULT([no])],
-    [yes],[AC_MSG_RESULT([none specified])
-      AC_MSG_ERROR([Please specify a directory to the --with-sysroot=DIR option])
-    ],[
-      AC_MSG_RESULT([$with_sysroot])
-      TARGET_SYSTEM_ROOT=$with_sysroot
-      AC_MSG_CHECKING([if sysroot contains an include directory])
-      AS_IF([test -d $with_sysroot/$host/include],
-        [AC_MSG_RESULT([yes])],
-        [
-          AC_MSG_RESULT([no])
-          AC_MSG_ERROR([Sysroot directory does not contain $host/include])
-          with_sysroot=no
-        ])
-    ])
-  ],
-  [
-    AC_MSG_RESULT([no])
-    TARGET_SYSTEM_ROOT=
-    with_sysroot=no
-  ])
-AM_CONDITIONAL([WITHSYSROOT],[test $with_sysroot != no])
+    [Search for headers within DIR/include (default: prefix)])],
+  [],
+  [AS_VAR_SET([with_sysroot],[yes])])
+AS_CASE([$with_sysroot],
+  [no],[],
+  [yes],[AS_VAR_SET([with_sysroot],[$prefix])],
+  [])
+AC_MSG_RESULT([$with_sysroot])
+AS_VAR_IF([with_sysroot],[no],[],[AS_VAR_SET([TARGET_SYSTEM_ROOT],[$with_sysroot])])
 AC_SUBST([TARGET_SYSTEM_ROOT])
+AM_CONDITIONAL([WITHSYSROOT],[AS_VAR_TEST_SET([TARGET_SYSTEM_ROOT])])
+
 
 # Checks for programs.
 # Checks for headers, libs, etc need to utilize the sysroot... no idea how
@@ -48,80 +35,106 @@ AC_NO_EXECUTABLES
 AC_PROG_SED
 AC_PROG_CC
 AC_PROG_CXX
+AC_PROG_CPP
 AC_PROG_INSTALL
 AC_PROG_RANLIB
 AC_CHECK_TOOL([DLLTOOL], [dlltool], [:])
+AM_PROG_AR
 AM_PROG_AS
-dnl Remove these once automake fixes the bug where they aren't defined according to $host
-AC_CHECK_TOOL([AR], [ar], [:])
+dnl Remove this once automake fixes the bug where AS is not defined according to $host
 AC_CHECK_TOOL([AS], [as], [:])
 dnl ---
 AM_PROG_CC_C_O
 
+AC_MSG_CHECKING([whether to build a w32api package for Cygwin])
+AC_ARG_ENABLE([w32api],
+  [AS_HELP_STRING([--enable-w32api],
+    [Enable building a w32api package for Cygwin])],
+  [],
+  [AS_VAR_SET([enable_w32api],[no])])
+AC_MSG_RESULT([$enable_w32api])
+AS_CASE([$enable_w32api],
+  [no],[],
+  [yes],[AS_VAR_SET([W32API])
+	 AS_VAR_SET([includedir],[${prefix}/include/w32api])],
+  [AC_MSG_ERROR([invalid argument.  Must be either yes or no.])])
+AM_CONDITIONAL([W32API], [AS_VAR_TEST_SET([W32API])])
+
+AC_MSG_CHECKING([whether to build the Win32 libraries])
 AC_ARG_ENABLE([lib32],
   [AS_HELP_STRING([--enable-lib32],
-    [Build the Win32 runtime])],
+    [Build the Win32 libraries])],
   [],
-  [AC_MSG_CHECKING([whether to build the Win32 runtime])
-   _save_CFLAGS="$CFLAGS"
-   CFLAGS="$CFLAGS -m32"
-   AC_COMPILE_IFELSE(
-     [AC_LANG_PROGRAM(
-       [[const char test[(sizeof(void*)==4)?0:-1];]],
-       []
-     )],
-     [enable_lib32=yes],
-     [enable_lib32=no])
-   AC_MSG_RESULT([$enable_lib32])
-   CFLAGS="$_save_CFLAGS"
-  ])
-AM_CONDITIONAL([LIB32], [test $enable_lib32 = yes])
+  [
+    _save_CFLAGS="$CFLAGS"
+    CFLAGS="$CFLAGS -m32"
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[const char test[(sizeof(void*)==4)?0:-1];]],[])],
+      [enable_lib32=yes],
+      [enable_lib32=no])
+    CFLAGS="$_save_CFLAGS"])
+AC_MSG_RESULT([$enable_lib32])
+AS_CASE([$enable_lib32],
+  [no],[],
+  [yes],[AS_VAR_SET([LIB32])],
+  [AC_MSG_ERROR([invalid argument.  Must be either yes or no.])])
+AM_CONDITIONAL([LIB32], [AS_VAR_TEST_SET([LIB32])])
 
+AC_MSG_CHECKING([whether to build the Win64 libraries])
 AC_ARG_ENABLE([lib64],
   [AS_HELP_STRING([--enable-lib64],
-    [Build the Win64 runtime])],
+    [Build the Win64 libraries])],
   [],
-  [AC_MSG_CHECKING([whether to build the Win64 runtime])
-   _save_CFLAGS="$CFLAGS"
-   CFLAGS="$CFLAGS -m64"
-   AC_COMPILE_IFELSE(
-     [AC_LANG_PROGRAM(
-       [[const char test[(sizeof(void*)==8)?0:-1];]],
-       []
-     )],
-     [enable_lib64=yes],
-     [enable_lib64=no])
-   AC_MSG_RESULT([$enable_lib64])
-   CFLAGS="$_save_CFLAGS"
-  ])
-AM_CONDITIONAL([LIB64], [test $enable_lib64 = yes])
+  [
+    _save_CFLAGS="$CFLAGS"
+    CFLAGS="$CFLAGS -m64"
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[const char test[(sizeof(void*)==8)?0:-1];]],[])],
+      [enable_lib64=yes],
+      [enable_lib64=no])
+    CFLAGS="$_save_CFLAGS"])
+AC_MSG_RESULT([$enable_lib64])
+AS_CASE([$enable_lib64],
+  [no],[],
+  [yes],[AS_VAR_SET([LIB64])],
+  [AC_MSG_ERROR([invalid argument.  Must be either yes or no.])])
+AM_CONDITIONAL([LIB64], [AS_VAR_TEST_SET([LIB64])])
 
+AC_MSG_CHECKING([whether to build the WinCE libraries])
 AC_ARG_ENABLE([libce],
   [AS_HELP_STRING([--enable-libce],
-    [Build the WinCE runtime])],
+    [Build the WinCE libraries])],
   [],
   [AS_CASE([$host_cpu],
     [arm*],[enable_libce=yes],
     [*],[enable_libce=no])
   ])
-AM_CONDITIONAL([LIBCE], [test $enable_libce = yes])
+AC_MSG_RESULT([$enable_libce])
+AS_CASE([$enable_libce],
+  [no],[],
+  [yes],[AS_VAR_SET([LIBCE])],
+  [AC_MSG_ERROR([invalid argument.  Must be either yes or no.])])
+AM_CONDITIONAL([LIBCE], [AS_VAR_TEST_SET([LIBCE])])
 
-AS_IF([test "$enable_lib32" = no && test "$enable_lib64" = no],
-        [],
-      [test "$enable_libce" = yes],
-        [AC_MSG_WARN([Building the runtime to use libce with lib32 or lib64 is unsupported.])])
+AS_VAR_IF([enable_libce],[yes],[
+  AS_IF([AS_VAR_TEST_SET([LIB32]) || AS_VAR_TEST_SET([LIB64])],
+    [AC_MSG_WARN([Building the runtime to use libce with lib32 or lib64 is unsupported.])])])
 
-AS_CASE([$host_cpu],
-  [x86_64],[
-    AC_SUBST([LIB64SUFFIXDIR],[lib])
-    AC_SUBST([LIB32SUFFIXDIR],[lib32])],
-  [i*86],[
-    AC_SUBST([LIB64SUFFIXDIR],[lib64])
-    AC_SUBST([LIB32SUFFIXDIR],[lib])],
-  [*],[
-    AC_SUBST([LIB64SUFFIXDIR],[lib64])
-    AC_SUBST([LIB32SUFFIXDIR],[lib32])]
-  )
+AS_CASE([$enable_w32api],
+  [yes],[
+	    AC_SUBST([LIB64SUFFIXDIR],[lib64/w32api])
+	    AC_SUBST([LIB32SUFFIXDIR],[lib/w32api])
+	],
+  [AS_CASE([$host_cpu],
+	  [x86_64],[
+	    AC_SUBST([LIB64SUFFIXDIR],[lib])
+	    AC_SUBST([LIB32SUFFIXDIR],[lib32])],
+	  [i*86],[
+	    AC_SUBST([LIB64SUFFIXDIR],[lib64])
+	    AC_SUBST([LIB32SUFFIXDIR],[lib])],
+	  [
+	    AC_SUBST([LIB64SUFFIXDIR],[lib64])
+	    AC_SUBST([LIB32SUFFIXDIR],[lib32])]
+	  )]
+)
 
 # Checks for features.
 
@@ -137,19 +150,6 @@ AS_CASE([$enable_wildcard],
   [AC_MSG_ERROR([Please only use --enable-wildcard or --disable-wildcard, without any additional arguments.])])
 AC_DEFINE_UNQUOTED([__ENABLE_GLOBBING],[$enable_wildcard_value],[Define as -1 to enable command line globbing or 0 to disable it.])
 AC_MSG_RESULT([$enable_wildcard])
-
-AC_MSG_CHECKING([whether to enable leading underscores])
-AC_ARG_ENABLE([leading-underscores],
-  [AS_HELP_STRING([--disable-leading-underscores],
-    [Disable leading underscores to match the MSVC calling convention])],
-  [],
-  [enable_leading_underscores=yes])
-AS_CASE([$enable_leading_underscores],
-  [yes],[],
-  [no],[],
-  [AC_MSG_ERROR([Please only use --enable-leading-underscores or --disable-leading-underscores, without any additional arguments.])])
-AM_CONDITIONAL([UNDERSCORES],[test $enable_leading_underscores = yes])
-AC_MSG_RESULT([$enable_leading_underscores])
 
 AC_MSG_CHECKING([whether to enable private exports])
 AC_ARG_ENABLE([private-exports],

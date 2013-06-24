@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef _FILEHC_H_
@@ -79,7 +79,7 @@ extern "C" {
   typedef struct NAME_CACHE_CONTEXT *PNAME_CACHE_CONTEXT;
 
   FILEHC_EXPORT PNAME_CACHE_CONTEXT WINAPI FindOrCreateNameCache(LPSTR lpstrName,CACHE_KEY_COMPARE pfnKeyCompare,CACHE_KEY_HASH pfnKeyHash,CACHE_DESTROY_CALLBACK pfnKeyDestroy,CACHE_DESTROY_CALLBACK pfnDataDestroy);
-  FILEHC_EXPORT long WINAPI ReleaseNameCache(PNAME_CACHE_CONTEXT pNameCache);
+  FILEHC_EXPORT __LONG32 WINAPI ReleaseNameCache(PNAME_CACHE_CONTEXT pNameCache);
   FILEHC_EXPORT WINBOOL WINAPI SetNameCacheSecurityFunction(PNAME_CACHE_CONTEXT pNameCache,CACHE_ACCESS_CHECK pfnAccessCheck);
   FILEHC_EXPORT WINBOOL WINAPI FindContextFromName(PNAME_CACHE_CONTEXT pNameCache,LPBYTE lpbName,DWORD cbName,CACHE_READ_CALLBACK pfnCallback,LPVOID lpvClientContext,HANDLE hToken,ACCESS_MASK accessMask,FIO_CONTEXT **ppContext);
   FILEHC_EXPORT WINBOOL WINAPI FindSyncContextFromName(PNAME_CACHE_CONTEXT pNameCache,LPBYTE lpbName,DWORD cbName,CACHE_READ_CALLBACK pfnCallback,LPVOID lpvClientContext,HANDLE hToken,ACCESS_MASK accessMask,FIO_CONTEXT **ppContext);

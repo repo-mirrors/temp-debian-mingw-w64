@@ -1,6 +1,6 @@
 /**
  * This file has no copyright assigned and is placed in the Public Domain.
- * This file is part of the w64 mingw-runtime package.
+ * This file is part of the mingw-w64 runtime package.
  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
  */
 #ifndef _MSTCPIP_
@@ -37,8 +37,14 @@ struct tcp_keepalive {
 typedef enum _SOCKET_SECURITY_PROTOCOL {
   SOCKET_SECURITY_PROTOCOL_DEFAULT,
   SOCKET_SECURITY_PROTOCOL_IPSEC,
+#if NTDDI_VERSION >= NTDDI_WIN7
+  SOCKET_SECURITY_PROTOCOL_IPSEC2,
+#endif
   SOCKET_SECURITY_PROTOCOL_INVALID 
 } SOCKET_SECURITY_PROTOCOL;
+
+#define SOCKET_SETTINGS_GUARANTEE_ENCRYPTION  0x1
+#define SOCKET_SETTINGS_ALLOW_INSECURE  0x2
 
 typedef enum _SOCKET_USAGE_TYPE {
   SYSTEM_CRITICAL_SOCKET   = 1 
