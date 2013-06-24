@@ -11,6 +11,7 @@ mingw-w64 (3.0~svn5914-4) UNRELEASED; urgency=low
       towards making parallel builds possible.
     - Specify the full target prefix as required since 5197.
   * Fix target mangling to build on hurd-i386.
+  * Make DLLs non-executable and drop .la files.
 
  -- Stephen Kitt <skitt@debian.org>  Mon, 24 Jun 2013 10:47:01 +0200
 
