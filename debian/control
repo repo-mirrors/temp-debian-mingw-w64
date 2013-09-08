@@ -60,6 +60,9 @@ Description: Development tools for 32- and 64-bit Windows
  64-bit (x86 and x64) Windows applications using the Windows API and
  the GNU Compiler Collection (gcc).
  .
- This package contains the gendef and genidl tools, used to extract
- respectively DLL exports and IDL information from Windows
- executables.
+ This package contains:
+  * gendef, which extracts DLL exports from Windows executables;
+  * genidl, which extracts IDL information from Windows executables;
+  * genpeimg, which manipulates PE flags in Windows executables;
+  * widl, which generates build files from IDL descriptions;
+  * pkg-config symlinks to allow .pc-based libraries to be used.
