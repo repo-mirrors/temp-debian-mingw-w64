@@ -1,6 +1,7 @@
 mingw-w64 (3.0~svn6246-1) UNRELEASED; urgency=low
 
   * New upstream snapshot.
+  * Drop obsolete mingw-w64-dev package.
 
  -- Stephen Kitt <skitt@debian.org>  Sun, 08 Sep 2013 19:11:35 +0200
 

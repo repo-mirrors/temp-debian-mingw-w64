@@ -11,19 +11,6 @@ Homepage: http://mingw-w64.sf.net
 Vcs-Git: git://anonscm.debian.org/collab-maint/mingw-w64.git
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/mingw-w64.git;a=summary
 
-Package: mingw-w64-dev
-Section: oldlibs
-Architecture: all
-Depends: mingw-w64-i686-dev, mingw-w64-x86-64-dev, ${misc:Depends}
-Breaks: gcc-mingw-w64 (<< 4.6.0)
-Description: Development files for MinGW-w64 (transitional package)
- MinGW-w64 provides a development and runtime environment for 32- and
- 64-bit (x86 and x64) Windows applications using the Windows API and
- the GNU Compiler Collection (gcc).
- .
- This transitional package provides the headers and libraries required
- to build software using MinGW-w64.
-
 Package: mingw-w64-i686-dev
 Architecture: all
 Depends: ${misc:Depends}
