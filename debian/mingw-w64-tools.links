@@ -1,0 +1,2 @@
+usr/share/pkg-config-crosswrapper usr/bin/i686-w64-mingw32-pkg-config
+usr/share/pkg-config-crosswrapper usr/bin/x86_64-w64-mingw32-pkg-config
