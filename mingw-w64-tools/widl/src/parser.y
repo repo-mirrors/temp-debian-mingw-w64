@@ -88,6 +88,26 @@ typedef struct _decl_spec_t
 
 typelist_t incomplete_types = LIST_INIT(incomplete_types);
 
+typedef struct str_namespace_pool_t {
+  struct str_namespace_pool_t *next;
+  size_t len;
+  char name[1];
+} str_namespace_pool_t;
+
+static const char *unify_ns_str (const char *str);
+static const char *unify_ns_name(const char *l, const char *r);
+
+typedef struct ctx_namespace_t {
+  struct ctx_namespace_t *prev;
+  const char *name;
+} ctx_namespace_t;
+
+static ctx_namespace_t *ctx_namespace = NULL;
+
+static void push_namespace(const char *name);
+static int pop_namespace(void);
+static const char *get_cur_namespace(void);
+
 static void fix_incomplete(void);
 static void fix_incomplete_types(type_t *complete_type);
 
@@ -148,6 +168,8 @@ static statement_t *make_statement_typedef(var_list_t *names);
 static statement_t *make_statement_import(const char *str);
 static statement_t *make_statement_typedef(var_list_t *names);
 static statement_list_t *append_statement(statement_list_t *list, statement_t *stmt);
+static statement_list_t *append_statements(statement_list_t *, statement_list_t *);
+static attr_list_t *append_attribs(attr_list_t *, attr_list_t *);
 
 %}
 %union {
@@ -229,6 +251,7 @@ static statement_list_t *append_statement(statement_list_t *list, statement_t *s
 %token tMAYBE tMESSAGE
 %token tMETHODS
 %token tMODULE
+%token tNAMESPACE
 %token tNOCODE tNONBROWSABLE
 %token tNONCREATABLE
 %token tNONEXTENSIBLE
@@ -282,7 +305,7 @@ static statement_list_t *append_statement(statement_list_t *list, statement_t *s
 %type <ifinfo> interfacehdr
 %type <stgclass> storage_cls_spec
 %type <declspec> decl_spec decl_spec_no_type m_decl_spec_no_type
-%type <type> inherit interface interfacedef interfacedec
+%type <type> inherit interface interfacedef interfacedec namespacedef
 %type <type> dispinterface dispinterfacehdr dispinterfacedef
 %type <type> module modulehdr moduledef
 %type <type> base_type int_std
@@ -340,6 +363,8 @@ input:   gbl_statements				{ fix_incomplete();
 	;
 
 gbl_statements:					{ $$ = NULL; }
+	| gbl_statements namespacedef '{' gbl_statements '}'
+						{ $$ = append_statements($1, $4); pop_namespace(); }
 	| gbl_statements interfacedec		{ $$ = append_statement($1, make_statement_reference($2)); }
 	| gbl_statements interfacedef		{ $$ = append_statement($1, make_statement_type_decl($2)); }
 	| gbl_statements coclass ';'		{ $$ = $1;
@@ -355,6 +380,7 @@ gbl_statements:					{ $$ = NULL; }
 
 imp_statements:					{ $$ = NULL; }
 	| imp_statements interfacedec		{ $$ = append_statement($1, make_statement_reference($2)); }
+	| imp_statements namespacedef '{' imp_statements '}' { $$ = append_statements($1, $4); pop_namespace(); }
 	| imp_statements interfacedef		{ $$ = append_statement($1, make_statement_type_decl($2)); }
 	| imp_statements coclass ';'		{ $$ = $1; reg_type($2, $2->name, 0); }
 	| imp_statements coclassdef		{ $$ = append_statement($1, make_statement_type_decl($2));
@@ -573,6 +599,7 @@ attribute:					{ $$ = NULL; }
 	| tUSESGETLASTERROR			{ $$ = make_attr(ATTR_USESGETLASTERROR); }
 	| tUSERMARSHAL '(' type ')'		{ $$ = make_attrp(ATTR_USERMARSHAL, $3); }
 	| tUUID '(' uuid_string ')'		{ $$ = make_attrp(ATTR_UUID, $3); }
+	| tASYNCUUID '(' uuid_string ')'	{ $$ = make_attrp(ATTR_ASYNCUUID, $3); }
 	| tV1ENUM				{ $$ = make_attr(ATTR_V1ENUM); }
 	| tVARARG				{ $$ = make_attr(ATTR_VARARG); }
 	| tVERSION '(' version ')'		{ $$ = make_attrv(ATTR_VERSION, $3); }
@@ -824,6 +851,10 @@ coclasshdr: attributes coclass			{ $$ = $2;
 
 coclassdef: coclasshdr '{' coclass_ints '}' semicolon_opt
 						{ $$ = type_coclass_define($1, $3); }
+	;
+
+namespacedef: tNAMESPACE aIDENTIFIER
+						{ $$=NULL; push_namespace($2); }
 	;
 
 coclass_ints:					{ $$ = NULL; }
@@ -1108,9 +1139,11 @@ type:	  tVOID					{ $$ = type_new_void(); }
 	| tSAFEARRAY '(' type ')'		{ $$ = make_safearray($3); }
 	;
 
-typedef: tTYPEDEF m_attributes decl_spec declarator_list
-						{ reg_typedefs($3, $4, check_typedef_attrs($2));
-						  $$ = make_statement_typedef($4);
+typedef: m_attributes tTYPEDEF m_attributes decl_spec declarator_list
+						{
+						  $1 = append_attribs ($1, $3);
+						  reg_typedefs($4, $5, check_typedef_attrs($1));
+						  $$ = make_statement_typedef($5);
 						}
 	;
 
@@ -1124,6 +1157,7 @@ uniondef: tUNION t_ident '{' ne_union_fields '}'
 version:
 	  aNUM					{ $$ = MAKEVERSION($1, 0); }
 	| aNUM '.' aNUM				{ $$ = MAKEVERSION($1, $3); }
+	| aHEXNUM				{ $$ = $1; }
 	;
 
 %%
@@ -1851,13 +1885,14 @@ static type_t *reg_typedefs(decl_spec_t *decl_spec, declarator_list_t *decls, at
        type_get_type_detect_alias(type) == TYPE_STRUCT ||
        type_get_type_detect_alias(type) == TYPE_UNION ||
        type_get_type_detect_alias(type) == TYPE_ENCAPSULATED_UNION) &&
-      !type->name && !parse_only)
+      !type->name)
   {
-    if (! is_attr(attrs, ATTR_PUBLIC))
+    if (! is_attr(attrs, ATTR_PUBLIC) && ! is_attr (attrs, ATTR_HIDDEN))
       attrs = append_attr( attrs, make_attr(ATTR_PUBLIC) );
     type->name = gen_name();
   }
-  else if (is_attr(attrs, ATTR_UUID) && !is_attr(attrs, ATTR_PUBLIC))
+  else if (is_attr(attrs, ATTR_UUID) && !is_attr(attrs, ATTR_PUBLIC)
+	   && !is_attr (attrs, ATTR_HIDDEN))
     attrs = append_attr( attrs, make_attr(ATTR_PUBLIC) );
 
   LIST_FOR_EACH_ENTRY( decl, decls, const declarator_t, entry )
@@ -1990,7 +2025,7 @@ static char *gen_name(void)
 
   if (! file_id)
   {
-    char *dst = dup_basename(input_name, ".idl");
+    char *dst = dup_basename(input_idl_name, ".idl");
     file_id = dst;
 
     for (; *dst; ++dst)
@@ -2031,6 +2066,7 @@ struct allowed_attr allowed_attr[] =
     /* ATTR_ANNOTATION */          { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, "annotation" },
     /* ATTR_APPOBJECT */           { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, "appobject" },
     /* ATTR_ASYNC */               { 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "async" },
+    /* ATTR_ASYNCUUID */	   { 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, "async_uuid" },
     /* ATTR_AUTO_HANDLE */         { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "auto_handle" },
     /* ATTR_BINDABLE */            { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "bindable" },
     /* ATTR_BROADCAST */           { 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "broadcast" },
@@ -2066,7 +2102,7 @@ struct allowed_attr allowed_attr[] =
     /* ATTR_HELPSTRING */          { 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, "helpstring" },
     /* ATTR_HELPSTRINGCONTEXT */   { 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, "helpstringcontext" },
     /* ATTR_HELPSTRINGDLL */       { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, "helpstringdll" },
-    /* ATTR_HIDDEN */              { 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, "hidden" },
+    /* ATTR_HIDDEN */              { 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, "hidden" },
     /* ATTR_ID */                  { 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, "id" },
     /* ATTR_IDEMPOTENT */          { 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "idempotent" },
     /* ATTR_IGNORE */              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, "ignore" },
@@ -2075,7 +2111,7 @@ struct allowed_attr allowed_attr[] =
     /* ATTR_IMPLICIT_HANDLE */     { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "implicit_handle" },
     /* ATTR_IN */                  { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, "in" },
     /* ATTR_INLINE */              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "inline" },
-    /* ATTR_INPUTSYNC */           { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "inputsync" },
+    /* ATTR_INPUTSYNC */           { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "inputsync" },
     /* ATTR_LENGTHIS */            { 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, "length_is" },
     /* ATTR_LIBLCID */             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, "lcid" },
     /* ATTR_LICENSED */            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, "licensed" },
@@ -2124,7 +2160,7 @@ struct allowed_attr allowed_attr[] =
     /* ATTR_UUID */                { 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, "uuid" },
     /* ATTR_V1ENUM */              { 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, "v1_enum" },
     /* ATTR_VARARG */              { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "vararg" },
-    /* ATTR_VERSION */             { 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, "version" },
+    /* ATTR_VERSION */             { 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, "version" },
     /* ATTR_VIPROGID */            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, "vi_progid" },
     /* ATTR_WIREMARSHAL */         { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, "wire_marshal" },
 };
@@ -2711,6 +2747,7 @@ static statement_t *make_statement(enum statement_type type)
 {
     statement_t *stmt = xmalloc(sizeof(*stmt));
     stmt->type = type;
+    stmt->nspace = get_cur_namespace();
     return stmt;
 }
 
@@ -2809,6 +2846,22 @@ static statement_t *make_statement_typedef(declarator_list_t *decls)
     return stmt;
 }
 
+static statement_list_t *append_statements(statement_list_t *l1, statement_list_t *l2)
+{
+  if (!l2) return l1;
+  if (!l1 || l1 == l2) return l2;
+  list_move_tail (l1, l2);
+  return l1;
+}
+
+static attr_list_t *append_attribs(attr_list_t *l1, attr_list_t *l2)
+{
+  if (!l2) return l1;
+  if (!l1 || l1 == l2) return l2;
+  list_move_tail (l1, l2);
+  return l1;
+}
+
 static statement_list_t *append_statement(statement_list_t *list, statement_t *stmt)
 {
     if (!stmt) return list;
@@ -2833,4 +2886,85 @@ static void check_def(const type_t *t)
     if (t->defined)
         error_loc("%s: redefinition error; original definition was at %s:%d\n",
                   t->name, t->loc_info.input_name, t->loc_info.line_number);
+}
+
+static void push_namespace(const char *nameadd)
+{
+  ctx_namespace_t *c;
+
+  if (!nameadd)
+    nameadd = "";
+  c = xmalloc(sizeof(ctx_namespace_t));
+  c->name = unify_ns_name(get_cur_namespace(), nameadd);
+  c->prev = ctx_namespace;
+  ctx_namespace = c;
+}
+
+static int pop_namespace(void)
+{
+  ctx_namespace_t *c;
+
+  if (!(c = ctx_namespace))
+    return 0;
+  ctx_namespace = c->prev;
+  c->prev = NULL;
+  free (c);
+  return 1;
+}
+
+static const char *get_cur_namespace(void)
+{
+  if (!ctx_namespace)
+    return unify_ns_str(NULL);
+  return ctx_namespace->name;
+}
+
+static const char *unify_ns_name(const char *l, const char *r)
+{
+  const char *r;
+  char *h;
+  if (!l || *l == 0)
+    return unify_ns_str(r);
+  if (!r || *r == 0)
+    return unify_ns_str(l);
+  h = xmalloc(strlen(l) + strlen(r) + 2);
+  strcpy(h, l);
+  strcat(h, ".");
+  strcat(h, r);
+  r = unify_ns_str(h);
+  free(h);
+  return r;
+}
+
+static const char *unify_ns_str (const char *str)
+{
+  static str_namespace_pool_t *pool = NULL;
+  size_t l;
+  int e;
+  str_namespace_pool_t *p, *c, *n;
+
+  if (!str || *str == 0)
+    return "";
+  l = strlen (str);
+  p = NULL;
+  c = pool;
+  while (c != NULL)
+  {
+    if (c->len == l && (e = strcmp (c->name, str)) >= 0)
+    {
+      if (!e)
+	return &(c->name[0]);
+      break;
+    }
+    c = (p = c)->next;
+  }
+  n = xmalloc (sizeof (str_namespace_pool_t) + l);
+  strcpy (n->name, str);
+  n->next = c;
+  n->len = l;
+  if (!p)
+    pool = n;
+  else
+    p->next = n;
+  return &(n->name[0]);
 }

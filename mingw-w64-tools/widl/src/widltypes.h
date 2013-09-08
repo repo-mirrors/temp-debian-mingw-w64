@@ -70,6 +70,7 @@ enum attr_type
     ATTR_ANNOTATION,
     ATTR_APPOBJECT,
     ATTR_ASYNC,
+    ATTR_ASYNCUUID,
     ATTR_AUTO_HANDLE,
     ATTR_BINDABLE,
     ATTR_BROADCAST,
@@ -513,6 +514,7 @@ struct _type_list_t {
 struct _statement_t {
     struct list entry;
     enum statement_type type;
+    const char *nspace;
     union
     {
         ifref_t iface;

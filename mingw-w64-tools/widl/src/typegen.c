@@ -747,6 +747,7 @@ static int type_has_pointers(const type_t *type)
 static int type_has_full_pointer(const type_t *type, const attr_list_t *attrs,
                                  int toplevel_param)
 {
+redo:
     switch (typegen_detect_type(type, NULL, TDT_IGNORE_STRINGS))
     {
     case TGT_USER_TYPE:
@@ -759,15 +760,18 @@ static int type_has_full_pointer(const type_t *type, const attr_list_t *attrs,
     case TGT_ARRAY:
         if (get_pointer_fc(type, attrs, toplevel_param) == RPC_FC_FP)
             return TRUE;
-        else
-            return type_has_full_pointer(type_array_get_element(type), NULL, FALSE);
+	type = type_array_get_element(type);
+	attrs = NULL;
+	toplevel_param = 0;
+	goto redo;
+
     case TGT_STRUCT:
     {
         var_list_t *fields = type_struct_get_fields(type);
         const var_t *field;
-        if (fields) LIST_FOR_EACH_ENTRY( field, fields, const var_t, entry )
+        if (fields && toplevel_param) LIST_FOR_EACH_ENTRY( field, fields, const var_t, entry )
         {
-            if (type_has_full_pointer(field->type, field->attrs, FALSE))
+            if (field->type && type_has_full_pointer(field->type, field->attrs, FALSE))
                 return TRUE;
         }
         break;
@@ -777,7 +781,7 @@ static int type_has_full_pointer(const type_t *type, const attr_list_t *attrs,
         var_list_t *fields;
         const var_t *field;
         fields = type_union_get_cases(type);
-        if (fields) LIST_FOR_EACH_ENTRY( field, fields, const var_t, entry )
+        if (fields && toplevel_param) LIST_FOR_EACH_ENTRY( field, fields, const var_t, entry )
         {
             if (field->type && type_has_full_pointer(field->type, field->attrs, FALSE))
                 return TRUE;
@@ -1158,7 +1162,7 @@ static unsigned int write_new_procformatstring_type(FILE *file, int indent, cons
     if (flags >> 13) sprintf( buffer + strlen(buffer), " srv size=%u,", (flags >> 13) * 8 );
     strcpy( buffer + strlen( buffer ) - 1, " */" );
     print_file( file, indent, "NdrFcShort(0x%hx),\t%s\n", flags, buffer );
-    print_file( file, indent, "NdrFcShort(0x%hx),	/* stack offset = %hu */\n",
+    print_file( file, indent, "NdrFcShort(0x%x),	/* stack offset = %u */\n",
                 *stack_offset, *stack_offset );
     if (flags & IsBasetype)
     {
@@ -1332,7 +1336,7 @@ static void write_proc_func_header( FILE *file, int indent, const type_t *iface,
     print_file( file, indent, "0x%02x,\n", oi_flags );
     print_file( file, indent, "NdrFcLong(0x%x),\n", rpc_flags );
     print_file( file, indent, "NdrFcShort(0x%hx),\t/* method %hu */\n", num_proc, num_proc );
-    print_file( file, indent, "NdrFcShort(0x%hx),\t/* stack size = %hu */\n", stack_size, stack_size );
+    print_file( file, indent, "NdrFcShort(0x%x),\t/* stack size = %u */\n", stack_size, stack_size );
     *offset += 10;
 
     if (!implicit_fc)
@@ -1380,9 +1384,9 @@ static void write_proc_func_header( FILE *file, int indent, const type_t *iface,
         if (is_attr( func->attrs, ATTR_NOTIFYFLAG )) ext_flags |= 0x10;  /* HasNotify2 */
 
         size = get_function_buffer_size( func, PASS_IN );
-        print_file( file, indent, "NdrFcShort(0x%x),\t/* client buffer = %hu */\n", size, size );
+        print_file( file, indent, "NdrFcShort(0x%x),\t/* client buffer = %u */\n", size, size );
         size = get_function_buffer_size( func, PASS_OUT );
-        print_file( file, indent, "NdrFcShort(0x%x),\t/* server buffer = %hu */\n", size, size );
+        print_file( file, indent, "NdrFcShort(0x%x),\t/* server buffer = %u */\n", size, size );
         print_file( file, indent, "0x%02x,\n", oi2_flags );
         print_file( file, indent, "0x%02x,\t/* %u params */\n", nb_args, nb_args );
         print_file( file, indent, "0x%02x,\n", pointer_size == 8 ? 10 : 8 );
@@ -2158,7 +2162,7 @@ static unsigned int write_simple_pointer(FILE *file, const attr_list_t *attrs,
 static void print_start_tfs_comment(FILE *file, type_t *t, unsigned int tfsoff)
 {
     print_file(file, 0, "/* %u (", tfsoff);
-    write_type_decl(file, t, NULL);
+    write_type_decl(file, t, NULL, "");
     print_file(file, 0, ") */\n");
 }
 
@@ -3969,7 +3973,7 @@ void print_phase_basetype(FILE *file, int indent, const char *local_var_prefix,
         if (phase == PHASE_MARSHAL)
         {
             print_file(file, indent, "*(");
-            write_type_decl(file, is_ptr(type) ? type_pointer_get_ref(type) : type, NULL);
+            write_type_decl(file, is_ptr(type) ? type_pointer_get_ref(type) : type, NULL, "");
             if (is_ptr(type))
                 fprintf(file, " *)__frame->_StubMsg.Buffer = *");
             else
@@ -3980,7 +3984,7 @@ void print_phase_basetype(FILE *file, int indent, const char *local_var_prefix,
         else if (phase == PHASE_UNMARSHAL)
         {
             print_file(file, indent, "if (__frame->_StubMsg.Buffer + sizeof(");
-            write_type_decl(file, is_ptr(type) ? type_pointer_get_ref(type) : type, NULL);
+            write_type_decl(file, is_ptr(type) ? type_pointer_get_ref(type) : type, NULL, "");
             fprintf(file, ") > __frame->_StubMsg.BufferEnd)\n");
             print_file(file, indent, "{\n");
             print_file(file, indent + 1, "RpcRaiseException(RPC_X_BAD_STUB_DATA);\n");
@@ -3992,12 +3996,12 @@ void print_phase_basetype(FILE *file, int indent, const char *local_var_prefix,
                 fprintf(file, " = (");
             else
                 fprintf(file, " = *(");
-            write_type_decl(file, is_ptr(type) ? type_pointer_get_ref(type) : type, NULL);
+            write_type_decl(file, is_ptr(type) ? type_pointer_get_ref(type) : type, NULL, "");
             fprintf(file, " *)__frame->_StubMsg.Buffer;\n");
         }
 
         print_file(file, indent, "__frame->_StubMsg.Buffer += sizeof(");
-        write_type_decl(file, is_ptr(type) ? type_pointer_get_ref(type) : type, NULL);
+        write_type_decl(file, is_ptr(type) ? type_pointer_get_ref(type) : type, NULL, "");
         fprintf(file, ");\n");
     }
 }
@@ -4301,9 +4305,9 @@ static void write_remoting_arg(FILE *file, int indent, const var_t *func, const 
             range_max = LIST_ENTRY(list_next(range_list, list_head(range_list)), const expr_t, entry);
 
             print_file(file, indent, "if ((%s%s < (", local_var_prefix, var->name);
-            write_type_decl(file, var->type, NULL);
+            write_type_decl(file, var->type, NULL, "");
             fprintf(file, ")0x%x) || (%s%s > (", range_min->cval, local_var_prefix, var->name);
-            write_type_decl(file, var->type, NULL);
+            write_type_decl(file, var->type, NULL, "");
             fprintf(file, ")0x%x))\n", range_max->cval);
             print_file(file, indent, "{\n");
             print_file(file, indent+1, "RpcRaiseException(RPC_S_INVALID_BOUND);\n");
@@ -4533,7 +4537,7 @@ void declare_stub_args( FILE *file, int indent, const var_t *func )
     if (!is_void(var->type))
     {
         print_file(file, indent, "%s", "");
-        write_type_decl(file, var->type, var->name);
+        write_type_decl(file, var->type, var->name, "");
         fprintf(file, ";\n");
     }
 
@@ -4562,7 +4566,7 @@ void declare_stub_args( FILE *file, int indent, const var_t *func )
                 else
                     type_to_print = type_pointer_get_ref(var->type);
                 sprintf(name, "_W%u", i++);
-                write_type_decl(file, type_to_print, name);
+                write_type_decl(file, type_to_print, name, "");
                 fprintf(file, ";\n");
             }
 
@@ -4737,7 +4741,7 @@ void write_func_param_struct( FILE *file, const type_t *iface, const type_t *fun
     if (add_retval && !is_void( retval->type ))
     {
         print_file(file, 2, "%s", "");
-        write_type_decl( file, retval->type, retval->name );
+        write_type_decl( file, retval->type, retval->name, "");
         if (is_array( retval->type ) || is_ptr( retval->type ) ||
             type_memsize( retval->type ) == pointer_size)
             fprintf( file, ";\n" );

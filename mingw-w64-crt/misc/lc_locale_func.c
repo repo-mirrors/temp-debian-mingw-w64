@@ -1,12 +1,14 @@
 #define __lc_codepage __dummy_lc_codepage
+#define ___lc_codepage_func __dummy____lc_codepage_func
 #include <windows.h>
 #include <locale.h>
 #include <msvcrt.h>
 
+#undef ___lc_codepage_func
 #include "mb_wc_common.h"
 
 static unsigned int *msvcrt__lc_codepage;
-static unsigned int __cdecl msvcrt__lc_codepage_func(void)
+static unsigned int __cdecl msvcrt___lc_codepage_func(void)
 {
     return *msvcrt__lc_codepage;
 }
@@ -19,7 +21,12 @@ static unsigned int __cdecl setlocale_codepage_hack(void)
 }
 
 static unsigned int __cdecl init_codepage_func(void);
-unsigned int (__cdecl *__MINGW_IMP_SYMBOL(__lc_codepage_func))(void) = init_codepage_func;
+unsigned int (__cdecl *__MINGW_IMP_SYMBOL(___lc_codepage_func))(void) = init_codepage_func;
+
+unsigned int __cdecl ___lc_codepage_func (void)
+{
+  return __MINGW_IMP_SYMBOL(___lc_codepage_func) ();
+}
 
 static unsigned int __cdecl init_codepage_func(void)
 {
@@ -31,12 +38,12 @@ static unsigned int __cdecl init_codepage_func(void)
         if(!func) {
             msvcrt__lc_codepage = (unsigned int*)GetProcAddress(msvcrt, "__lc_codepage");
             if(msvcrt__lc_codepage)
-                func = msvcrt__lc_codepage_func;
+                func = msvcrt___lc_codepage_func;
         }
     }
 
     if(!func)
         func = setlocale_codepage_hack;
 
-    return (__MINGW_IMP_SYMBOL(__lc_codepage_func) = func)();
+    return (__MINGW_IMP_SYMBOL(___lc_codepage_func) = func)();
 }
