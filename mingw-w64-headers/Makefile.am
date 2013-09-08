@@ -59,9 +59,14 @@ if HAVE_WIDL
 
 IDL_SRCS = \
   include/activation.idl \
+  include/activaut.idl \
+  include/activprof.idl \
+  include/activscp.idl \
   include/audioclient.idl \
   include/audiopolicy.idl \
+  include/control.idl \
   include/ctfutb.idl \
+  include/dbgprop.idl \
   include/docobj.idl \
   include/devicetopology.idl \
   include/downloadmgr.idl \
@@ -70,6 +75,7 @@ IDL_SRCS = \
   include/fusion.idl \
   include/fwptypes.idl \
   include/hstring.idl \
+  include/icodecapi.idl \
   include/iketypes.idl \
   include/inputscope.idl \
   include/inspectable.idl \
@@ -86,12 +92,14 @@ IDL_SRCS = \
   include/msxml.idl \
   include/objectarray.idl \
   include/objidl.idl \
+  include/objidlbase.idl \
   include/oleidl.idl \
   include/optary.idl \
   include/portabledevicetypes.idl \
   include/propidl.idl \
   include/propsys.idl \
   include/sensorsapi.idl \
+  include/servprov.idl \
   include/shobjidl.idl \
   include/shtypes.idl \
   include/strmif.idl \
@@ -101,8 +109,17 @@ IDL_SRCS = \
   include/uiautomationclient.idl \
   include/uiautomationcore.idl \
   include/unknwn.idl \
+  include/unknwnbase.idl \
   include/urlmon.idl \
   include/wincodec.idl \
+  include/wmsbuffer.idl \
+  include/wmsdkidl.idl \
+  include/wtypesbase.idl \
+  include/windows.foundation.idl \
+  include/windows.security.cryptography.idl \
+  include/windows.storage.idl \
+  include/windows.storage.streams.idl \
+  include/windows.system.threading.idl \
   include/wmcodecdsp.idl \
   include/wpcapi.idl \
   include/wtypes.idl \

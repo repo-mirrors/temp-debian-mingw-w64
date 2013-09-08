@@ -1749,7 +1749,7 @@ typedef enum _EX_POOL_PRIORITY {
 #if !defined(_WIN64) && (defined(_NTDDK_) || defined(_NTIFS_) || defined(_NDIS_))
 #define LOOKASIDE_ALIGN
 #else
-#define LOOKASIDE_ALIGN /* FIXME: DECLSPEC_CACHEALIGN */
+#define LOOKASIDE_ALIGN DECLSPEC_CACHEALIGN
 #endif
 
 typedef struct _LOOKASIDE_LIST_EX *PLOOKASIDE_LIST_EX;
@@ -10539,9 +10539,11 @@ KeFlushWriteBuffer(VOID);
 /* ULONG
  * BYTES_TO_PAGES(
  *   IN ULONG Size)
+ *
+ * Note: This needs to be like this to avoid overflows!
  */
 #define BYTES_TO_PAGES(Size) \
-  (((Size) + PAGE_SIZE - 1) >> PAGE_SHIFT)
+  (((Size) >> PAGE_SHIFT) + (((Size) & (PAGE_SIZE - 1)) != 0))
 
 /* PVOID
  * PAGE_ALIGN(

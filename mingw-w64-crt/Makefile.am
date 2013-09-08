@@ -90,16 +90,16 @@ src_libmingwthrd=libsrc/mingwthrd_mt.c
 
 src_libgdiplus=libsrc/gdiplus.c
 
-src_libuuid=libsrc/uuid.c   libsrc/guid_nul.c         libsrc/devguid.c         libsrc/fwp-uuid.c        \
-  libsrc/ativscp-uuid.c     libsrc/atsmedia-uuid.c    libsrc/bth-uuid.c        libsrc/cguid-uuid.c        \
-  libsrc/comcat-uuid.c      libsrc/docobj-uuid.c      libsrc/exdisp-uuid.c     libsrc/extras-uuid.c     libsrc/hlguids-uuid.c      \
-  libsrc/hlink-uuid.c       libsrc/mlang-uuid.c       libsrc/msctf-uuid.c      libsrc/mshtml-uuid.c     libsrc/msxml-uuid.c        \
-  libsrc/netcon-uuid.c      libsrc/objidl-uuid.c      libsrc/oaidl-uuid.c      libsrc/objsafe-uuid.c    libsrc/ocidl-uuid.c        \
-  libsrc/oleacc-uuid.c      libsrc/olectlid-uuid.c    libsrc/oleidl-uuid.c     libsrc/power-uuid.c      libsrc/servprov-uuid.c     \
-  libsrc/urlmon-uuid.c      libsrc/vds-uuid.c         libsrc/virtdisk-uuid.c   \
-  libsrc/wia-uuid.c         libsrc/powrprof-uuid.c    libsrc/usbcamdi-uuid.c   libsrc/usbiodef-uuid.c   libsrc/ntddkbd-uuid.c      \
-  libsrc/ntddmou-uuid.c     libsrc/ntddpar-uuid.c     libsrc/ntddser-uuid.c    libsrc/ntddscsi-uuid.c   libsrc/ntddstor-uuid.c     \
-  libsrc/ntddvdeo-uuid.c    libsrc/dxva-uuid.c        libsrc/mshtmhst-uuid.c
+src_libuuid=\
+  libsrc/ativscp-uuid.c   libsrc/atsmedia-uuid.c  libsrc/bth-uuid.c       libsrc/cguid-uuid.c     libsrc/comcat-uuid.c  \
+  libsrc/devguid.c        libsrc/docobj-uuid.c    libsrc/dxva-uuid.c      libsrc/exdisp-uuid.c    libsrc/extras-uuid.c  \
+  libsrc/fwp-uuid.c       libsrc/guid_nul.c       libsrc/hlguids-uuid.c   libsrc/hlink-uuid.c     libsrc/mlang-uuid.c   \
+  libsrc/msctf-uuid.c     libsrc/mshtmhst-uuid.c  libsrc/mshtml-uuid.c    libsrc/msxml-uuid.c     libsrc/netcon-uuid.c  \
+  libsrc/ntddkbd-uuid.c   libsrc/ntddmou-uuid.c   libsrc/ntddpar-uuid.c   libsrc/ntddscsi-uuid.c  libsrc/ntddser-uuid.c \
+  libsrc/ntddstor-uuid.c  libsrc/ntddvdeo-uuid.c  libsrc/oaidl-uuid.c     libsrc/objidl-uuid.c    libsrc/objsafe-uuid.c \
+  libsrc/ocidl-uuid.c     libsrc/oleacc-uuid.c    libsrc/olectlid-uuid.c  libsrc/oleidl-uuid.c    libsrc/power-uuid.c   \
+  libsrc/powrprof-uuid.c  libsrc/urlmon-uuid.c    libsrc/usbcamdi-uuid.c  libsrc/usbiodef-uuid.c  libsrc/uuid.c         \
+  libsrc/vds-uuid.c       libsrc/virtdisk-uuid.c  libsrc/wia-uuid.c
 
 src_libws2_32=libsrc/ws2_32.c \
   \
@@ -119,7 +119,6 @@ src_libws2_32=libsrc/ws2_32.c \
 
 src_msvcrt=\
   misc/invalid_parameter_handler.c \
-  misc/lc_locale_func.c \
   misc/output_format.c \
   secapi/_access_s.c \
   secapi/_cgets_s.c \
@@ -156,6 +155,9 @@ src_msvcrt=\
   secapi/vsprintf_s.c \
   secapi/wmemcpy_s.c
 
+src_msvcrt32=\
+  $(src_msvcrt) \
+  misc/lc_locale_func.c
 
 src_libmingwex=\
   crt/dllentry.c        crt/dllmain.c \
@@ -260,9 +262,9 @@ src_intrincs= \
   intrincs/__movsb.c        intrincs/__movsd.c        intrincs/__movsw.c         intrincs/__stosb.c       intrincs/__stosd.c        \
   intrincs/__stosw.c        intrincs/_rotl64.c        intrincs/_rotr64.c         intrincs/bitscanfwd.c    intrincs/bitscanrev.c     \
   intrincs/bittest.c        intrincs/bittestc.c       intrincs/bittestci.c       intrincs/bittestr.c      intrincs/bittestri.c      \
-  intrincs/bittests.c       intrincs/bittestsi.c      intrincs/cpuid.c           intrincs/currentfiber.c  intrincs/currentteb.c     \
-  intrincs/fiberdata.c      intrincs/ilockadd.c       intrincs/ilockand.c        intrincs/ilockand64.c \
-  intrincs/ilockcxch.c      intrincs/ilockcxch2.c \
+  intrincs/bittests.c       intrincs/bittestsi.c      intrincs/cpuid.c           \
+  intrincs/ilockadd.c       intrincs/ilockand.c        intrincs/ilockand64.c \
+  intrincs/ilockcxch.c      \
   intrincs/ilockcxch16.c    intrincs/ilockcxch64.c    intrincs/ilockcxchptr.c    intrincs/ilockdec.c      intrincs/ilockdec16.c     \
   intrincs/ilockdec64.c     intrincs/ilockexch.c      intrincs/ilockexch64.c     intrincs/ilockexchadd.c  intrincs/ilockexchadd64.c \
   intrincs/ilockexchptr.c   intrincs/ilockinc.c       intrincs/ilockinc16.c      intrincs/ilockinc64.c    intrincs/ilockor.c        \
@@ -271,7 +273,7 @@ src_intrincs= \
   intrincs/outbytestring.c  intrincs/outdword.c       intrincs/outdwordstring.c  intrincs/outword.c       intrincs/outwordstring.c  \
   intrincs/rdtsc.c          intrincs/readcr0.c        intrincs/readcr2.c         intrincs/readcr3.c       intrincs/readcr4.c        \
   intrincs/readcr8.c        intrincs/readmsr.c        intrincs/writecr0.c        intrincs/writecr2.c      intrincs/writecr3.c       \
-  intrincs/writecr4.c       intrincs/writecr8.c       intrincs/writemsr.c        intrincs/RtlSecureZeroMemory.c
+  intrincs/writecr4.c       intrincs/writecr8.c       intrincs/writemsr.c        intrincs/__int2c.c       intrincs/RtlSecureZeroMemory.c
 
 # these only go into the 64 bit version:
 src_intrincs64=\
@@ -281,12 +283,15 @@ src_intrincs64=\
   intrincs/readgsqword.c  intrincs/writegsbyte.c  intrincs/writegsword.c  intrincs/writegsdword.c    \
   intrincs/writegsqword.c intrincs/mul128ex.c     intrincs/umul128ex.c    intrincs/_mul128.c         \
   intrincs/_umul128.c     intrincs/__movsq.c      intrincs/__stosq.c      intrincs/__shiftright128.c \
-  intrincs/bittestci64.c  intrincs/__shiftleft128.c
+  intrincs/bittestci64.c  intrincs/__faststorefence.c    intrincs/__shiftleft128.c
 
 # these only go into the 32 bit version:
 src_intrincs32=\
-  intrincs/membarrier.c   intrincs/readfsbyte.c   intrincs/readfsword.c   intrincs/readfsdword.c  \
+  intrincs/readfsbyte.c   intrincs/readfsword.c   intrincs/readfsdword.c  \
   intrincs/writefsbyte.c  intrincs/writefsword.c  intrincs/writefsdword.c
+
+winrtlibs=\
+  winrt/libruntimeobject.a
 
 if LIB32
 #########
@@ -295,8 +300,11 @@ if LIB32
 
 lib32dir=$(prefix)/@LIB32SUFFIXDIR@
 crt32dir=$(lib32dir)
+winrtdir=$(lib32dir)
 
-if ! W32API
+winrt_DATA = $(winrtlibs)
+
+if !W32API
 crt32_DATA = \
   lib32/crt1.o    lib32/crt2.o     lib32/crt1u.o   lib32/crt2u.o    lib32/dllcrt1.o    lib32/dllcrt2.o \
   lib32/CRT_fp8.o lib32/CRT_fp10.o lib32/txtmode.o lib32/binmode.o  lib32/crtbegin.o   lib32/crtend.o \
@@ -342,11 +350,13 @@ lib32_libkernel32_a_SOURCES = $(src_intrincs) $(src_intrincs32)
 lib32_libkernel32_a_AR = $(DTLIB32) && $(AR) $(ARFLAGS)
 lib32_libkernel32_a_CPPFLAGS=$(CPPFLAGS32) $(extra_include) $(AM_CPPFLAGS)
 
+if !W32API
 lib32_LIBRARIES += lib32/libmsvcrt.a
-lib32_libmsvcrt_a_SOURCES = $(src_msvcrt) lib32/msvcrt.def.in
+lib32_libmsvcrt_a_SOURCES = $(src_msvcrt32) lib32/msvcrt.def.in
 lib32_libmsvcrt_a_AR = $(DTDEF32) lib32/msvcrt.def && $(AR) $(ARFLAGS)
 lib32_libmsvcrt_a_CPPFLAGS=$(CPPFLAGS32) -D__LIBMSVCRT__ $(extra_include) $(sysincludes)
 EXTRA_lib32_libmsvcrt_a_DEPENDENCIES=lib32/msvcrt.def
+endif
 
 lib32_LIBRARIES += lib32/libshell32.a
 lib32_libshell32_a_SOURCES = $(src_libshell32)
@@ -439,7 +449,7 @@ lib32_libws2_32_a_SOURCES = $(src_libws2_32)
 lib32_libws2_32_a_CPPFLAGS=$(CPPFLAGS32) $(sysincludes)
 lib32_libws2_32_a_AR = $(DTLIB32) && $(AR) $(ARFLAGS)
 
-if ! W32API
+if !W32API
 lib32_LIBRARIES += lib32/libdelayimp.a
 lib32_libdelayimp_a_SOURCES =
 
@@ -468,7 +478,7 @@ lib32_libmingwex_a_SOURCES = $(src_libmingwex)
 
 lib32_LIBRARIES += lib32/libmoldname.a
 lib32_libmoldname_a_CPPFLAGS=$(CPPFLAGS32) $(extra_include) $(AM_CPPFLAGS)
-lib32_libmoldname_a_SOURCES = 
+lib32_libmoldname_a_SOURCES = $(src_libm)
 
 lib32_LIBRARIES += lib32/libmingwthrd.a
 lib32_libmingwthrd_a_SOURCES = $(src_libmingwthrd)
@@ -497,7 +507,7 @@ lib32_DATA = \
   lib32/libmapi32.a    lib32/libmcd.a       lib32/libmfcuia32.a  lib32/libmgmtapi.a   lib32/libmprapi.a   \
   lib32/libmpr.a       lib32/libmqrt.a      lib32/libmsacm32.a   lib32/libmscms.a     lib32/libmsdmo.a    \
   lib32/libmsi.a       \
-  lib32/libmsimg32.a   lib32/libmsvcp60.a   lib32/libmsvfw32.a   lib32/libmswsock.a   lib32/libnddeapi.a  \
+  lib32/libmsimg32.a   lib32/libmsvfw32.a   lib32/libmswsock.a   lib32/libnddeapi.a  \
   lib32/libndis.a      lib32/libnetapi32.a  lib32/libnewdev.a    lib32/libntdll.a     lib32/libntoskrnl.a \
   lib32/libodbc32.a    lib32/libodbccp32.a  lib32/libole32.a     lib32/liboleacc.a    lib32/liboleaut32.a \
   lib32/libolecli32.a  lib32/liboledlg.a    lib32/libolepro32.a  lib32/libolesvr32.a  lib32/libopengl32.a \
@@ -514,9 +524,6 @@ lib32_DATA = \
   \
   lib32/libgpapi.a     lib32/libgpedit.a    lib32/libgpprefcl.a  lib32/libgpscript.a \
   lib32/libgptext.a    lib32/libmshtml.a    lib32/libmshtmled.a  \
-  \
-  lib32/libcrtdll.a    lib32/libmsvcr80.a   \
-  \
   lib32/libbcrypt.a    lib32/libbthprops.a  lib32/libclusapi.a   lib32/libcmutil.a    \
   lib32/libcredui.a    lib32/libcryptnet.a  lib32/libdavclnt.a   lib32/libdhcpcsvc6.a \
   lib32/libdhcpsapi.a  lib32/libdssec.a     lib32/libdxva2.a     lib32/libeapp3hst.a  \
@@ -534,10 +541,10 @@ lib32_DATA = \
   lib32/libvsstrace.a  lib32/libslwga.a     lib32/libvss_ps.a    lib32/libtbs.a       \
   lib32/libtxfw32.a    lib32/libmsctfmonitor.a lib32/libtdh.a    lib32/libwlanutil.a  \
   lib32/libwlanui.a    lib32/libwlanapi.a   lib32/libwer.a       lib32/libvirtdisk.a  \
-  lib32/libd2d1.a      lib32/libauthz.a     lib32/libwdscore.a   lib32/libmsvcr90d.a  \
-  lib32/libmsvcr90.a   lib32/libcryptsp.a   lib32/libbootvid.a   lib32/libwdscsl.a    \
+  lib32/libd2d1.a      lib32/libauthz.a     lib32/libwdscore.a   \
+  lib32/libcryptsp.a   lib32/libbootvid.a   lib32/libwdscsl.a    \
   lib32/libwdsutil.a   lib32/libwdsclient.a lib32/libwdsimage.a  lib32/libwdsupgcompl.a \
-  lib32/libmsvcr100.a  lib32/libwdsclientapi.a lib32/libpcwum.a  lib32/libdbgeng.a    \
+  lib32/libwdsclientapi.a lib32/libpcwum.a  lib32/libdbgeng.a    \
   \
   lib32/libcabinet.a   lib32/libcryptxml.a  lib32/libsspicli.a \
   \
@@ -570,13 +577,13 @@ lib32_DATA = \
   lib32/libxinput.a         lib32/libxaudio.a         lib32/libxaudiod.a   \
   lib32/libxapofx.a         lib32/libx3daudio.a       lib32/libd3dx9.a     \
   lib32/libd3dx10.a         lib32/libd3dx11.a         lib32/libd3dcsxd.a   \
-  lib32/libd3dcompiler.a    lib32/libwinhttp.a        lib32/libmsvcr110.a  \
+  lib32/libd3dcompiler.a    lib32/libwinhttp.a        \
   lib32/libdevmgr.a         lib32/libdevobj.a         lib32/libdevrtl.a    \
-  lib32/libapi-ms-win-core-winrt-string-l1-1-0.a lib32/libruntimeobject.a  \
+  lib32/libapi-ms-win-core-winrt-string-l1-1-0.a \
   lib32/libapi-ms-win-core-winrt-l1-1-0.a
 
-if ! W32API
-lib32_DATA += lib32/libglut.a
+if !W32API
+lib32_DATA += lib32/libglut.a lib32/libmsvcp60.a lib32/libmsvcr80.a lib32/libmsvcr90.a lib32/libmsvcr90d.a lib32/libmsvcr100.a lib32/libmsvcr110.a lib32/libcrtdll.a
 endif
 
 # combine these two rules with the ones for lib64
@@ -630,8 +637,11 @@ if LIB64
 
 lib64dir=$(prefix)/@LIB64SUFFIXDIR@
 crt64dir=$(lib64dir)
+winrtdir=$(lib64dir)
 
-if ! W32API
+winrt_DATA = $(winrtlibs)
+
+if !W32API
 crt64_DATA = \
   lib64/crt1.o    lib64/crt2.o     lib64/crt1u.o   lib64/crt2u.o   lib64/dllcrt1.o lib64/dllcrt2.o \
   lib64/CRT_fp8.o lib64/CRT_fp10.o lib64/txtmode.o lib64/binmode.o lib64/crtbegin.o lib64/crtend.o \
@@ -669,11 +679,13 @@ lib64_libkernel32_a_SOURCES = $(src_intrincs) $(src_intrincs64)
 lib64_libkernel32_a_CPPFLAGS=$(CPPFLAGS64) $(extra_include) $(AM_CPPFLAGS)
 lib64_libkernel32_a_AR = $(DTLIB64) && $(AR) $(ARFLAGS)
 
+if !W32API
 lib64_LIBRARIES += lib64/libmsvcrt.a
 lib64_libmsvcrt_a_SOURCES = $(src_msvcrt) lib64/msvcrt.def.in
 lib64_libmsvcrt_a_AR = $(DTDEF64) lib64/msvcrt.def && $(AR) $(ARFLAGS)
 lib64_libmsvcrt_a_CPPFLAGS=$(CPPFLAGS64) -D__LIBMSVCRT__ $(extra_include) $(sysincludes)
 EXTRA_lib64_libmsvcrt_a_DEPENDENCIES=lib64/msvcrt.def
+endif
 
 lib64_LIBRARIES += lib64/libshell32.a
 lib64_libshell32_a_SOURCES = $(src_libshell32)
@@ -766,7 +778,7 @@ lib64_libws2_32_a_SOURCES = $(src_libws2_32)
 lib64_libws2_32_a_CPPFLAGS=$(CPPFLAGS64) $(sysincludes)
 lib64_libws2_32_a_AR = $(DTLIB64) && $(AR) $(ARFLAGS)
 
-if ! W32API
+if !W32API
 lib64_LIBRARIES += lib64/libdelayimp.a
 lib64_libdelayimp_a_SOURCES =
 
@@ -795,7 +807,7 @@ lib64_libmingwex_a_SOURCES = $(src_libmingwex)
 
 lib64_LIBRARIES += lib64/libmoldname.a
 lib64_libmoldname_a_CPPFLAGS=$(CPPFLAGS64) $(extra_include) $(AM_CPPFLAGS)
-lib64_libmoldname_a_SOURCES = 
+lib64_libmoldname_a_SOURCES = $(src_libm)
 
 lib64_LIBRARIES += lib64/libmingwthrd.a
 lib64_libmingwthrd_a_SOURCES = $(src_libmingwthrd)
@@ -943,7 +955,7 @@ lib64_DATA = \
   lib64/libmsoeacct.a   lib64/libmsoe.a       lib64/libmsoert2.a      lib64/libmspatcha.a   lib64/libmspmsnsv.a      \
   lib64/libmsports.a    lib64/libmsrating.a   lib64/libmsrle32.a      lib64/libmssign32.a   lib64/libmssip32.a       \
   lib64/libmstask.a     lib64/libmstime.a     lib64/libmstlsapi.a     lib64/libmstscax.a    lib64/libmsutb.a         \
-  lib64/libmsv1_0.a     lib64/libmsvcirt.a    lib64/libmsvcp60.a      lib64/libmsvfw32.a    lib64/libmsvidc32.a      \
+  lib64/libmsv1_0.a     lib64/libmsvcirt.a    lib64/libmsvfw32.a      lib64/libmsvidc32.a      \
   lib64/libmsvidctl.a   lib64/libmsw3prt.a    lib64/libmswsock.a      lib64/libmsxactps.a   lib64/libmsxml3.a        \
   lib64/libmsxs64.a     lib64/libmsyuv.a      lib64/libmtxclu.a       lib64/libmtxdm.a      lib64/libmtxex.a         \
   lib64/libmtxoci.a     lib64/libmycomput.a   lib64/libmydocs.a       lib64/libnarrhook.a   lib64/libncobjapi.a      \
@@ -1032,9 +1044,6 @@ lib64_DATA = \
   lib64/libclfsw32.a    \
   lib64/libdwmapi.a     lib64/libntoskrnl.a     lib64/libuxtheme.a    \
   lib64/libwtsapi32.a   \
-  \
-  lib64/libcrtdll.a     lib64/libmsvcr80.a     \
-  \
   lib64/libbcrypt.a     lib64/libbthprops.a   lib64/libdhcpcsvc6.a   lib64/libdxva2.a       lib64/libeappcfg.a       \
   lib64/libeappgnui.a   lib64/libeapphost.a   lib64/libeappprxy.a    lib64/libevr.a         lib64/libiscsidsc.a      \
   lib64/libktmw32.a     lib64/libmf.a         lib64/libmfplat.a      lib64/libmsdrm.a       lib64/libncrypt.a        \
@@ -1047,7 +1056,7 @@ lib64_DATA = \
   lib64/libtdh.a        lib64/libtxfw32.a     lib64/libwlanui.a      lib64/libwlanapi.a     lib64/libwlanutil.a      \
   lib64/libwer.a        lib64/libndis.a       lib64/libd2d1.a        lib64/libwdscsl.a      lib64/libpcwum.a         \
   lib64/libwdscore.a    lib64/libcryptsp.a    lib64/libwdsclient.a   lib64/libwdsupgcompl.a lib64/libwdsclientapi.a  \
-  lib64/libwdsutil.a    lib64/libmsvcr90.a    lib64/libmsvcr100.a    lib64/libmsvcr90d.a    lib64/libwdsimage.a      \
+  lib64/libwdsutil.a    lib64/libwdsimage.a      \
   \
   lib64/libcryptxml.a   lib64/libsspicli.a    \
   \
@@ -1080,9 +1089,13 @@ lib64_DATA = \
   lib64/libxinput.a         lib64/libxaudio.a         lib64/libxaudiod.a   \
   lib64/libxapofx.a         lib64/libx3daudio.a       lib64/libd3dx9.a     \
   lib64/libd3dx10.a         lib64/libd3dx11.a         lib64/libd3dcsxd.a   \
-  lib64/libd3dcompiler.a    lib64/libwinhttp.a        lib64/libmsvcr110.a  \
-  lib64/libapi-ms-win-core-winrt-string-l1-1-0.a lib64/libruntimeobject.a  \
+  lib64/libd3dcompiler.a    lib64/libwinhttp.a \
+  lib64/libapi-ms-win-core-winrt-string-l1-1-0.a \
   lib64/libapi-ms-win-core-winrt-l1-1-0.a
+
+if !W32API
+lib64_DATA += lib64/libmsvcp60.a lib64/libmsvcr80.a lib64/libmsvcr90.a lib64/libmsvcr100.a lib64/libmsvcr90d.a lib64/libmsvcr110.a lib64/libcrtdll.a
+endif
 
 lib64/libcrtdll.a lib64/libmsvcr80.a: lib64/lib%.a: lib64/%.def
 	$(DTDEF64) $< --dllname $*.dll

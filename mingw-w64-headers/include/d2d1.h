@@ -207,6 +207,17 @@ typedef enum _D2D1_ARC_SIZE {
   D2D1_ARC_SIZE_LARGE   = 1 
 } D2D1_ARC_SIZE;
 
+enum {
+    D2D1_INTERPOLATION_MODE_DEFINITION_NEAREST_NEIGHBOR    = 0,
+    D2D1_INTERPOLATION_MODE_DEFINITION_LINEAR              = 1,
+    D2D1_INTERPOLATION_MODE_DEFINITION_CUBIC               = 2,
+    D2D1_INTERPOLATION_MODE_DEFINITION_MULTI_SAMPLE_LINEAR = 3,
+    D2D1_INTERPOLATION_MODE_DEFINITION_ANISOTROPIC         = 4,
+    D2D1_INTERPOLATION_MODE_DEFINITION_HIGH_QUALITY_CUBIC  = 5,
+    D2D1_INTERPOLATION_MODE_DEFINITION_FANT                = 6,
+    D2D1_INTERPOLATION_MODE_DEFINITION_MIPMAP_LINEAR       = 7
+};
+
 typedef enum _D2D1_BITMAP_INTERPOLATION_MODE {
   D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR   = 0,
   D2D1_BITMAP_INTERPOLATION_MODE_LINEAR             = 1 
@@ -625,11 +636,34 @@ interface ID2D1Brush {
 
 #endif
 
+DEFINE_GUID(IID_ID2D1Image, 0x65019f75,0x8da2,0x497c,0xb3,0x2c,0xdf,0xa3,0x4e,0x48,0xed,0xe6);
+
+#ifndef D2D_USE_C_DEFINITIONS
+
+interface ID2D1Image : public ID2D1Resource {};
+
+#else
+
+typedef struct ID2D1ImageVtbl {
+    ID2D1ResourceVtbl Base;
+} ID2D1ImageVtbl;
+
+interface ID2D1Image {
+    const ID2D1ImageVtbl *lpVtbl;
+};
+
+#define ID2D1Image_QueryInterface(this,A,B) (this)->lpVtbl->Base.Base.QueryInterface((IUnkwnown*)this,A,B)
+#define ID2D1Image_AddRef(this) (this)->lpVtbl->Base.Base.AddRef((IUnknown*)this)
+#define ID2D1Image_Release(this) (this)->lpVtbl->Base.Base.Release((IUnknown*)this)
+#define ID2D1Image_GetFactory(this,A) (this)->lpVtbl->Base.GetFactory((ID2D1Resource*)this,A)
+
+#endif
+
 DEFINE_GUID(IID_ID2D1Bitmap, 0xa2296057,0xea42,0x4099,0x98,0x3b,0x53,0x9f,0xb6,0x50,0x54,0x26);
 
 #ifndef D2D_USE_C_DEFINITIONS
 
-interface ID2D1Bitmap : public ID2D1Resource {
+interface ID2D1Bitmap : public ID2D1Image {
     STDMETHOD_(D2D1_SIZE_F, GetSize)(void) const PURE;
     STDMETHOD_(D2D1_SIZE_U, GetPixelSize)(void) const PURE;
     STDMETHOD_(D2D1_PIXEL_FORMAT, GetPixelFormat)(void) const PURE;
@@ -642,7 +676,7 @@ interface ID2D1Bitmap : public ID2D1Resource {
 #else
 
 typedef struct ID2D1BitmapVtbl {
-    ID2D1ResourceVtbl Base;
+    ID2D1ImageVtbl Base;
 
     STDMETHOD_(D2D1_SIZE_F, GetSize)(ID2D1Bitmap *This) PURE;
     STDMETHOD_(D2D1_SIZE_U, GetPixelSize)(ID2D1Bitmap *This) PURE;
@@ -657,10 +691,10 @@ interface ID2D1Bitmap {
     const ID2D1BitmapVtbl *lpVtbl;
 };
 
-#define ID2D1Bitmap_QueryInterface(this,A,B) (this)->lpVtbl->Base.Base.QueryInterface((IUnkwnown*)this,A,B)
-#define ID2D1Bitmap_AddRef(this) (this)->lpVtbl->Base.Base.AddRef((IUnknown*)this)
-#define ID2D1Bitmap_Release(this) (this)->lpVtbl->Base.Base.Release((IUnknown*)this)
-#define ID2D1Bitmap_GetFactory(this,A) (this)->lpVtbl->Base.GetFactory((ID2D1Resource*)this,A)
+#define ID2D1Bitmap_QueryInterface(this,A,B) (this)->lpVtbl->Base.Base.Base.QueryInterface((IUnkwnown*)this,A,B)
+#define ID2D1Bitmap_AddRef(this) (this)->lpVtbl->Base.Base.Base.AddRef((IUnknown*)this)
+#define ID2D1Bitmap_Release(this) (this)->lpVtbl->Base.Base.Base.Release((IUnknown*)this)
+#define ID2D1Bitmap_GetFactory(this,A) (this)->lpVtbl->Base.Base.GetFactory((ID2D1Resource*)this,A)
 #define ID2D1Bitmap_GetSize(this) (this)->lpVtbl->GetSize(this)
 #define ID2D1Bitmap_GetPixelSize(this) (this)->lpVtbl->GetPixelSize(this)
 #define ID2D1Bitmap_GetPixelFormat(this) (this)->lpVtbl->GetPixelFormat(this)
@@ -2403,6 +2437,7 @@ __CRT_UUID_DECL(ID2D1EllipseGeometry, 0x2cd906a4,0x12e2,0x11dc,0x9f,0xed,0x00,0x
 __CRT_UUID_DECL(ID2D1GeometryGroup, 0x2cd906a6,0x12e2,0x11dc,0x9f,0xed,0x00,0x11,0x43,0xa0,0x55,0xf9);
 __CRT_UUID_DECL(ID2D1RoundedRectangleGeometry, 0x2cd906a3,0x12e2,0x11dc,0x9f,0xed,0x00,0x11,0x43,0xa0,0x55,0xf9);
 __CRT_UUID_DECL(ID2D1TessellationSink, 0x2cd906c1,0x12e2,0x11dc,0x9f,0xed,0x00,0x11,0x43,0xa0,0x55,0xf9);
+__CRT_UUID_DECL(ID2D1Image, 0x65019f75,0x8da2,0x497c,0xb3,0x2c,0xdf,0xa3,0x4e,0x48,0xed,0xe6);
 
 #ifdef __cplusplus
 extern "C" {
