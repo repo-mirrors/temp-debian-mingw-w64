@@ -1,3 +1,9 @@
+mingw-w64 (3.0~svn6246-1) UNRELEASED; urgency=low
+
+  * New upstream snapshot.
+
+ -- Stephen Kitt <skitt@debian.org>  Sun, 08 Sep 2013 19:11:35 +0200
+
 mingw-w64 (3.0~svn5915-1) unstable; urgency=low
 
   * New upstream snapshot.

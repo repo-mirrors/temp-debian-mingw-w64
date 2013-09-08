@@ -1,8 +1,8 @@
 Description: Drop unused platform-specific context definitions
 Author: Stephen Kitt <steve@sk2.org>
 
---- mingw-w64.orig/mingw-w64-tools/widl/include/winbase.h
-+++ mingw-w64/mingw-w64-tools/widl/include/winbase.h
+--- a/mingw-w64-tools/widl/include/winbase.h
++++ b/mingw-w64-tools/widl/include/winbase.h
 @@ -150,13 +150,6 @@
      } u;
  } DEBUG_EVENT, *LPDEBUG_EVENT;
@@ -25,7 +25,7 @@ Author: Stephen Kitt <steve@sk2.org>
  WINADVAPI  BOOL        WINAPI AdjustTokenGroups(HANDLE,BOOL,PTOKEN_GROUPS,DWORD,PTOKEN_GROUPS,PDWORD);
  WINADVAPI  BOOL        WINAPI AccessCheck(PSECURITY_DESCRIPTOR,HANDLE,DWORD,PGENERIC_MAPPING,PPRIVILEGE_SET,LPDWORD,LPDWORD,LPBOOL);
  WINADVAPI  BOOL        WINAPI AccessCheckAndAuditAlarmA(LPCSTR,LPVOID,LPSTR,LPSTR,PSECURITY_DESCRIPTOR,DWORD,PGENERIC_MAPPING,BOOL,LPDWORD,LPBOOL,LPBOOL);
-@@ -1872,7 +1864,6 @@
+@@ -1873,7 +1865,6 @@
  WINBASEAPI DWORD       WINAPI GetTickCount(void);
  WINBASEAPI ULONGLONG   WINAPI GetTickCount64(void);
  WINBASEAPI DWORD       WINAPI GetTimeZoneInformation(LPTIME_ZONE_INFORMATION);
@@ -33,7 +33,7 @@ Author: Stephen Kitt <steve@sk2.org>
  WINBASEAPI DWORD       WINAPI GetThreadErrorMode(void);
  WINBASEAPI INT         WINAPI GetThreadPriority(HANDLE);
  WINBASEAPI BOOL        WINAPI GetThreadPriorityBoost(HANDLE,PBOOL);
-@@ -2217,7 +2208,6 @@
+@@ -2218,7 +2209,6 @@
  WINBASEAPI DWORD       WINAPI SetTapeParameters(HANDLE,DWORD,LPVOID);
  WINBASEAPI DWORD       WINAPI SetTapePosition(HANDLE,DWORD,DWORD,DWORD,DWORD,BOOL);
  WINBASEAPI DWORD_PTR   WINAPI SetThreadAffinityMask(HANDLE,DWORD_PTR);
@@ -41,7 +41,7 @@ Author: Stephen Kitt <steve@sk2.org>
  WINBASEAPI BOOL        WINAPI SetThreadErrorMode(DWORD,LPDWORD);
  WINBASEAPI DWORD       WINAPI SetThreadExecutionState(EXECUTION_STATE);
  WINBASEAPI DWORD       WINAPI SetThreadIdealProcessor(HANDLE,DWORD);
-@@ -2227,7 +2217,6 @@
+@@ -2228,7 +2218,6 @@
  WINBASEAPI HANDLE      WINAPI SetTimerQueueTimer(HANDLE,WAITORTIMERCALLBACK,PVOID,DWORD,DWORD,BOOL);
  WINBASEAPI BOOL        WINAPI SetTimeZoneInformation(const TIME_ZONE_INFORMATION *);
  WINADVAPI  BOOL        WINAPI SetTokenInformation(HANDLE,TOKEN_INFORMATION_CLASS,LPVOID,DWORD);
@@ -49,8 +49,8 @@ Author: Stephen Kitt <steve@sk2.org>
  WINBASEAPI BOOL        WINAPI SetVolumeLabelA(LPCSTR,LPCSTR);
  WINBASEAPI BOOL        WINAPI SetVolumeLabelW(LPCWSTR,LPCWSTR);
  #define                       SetVolumeLabel WINELIB_NAME_AW(SetVolumeLabel)
---- mingw-w64.orig/mingw-w64-tools/widl/include/winnt.h
-+++ mingw-w64/mingw-w64-tools/widl/include/winnt.h
+--- a/mingw-w64-tools/widl/include/winnt.h
++++ b/mingw-w64-tools/widl/include/winnt.h
 @@ -874,86 +874,6 @@
  
  /* The Win32 register context */
