@@ -1,10 +1,10 @@
-mingw-w64 (3.0.0-1) UNRELEASED; urgency=low
+mingw-w64 (3.0.0-1) unstable; urgency=low
 
   * New upstream release.
   * Add links to the pkg-config manpage.
   * Import widl manpage from the Wine project.
 
- -- Stephen Kitt <skitt@debian.org>  Sat, 21 Sep 2013 12:22:11 +0200
+ -- Stephen Kitt <skitt@debian.org>  Sat, 21 Sep 2013 13:27:01 +0200
 
 mingw-w64 (3.0~svn6246-1) unstable; urgency=low
 
