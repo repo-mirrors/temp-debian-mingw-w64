@@ -763,6 +763,10 @@ Copyright: 2009, 2010 Robert Millan
            2010-2013 Stephen Kitt <skitt@debian.org>
 License: GPL-2+
 
+Files: debian/*widl.1
+Copyright: 1993-2013 The Wine project authors
+License: LGPL-2.1+
+
 
 License: BSD
  Redistribution and use in source and binary forms, with or without
