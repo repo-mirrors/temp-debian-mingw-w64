@@ -2,3 +2,4 @@ spelling-fix.patch
 widl-no-context.patch
 disable-werror.patch
 missing-cpu-info.patch
+libvfw32.patch

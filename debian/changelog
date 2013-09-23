@@ -1,3 +1,10 @@
+mingw-w64 (3.0.0-2) UNRELEASED; urgency=low
+
+  * Restore libvfw32.a in the 32-bit package (thanks to Eugen Dedu for
+    pointing out that it had been dropped).
+
+ -- Stephen Kitt <skitt@debian.org>  Mon, 23 Sep 2013 23:06:12 +0200
+
 mingw-w64 (3.0.0-1) unstable; urgency=low
 
   * New upstream release.
