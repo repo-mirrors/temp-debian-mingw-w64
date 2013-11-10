@@ -137,4 +137,29 @@ binary: binary-indep binary-arch
 	dh_auto_install -D$(call sourcefolder,$*) -B$(call buildfolder,$*)
 	touch $*-install-stamp
 
+override_dh_install-indep:
+# Move duplicate files to mingw-w64-common
+	reftarget=$$(echo $(targets) | cut -d\  -f1); \
+	testtargets=$$(echo $(targets) | cut -d\  -f2-); \
+	for file in $$(cd debian/tmp/usr/$$reftarget; find . -name \*.h); do \
+		duptargets=$$reftarget; \
+		for testtarget in $$testtargets; do \
+			if [ -f debian/tmp/usr/$$testtarget/$$file ]; then \
+				if cmp debian/tmp/usr/$$reftarget/$$file debian/tmp/usr/$$testtarget/$$file; then \
+					duptargets="$$duptargets $$testtarget"; \
+				fi; \
+			fi; \
+		done; \
+		if [ "$$duptargets" != "$$reftarget" ]; then \
+			mkdir -p debian/mingw-w64-common/usr/share/mingw-w64/$$(dirname $$file); \
+			cp debian/tmp/usr/$$reftarget/$$file debian/mingw-w64-common/usr/share/mingw-w64/$$file; \
+			for duptarget in $$duptargets; do \
+				rm -f debian/tmp/usr/$$duptarget/$$file; \
+				ln -sf /usr/share/mingw-w64/$$file debian/tmp/usr/$$duptarget/$$file; \
+			done; \
+		fi; \
+	done
+# Do the rest of the installation
+	dh_install -i
+
 .PHONY: binary-indep binary-arch binary clean build-indep build-arch build install
