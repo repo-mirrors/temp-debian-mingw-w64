@@ -1,3 +1,9 @@
+mingw-w64 (3.0.0-3) UNRELEASED; urgency=low
+
+  * Explicitly build-depend on automake 1.14 or later.
+
+ -- Stephen Kitt <skitt@debian.org>  Sun, 10 Nov 2013 08:21:31 +0100
+
 mingw-w64 (3.0.0-2) unstable; urgency=low
 
   * Restore libvfw32.a in the 32-bit package (thanks to Eugen Dedu for
