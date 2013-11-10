@@ -106,7 +106,7 @@ build-indep-stamp: $(foreach target,$(targets),$(patsubst %,$(target)~$(target)~
 	done
 	touch $@
 
-build: build-arch
+build: build-indep build-arch
 build-arch: build-arch-stamp
 build-indep: build-indep-stamp
 
