@@ -1,11 +1,11 @@
-mingw-w64 (3.0.0-3) UNRELEASED; urgency=low
+mingw-w64 (3.0.0-3) unstable; urgency=low
 
   * Explicitly build-depend on automake 1.14 or later.
   * Ship common header files in a new mingw-w64-common package.
   * Make the build target in debian/rules depend on build-indep as well
     as build-arch, so it builds everything.
 
- -- Stephen Kitt <skitt@debian.org>  Sun, 10 Nov 2013 08:21:31 +0100
+ -- Stephen Kitt <skitt@debian.org>  Sun, 10 Nov 2013 14:46:24 +0100
 
 mingw-w64 (3.0.0-2) unstable; urgency=low
 
