@@ -176,8 +176,6 @@ int    WINPTHREAD_API pthread_set_num_processors_np(int n);
 #define pthread_getcpuclockid(T, C) ENOTSUP
 #define pthread_attr_getguardsize(A, S) ENOTSUP
 #define pthread_attr_setgaurdsize(A, S) ENOTSUP
-#define pthread_attr_getschedpolicy(A, S) ENOTSUP
-#define pthread_attr_setschedpolicy(A, S) ENOTSUP
 
 typedef long pthread_once_t;
 typedef unsigned pthread_mutexattr_t;
@@ -263,6 +261,8 @@ int WINPTHREAD_API pthread_attr_setschedparam(pthread_attr_t *attr, const struct
 int WINPTHREAD_API pthread_attr_getschedparam(const pthread_attr_t *attr, struct sched_param *param);
 int WINPTHREAD_API pthread_getschedparam(pthread_t thread, int *pol, struct sched_param *param);
 int WINPTHREAD_API pthread_setschedparam(pthread_t thread, int pol, const struct sched_param *param);
+int WINPTHREAD_API pthread_attr_setschedpolicy (pthread_attr_t *attr, int pol);
+int WINPTHREAD_API pthread_attr_getschedpolicy (pthread_attr_t *attr, int *pol);
 
 /* synchronization objects */
 typedef void	*pthread_spinlock_t;
@@ -305,7 +305,6 @@ int       WINPTHREAD_API pthread_get_concurrency(int *val);
 int       WINPTHREAD_API pthread_set_concurrency(int val);
 void      WINPTHREAD_API pthread_exit(void *res);
 void      WINPTHREAD_API _pthread_invoke_cancel(void);
-void      WINPTHREAD_API pthread_testcancel(void);
 int       WINPTHREAD_API pthread_cancel(pthread_t t);
 int       WINPTHREAD_API pthread_kill(pthread_t t, int sig);
 unsigned  WINPTHREAD_API _pthread_get_state(const pthread_attr_t *attr, unsigned flag);
