@@ -1,3 +1,9 @@
+mingw-w64 (3.1.0-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+
+ -- Stephen Kitt <skitt@debian.org>  Fri, 10 Jan 2014 06:43:52 +0100
+
 mingw-w64 (3.0.0-3) unstable; urgency=low
 
   * Explicitly build-depend on automake 1.14 or later.
