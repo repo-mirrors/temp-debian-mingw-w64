@@ -4,6 +4,8 @@ mingw-w64 (3.1.0-1) UNRELEASED; urgency=medium
   * Add support for hppa; thanks to John David Anglin for the patch.
     (Closes: #730398.)
   * Standards-Version 3.9.5, no change required.
+  * Drop Makefile.in patch from libvfw32.patch; it's regenerated during
+    the build (this allows building twice in a row without errors).
 
  -- Stephen Kitt <skitt@debian.org>  Fri, 10 Jan 2014 06:43:52 +0100
 
