@@ -1,4 +1,4 @@
-mingw-w64 (3.1.0-1) UNRELEASED; urgency=medium
+mingw-w64 (3.1.0-1) unstable; urgency=medium
 
   * New upstream release.
   * Add support for hppa; thanks to John David Anglin for the patch.
@@ -7,7 +7,7 @@ mingw-w64 (3.1.0-1) UNRELEASED; urgency=medium
   * Drop Makefile.in patch from libvfw32.patch; it's regenerated during
     the build (this allows building twice in a row without errors).
 
- -- Stephen Kitt <skitt@debian.org>  Fri, 10 Jan 2014 06:43:52 +0100
+ -- Stephen Kitt <skitt@debian.org>  Fri, 10 Jan 2014 07:14:19 +0100
 
 mingw-w64 (3.0.0-3) unstable; urgency=low
 
