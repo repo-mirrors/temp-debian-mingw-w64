@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 7.0.50~), dh-autoreconf, automake (>= 1:1.14)
 Build-Depends-Indep:
  gcc-mingw-w64-i686 | gcc-mingw-w64-bootstrap (>= 4.6.0),
  gcc-mingw-w64-x86-64 | gcc-mingw-w64-bootstrap (>= 4.6.0)
-Standards-Version: 3.9.4
+Standards-Version: 3.9.5
 Homepage: http://mingw-w64.sf.net
 Vcs-Git: git://anonscm.debian.org/collab-maint/mingw-w64.git
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/mingw-w64.git;a=summary

@@ -3,6 +3,7 @@ mingw-w64 (3.1.0-1) UNRELEASED; urgency=medium
   * New upstream release.
   * Add support for hppa; thanks to John David Anglin for the patch.
     (Closes: #730398.)
+  * Standards-Version 3.9.5, no change required.
 
  -- Stephen Kitt <skitt@debian.org>  Fri, 10 Jan 2014 06:43:52 +0100
 
