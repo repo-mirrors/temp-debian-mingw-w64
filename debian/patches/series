@@ -4,3 +4,4 @@ disable-werror.patch
 missing-cpu-info.patch
 libvfw32.patch
 basetsd-hppa.patch
+strtok_r.patch
