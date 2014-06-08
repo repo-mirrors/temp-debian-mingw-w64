@@ -1,0 +1,18 @@
+Description: Handle NULL _EndPtr in __mingw_wcstold
+Author: Kai Tietz <ktietz70@googlemail.com>
+
+--- a/mingw-w64-crt/misc/mingw_wcstold.c
++++ b/mingw-w64-crt/misc/mingw_wcstold.c
+@@ -22,9 +22,10 @@
+     l2 = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, n, -1, NULL, 0);
+     if (l2 > 0)
+       l2 -= 1; /* Remove zero terminator from length.  */
+-    *_EndPtr = (wchar_t *) &_Str[l2];
++    if (_EndPtr)
++      *_EndPtr = (wchar_t *) &_Str[l2];
+   }
+-  else
++  else if (_EndPtr)
+    *_EndPtr = NULL;
+   return r;
+ }
