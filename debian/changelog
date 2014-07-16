@@ -1,3 +1,10 @@
+mingw-w64 (3.1.0-3) UNRELEASED; urgency=medium
+
+  * g++-mingw-w64 exists separately in stable, drop obsolete alternate
+    dependency on old versions of gcc-mingw-w64.
+
+ -- Stephen Kitt <skitt@debian.org>  Wed, 16 Jul 2014 22:18:38 +0200
+
 mingw-w64 (3.1.0-2) unstable; urgency=medium
 
   * Use strtok_s to implement strtok_r instead of the non-reentrant
