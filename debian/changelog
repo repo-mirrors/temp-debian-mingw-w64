@@ -6,6 +6,8 @@ mingw-w64 (3.1.0-3) UNRELEASED; urgency=medium
     Windows XP. Thanks to Gianluigi Tiesi for pointing out the problem,
     and to Jonathan Young for pointing out that he'd fixed it upstream.
     (Closes: #755448.)
+  * Small typo fix on 'targeting' in mingw-w64's description, thanks
+    Lintian!
 
  -- Stephen Kitt <skitt@debian.org>  Wed, 16 Jul 2014 22:18:38 +0200
 
