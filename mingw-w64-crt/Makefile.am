@@ -150,6 +150,8 @@ src_msvcrt=\
   secapi/asctime_s.c \
   secapi/memcpy_s.c \
   secapi/rand_s.c \
+  secapi/strerror_s.c \
+  secapi/sprintf_s.c \
   secapi/vsprintf_s.c \
   secapi/wmemcpy_s.c
 

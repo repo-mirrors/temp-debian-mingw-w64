@@ -279,14 +279,14 @@ typedef void	*pthread_barrier_t;
 #define GENERIC_ERRORCHECK_INITIALIZER			((void *) (size_t) -2)
 #define GENERIC_RECURSIVE_INITIALIZER			((void *) (size_t) -3)
 #define GENERIC_NORMAL_INITIALIZER			((void *) (size_t) -1)
-#define PTHREAD_MUTEX_INITIALIZER			(pthread_mutex_t *)GENERIC_INITIALIZER
-#define PTHREAD_RECURSIVE_MUTEX_INITIALIZER		(pthread_mutex_t *)GENERIC_RECURSIVE_INITIALIZER
-#define PTHREAD_ERRORCHECK_MUTEX_INITIALIZER		(pthread_mutex_t *)GENERIC_ERRORCHECK_INITIALIZER
-#define PTHREAD_NORMAL_MUTEX_INITIALIZER		(pthread_mutex_t *)GENERIC_NORMAL_INITIALIZER
+#define PTHREAD_MUTEX_INITIALIZER			(pthread_mutex_t)GENERIC_INITIALIZER
+#define PTHREAD_RECURSIVE_MUTEX_INITIALIZER		(pthread_mutex_t)GENERIC_RECURSIVE_INITIALIZER
+#define PTHREAD_ERRORCHECK_MUTEX_INITIALIZER		(pthread_mutex_t)GENERIC_ERRORCHECK_INITIALIZER
+#define PTHREAD_NORMAL_MUTEX_INITIALIZER		(pthread_mutex_t)GENERIC_NORMAL_INITIALIZER
 #define PTHREAD_DEFAULT_MUTEX_INITIALIZER		PTHREAD_NORMAL_MUTEX_INITIALIZER
-#define PTHREAD_COND_INITIALIZER			(pthread_cond_t *)GENERIC_INITIALIZER
-#define PTHREAD_RWLOCK_INITIALIZER			(pthread_rwlock_t *)GENERIC_INITIALIZER
-#define PTHREAD_SPINLOCK_INITIALIZER			(pthread_spinlock_t *)GENERIC_INITIALIZER
+#define PTHREAD_COND_INITIALIZER			(pthread_cond_t)GENERIC_INITIALIZER
+#define PTHREAD_RWLOCK_INITIALIZER			(pthread_rwlock_t)GENERIC_INITIALIZER
+#define PTHREAD_SPINLOCK_INITIALIZER			(pthread_spinlock_t)GENERIC_INITIALIZER
 
 extern void WINPTHREAD_API (**_pthread_key_dest)(void *);
 int         WINPTHREAD_API pthread_key_create(pthread_key_t *key, void (* dest)(void *));
@@ -300,7 +300,6 @@ void      WINPTHREAD_API pthread_testcancel(void);
 int       WINPTHREAD_API pthread_equal(pthread_t t1, pthread_t t2);
 void      WINPTHREAD_API pthread_tls_init(void);
 void      WINPTHREAD_API _pthread_cleanup_dest(pthread_t t);
-pthread_t WINPTHREAD_API pthread_self(void);
 int       WINPTHREAD_API pthread_get_concurrency(int *val);
 int       WINPTHREAD_API pthread_set_concurrency(int val);
 void      WINPTHREAD_API pthread_exit(void *res);
@@ -332,6 +331,7 @@ int WINPTHREAD_API pthread_cond_signal (pthread_cond_t *cv);
 int WINPTHREAD_API pthread_cond_broadcast (pthread_cond_t *cv);
 int WINPTHREAD_API pthread_cond_wait (pthread_cond_t *cv, pthread_mutex_t *external_mutex);
 int WINPTHREAD_API pthread_cond_timedwait(pthread_cond_t *cv, pthread_mutex_t *external_mutex, const struct timespec *t);
+int WINPTHREAD_API pthread_cond_timedwait_relative_np(pthread_cond_t *cv, pthread_mutex_t *external_mutex, const struct timespec *t);
 
 int WINPTHREAD_API pthread_mutex_lock(pthread_mutex_t *m);
 int WINPTHREAD_API pthread_mutex_timedlock(pthread_mutex_t *m, const struct timespec *ts);
@@ -401,7 +401,7 @@ int WINPTHREAD_API pthread_barrierattr_getpshared(void **attr, int *s);
 /* Private extensions for analysis and internal use.  */
 struct _pthread_cleanup ** WINPTHREAD_API pthread_getclean (void);
 void *                     WINPTHREAD_API pthread_gethandle (pthread_t t);
-void *                     WINPTHREAD_API pthread_getevent (pthread_t t);
+void *                     WINPTHREAD_API pthread_getevent ();
 
 unsigned long long         WINPTHREAD_API _pthread_rel_time_in_ms(const struct timespec *ts);
 unsigned long long         WINPTHREAD_API _pthread_time_in_ms(void);
