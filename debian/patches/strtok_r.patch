@@ -4,7 +4,7 @@ Origin: https://sourceforge.net/p/mingw-w64/mingw-w64/ci/9488f917d4008775041280a
 
 --- a/mingw-w64-crt/Makefile.am
 +++ b/mingw-w64-crt/Makefile.am
-@@ -237,7 +237,7 @@
+@@ -239,7 +239,7 @@
    \
    stdio/mingw_pformat.h    \
    stdio/vfscanf2.S         stdio/vfwscanf2.S         stdio/vscanf2.S          stdio/vsscanf2.S          stdio/vswscanf2.S \

@@ -1,6 +1,8 @@
 mingw-w64 (3.2.0-1) UNRELEASED; urgency=medium
 
   * New upstream release.
+  * Refresh patches, and drop libvfw32.patch and wcstold.patch, both
+    merged upstream.
 
  -- Stephen Kitt <skitt@debian.org>  Thu, 04 Sep 2014 06:29:36 +0200
 
