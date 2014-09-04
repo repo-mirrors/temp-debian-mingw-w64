@@ -82,7 +82,7 @@ static WINPTHREADS_ATTRIBUTE((noinline)) int rwl_ref_destroy(pthread_rwlock_t *r
     int r = 0;
 
     *rDestroy = NULL;
-    if (pthread_spin_trylock(&rwl_global)) return EBUSY;
+    pthread_spin_lock(&rwl_global);
     
     if (!rwl || !*rwl) r = EINVAL;
     else {
@@ -248,7 +248,7 @@ int pthread_rwlock_rdlock (pthread_rwlock_t *rwlock_)
   rwlock_t *rwlock;
   int ret;
 
-  pthread_testcancel();
+  /* pthread_testcancel(); */
 
   ret = rwl_ref(rwlock_,0);
   if(ret != 0) return ret;
@@ -280,7 +280,7 @@ int pthread_rwlock_timedrdlock (pthread_rwlock_t *rwlock_, const struct timespec
   rwlock_t *rwlock;
   int ret;
 
-  pthread_testcancel();
+  /* pthread_testcancel(); */
 
   ret = rwl_ref(rwlock_,0);
   if(ret != 0) return ret;
@@ -421,7 +421,7 @@ int pthread_rwlock_wrlock (pthread_rwlock_t *rwlock_)
   rwlock_t *rwlock;
   int ret;
 
-  pthread_testcancel();
+  /* pthread_testcancel(); */
   ret = rwl_ref(rwlock_,0);
   if(ret != 0) return ret;
 
@@ -460,7 +460,7 @@ int pthread_rwlock_timedwrlock (pthread_rwlock_t *rwlock_, const struct timespec
   int ret;
   rwlock_t *rwlock;
 
-  pthread_testcancel();
+  /* pthread_testcancel(); */
   if (!rwlock_ || !ts)
     return EINVAL;
   if ((ret = rwl_ref(rwlock_,0)) != 0)

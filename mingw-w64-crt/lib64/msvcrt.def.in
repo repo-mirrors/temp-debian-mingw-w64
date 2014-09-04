@@ -1175,7 +1175,7 @@ sin
 sinh
 ;sinhf
 sprintf
-sprintf_s
+; sprintf_s replaced by emu
 sqrt DATA
 sqrtf DATA
 srand
@@ -1190,7 +1190,7 @@ strcpy
 strcpy_s
 strcspn
 strerror
-strerror_s
+; strerror_s replaced by emu
 strftime
 strlen
 strncat
