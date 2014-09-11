@@ -1,3 +1,10 @@
+mingw-w64 (3.2.0-2) UNRELEASED; urgency=medium
+
+  * Add missing / to open boilerplate in a few headers. (Closes:
+    #761191.)
+
+ -- Stephen Kitt <skitt@debian.org>  Thu, 11 Sep 2014 23:29:29 +0200
+
 mingw-w64 (3.2.0-1) unstable; urgency=medium
 
   * New upstream release.
