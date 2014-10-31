@@ -1,10 +1,10 @@
-mingw-w64 (3.3.0-1) UNRELEASED; urgency=medium
+mingw-w64 (3.3.0-1) experimental; urgency=medium
 
-  * New upstream release.
+  * New upstream release, uploaded to experimental for the Jessie freeze.
   * Drop strtok_r.patch and fix-mingw-headers.patch, merged upstream.
   * Update licensing information.
 
- -- Stephen Kitt <skitt@debian.org>  Fri, 31 Oct 2014 07:44:38 +0100
+ -- Stephen Kitt <skitt@debian.org>  Fri, 31 Oct 2014 07:46:22 +0100
 
 mingw-w64 (3.2.0-2) unstable; urgency=medium
 
