@@ -355,6 +355,11 @@ Files: mingw-w64-crt/profile/gmon.*
 Copyright: 1983, 1992, 1993 The Regents of the University of California
 License: BSD-3-clause
 
+Files: mingw-w64-crt/stdio/strtok_r.c
+Copyright: 1988, 1993 The Regents of the University of California
+           1998 Softweyr LLC
+License: BSD-3-clause
+
 Files: mingw-w64-headers/crt/stdarg.h
 Copyright: 1989, 1997, 1998, 1999, 2000 Free Software Foundation, Inc.
 License: GPL-2+

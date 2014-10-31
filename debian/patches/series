@@ -3,5 +3,3 @@ widl-no-context.patch
 disable-werror.patch
 missing-cpu-info.patch
 basetsd-hppa.patch
-strtok_r.patch
-fix-mingw-headers.patch
