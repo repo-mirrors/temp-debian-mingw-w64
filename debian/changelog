@@ -1,3 +1,9 @@
+mingw-w64 (3.2.0-3) UNRELEASED; urgency=medium
+
+  * Update licensing information.
+
+ -- Stephen Kitt <skitt@debian.org>  Fri, 31 Oct 2014 07:39:11 +0100
+
 mingw-w64 (3.2.0-2) unstable; urgency=medium
 
   * Add missing / to open boilerplate in a few headers. (Closes:

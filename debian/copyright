@@ -43,14 +43,14 @@ License: ZPL-2.1
 
 Files: mingw-w64-crt/crt/*
        mingw-w64-crt/include/*
-       mingw-w64-crt/intrics/cpuid.c
-       mingw-w64-crt/intrics/in*.c
-       mingw-w64-crt/intrics/out*.c
-       mingw-w64-crt/intrics/rdtsc.c
-       mingw-w64-crt/intrics/readcr*.c
-       mingw-w64-crt/intrics/readmsr.c
-       mingw-w64-crt/intrics/writecr*.c
-       mingw-w64-crt/intrics/writemsr.c
+       mingw-w64-crt/intrincs/cpuid.c
+       mingw-w64-crt/intrincs/in*.c
+       mingw-w64-crt/intrincs/out*.c
+       mingw-w64-crt/intrincs/rdtsc.c
+       mingw-w64-crt/intrincs/readcr*.c
+       mingw-w64-crt/intrincs/readmsr.c
+       mingw-w64-crt/intrincs/writecr*.c
+       mingw-w64-crt/intrincs/writemsr.c
        mingw-w64-crt/lib32/crtdll.def
        mingw-w64-crt/lib64/moldname-msvcrt.def
        mingw-w64-crt/libsrc/agt*.c
@@ -148,7 +148,6 @@ Files: mingw-w64-crt/crt/*
        mingw-w64-headers/ddk/include/ddk/ide.h
        mingw-w64-headers/ddk/include/ddk/ioaccess.h
        mingw-w64-headers/ddk/include/ddk/kbdmou.h
-       mingw-w64-headers/ddk/include/ddk/ddkmapi.h
        mingw-w64-headers/ddk/include/ddk/mcd.h
        mingw-w64-headers/ddk/include/ddk/miniport.h
        mingw-w64-headers/ddk/include/ddk/minitape.h
@@ -185,8 +184,6 @@ Files: mingw-w64-crt/crt/*
        mingw-w64-headers/direct-x/include/edevdefs.h
        mingw-w64-headers/direct-x/include/_mingw_dxhelper.h
        mingw-w64-headers/include/*
-       mingw-w64-libraries/winpthreads/src/clock.c
-       mingw-w64-libraries/winpthreads/src/nanosleep.c
 Copyright: public-domain
 License: public-domain
  This file has no copyright assigned and is placed in the Public
@@ -269,7 +266,7 @@ License:
 
 Files: mingw-w64-crt/misc/getopt.c
 Copyright: 2000 The NetBSD Foundation, Inc.
-License:
+License: BSD-2-clause
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
@@ -295,7 +292,7 @@ License:
 
 Files: mingw-w64-crt/misc/getopt.c
 Copyright: 2002 Todd C. Miller <Todd.Miller@courtesan.com>
-License:
+License: ISC
  Permission to use, copy, modify, and distribute this software for any
  purpose with or without fee is hereby granted, provided that the
  above copyright notice and this permission notice appear in all
@@ -356,7 +353,7 @@ License: Cygwin
 Files: mingw-w64-crt/profile/gmon.*
        mingw-w64-crt/profile/mcount.c
 Copyright: 1983, 1992, 1993 The Regents of the University of California
-License: BSD
+License: BSD-3-clause
 
 Files: mingw-w64-headers/crt/stdarg.h
 Copyright: 1989, 1997, 1998, 1999, 2000 Free Software Foundation, Inc.
@@ -376,16 +373,12 @@ License:
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 Files: mingw-w64-headers/ddk/include/ddk/d3dhal.h
-       mingw-w64-headers/ddk/include/ddk/ddrawi.h
+       mingw-w64-headers/ddk/include/ddrawi.h
        mingw-w64-headers/direct-x/include/d3dhal.h
        mingw-w64-headers/direct-x/include/d3dvec.inl
        mingw-w64-headers/direct-x/include/ddrawi.h
        mingw-w64-headers/direct-x/include/dsdriver.h
 Copyright: 2000, 2001 Ove Kaaven
-License: LGPL-2.1+
-
-Files: mingw-w64-headers/ddk/include/ddk/imm.h
-Copyright: 2007 CodeWeavers, Aric Stewart
 License: LGPL-2.1+
 
 Files: mingw-w64-headers/direct-x/include/amaudio.h
@@ -496,12 +489,10 @@ License: LGPL-2.1+
 
 Files: mingw-w64-headers/direct-x/include/d3dtypes.h
        mingw-w64-headers/direct-x/include/d3dcaps.h
-       mingw-w64-headers/direct-x/include/dplobby.h
 Copyright: 1999, 2000 Peter Hunnisett
 License: LGPL-2.1+
 
-Files: mingw-w64-headers/direct-x/include/d3dx8core.h
-       mingw-w64-headers/direct-x/include/dpaddr.h
+Files: mingw-w64-headers/direct-x/include/dpaddr.h
        mingw-w64-headers/direct-x/include/dplay8.h
        mingw-w64-headers/direct-x/include/dplobby8.h
        mingw-w64-headers/direct-x/include/dxdiag.h
@@ -522,12 +513,13 @@ Files: mingw-w64-headers/direct-x/include/d3dx9shader.h
 Copyright: 2008 Luis Busquets
 License: LGPL-2.1+
 
-Files: mingw-w64-headers/direct-x/include/d3dxanim.h
+Files: mingw-w64-headers/direct-x/include/d3dx9anim.h
        mingw-w64-headers/direct-x/include/d3dx9xof.h
 Copyright: 2011 Dylan Smith
 License: LGPL-2.1+
 
 Files: mingw-w64-headers/direct-x/include/d3dxcore.h
+       mingw-w64-headers/direct-x/include/d3dx9core.h
        mingw-w64-headers/direct-x/include/d3dx9tex.h
 Copyright: 2007, 2008 Tony Wasserka
 License: LGPL-2.1+
@@ -569,6 +561,7 @@ Copyright: 2003, 2004 Robert Reif
 License: LGPL-2.1+
 
 Files: mingw-w64-headers/direct-x/include/dxgiformat.h
+       mingw-w64-headers/direct-x/include/dxgitype.h
        mingw-w64-headers/direct-x/include/dxgi.idl
 Copyright: 2007 Andras Kovacs
 License: LGPL-2.1+
@@ -634,9 +627,13 @@ Copyright: 2007 Francois Gouget
            2008 Alistair Leslie-Hughes
 License: LGPL-2.1+
 
+Files: mingw-w64-headers/include/msctf.idl
+Copyright: 2008 Aric Stewart, CodeWeavers
+License: LGPL-2.1+
+
 Files: mingw-w64-headers/include/profile.h
 Copyright: 1992, 1993 The Regents of the University of California
-License: BSD
+License: BSD-3-clause
 
 Files: mingw-w64-headers/include/propkey.h
 Copyright: 2010 Maarten Lankhorst for CodeWeavers
@@ -652,7 +649,7 @@ License: LGPL-2.1+
 
 Files: mingw-w64-headers/include/textstor.idl
 Copyright: 2009 Aric Stewart, CodeWeavers
-License: LGPL-2.1+
+License: BSD-3-clause
 
 Files: mingw-w64-headers/include/wincodec.idl
 Copyright: 2009 Vincent Povirk for CodeWeavers
@@ -660,6 +657,11 @@ License: LGPL-2.1+
 
 Files: mingw-w64-headers/include/winddiui.h
 Copyright: 2007 Marcel Partap
+License: LGPL-2.1+
+
+Files: mingw-w64-headers/include/wmsbuffer.idl
+       mingw-w64-headers/include/wmsdkidl.idl
+Copyright: 2012 André Hentschel
 License: LGPL-2.1+
 
 Files: mingw-w64-headers/include/xmllite.idl
@@ -675,12 +677,13 @@ Copyright: 2004/2005, 2008, 2009, 2010 KJK::Hyperion
 License: expat
 
 Files: mingw-w64-libraries/winpthreads/*
-Copyright: 2011-2013 mingw-w64 project
+Copyright: 2011-2014 mingw-w64 project
 License: expat
 
-Files: mingw-w64-libraries/winpthreads/*
+Files: mingw-w64-libraries/winpthreads/include/pthread.h
+       mingw-w64-libraries/winpthreads/include/pthread_compat.h
 Copyright: 2010 Lockless Inc.
-License: BSD
+License: BSD-3-clause
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
@@ -708,9 +711,16 @@ License: BSD
  WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  POSSIBILITY OF SUCH DAMAGE.
 
+Files: mingw-w64-libraries/winpthreads/src/clock.c
+       mingw-w64-libraries/winpthreads/src/nanosleep.c
+Copyright: public-domain
+License: public-domain
+ This file has no copyright assigned and is placed in the Public
+ Domain.
+
 Files: mingw-w64-libraries/winpthreads/src/libgcc/dll_math.c
 Copyright: 1992, 1993 The Regents of the University of California
-License: BSD
+License: BSD-3-clause
 
 Files: mingw-w64-libraries/winpthreads/tests_pthread/*
 Copyright: 1998 John E. Bossom
@@ -768,7 +778,7 @@ Copyright: 1993-2013 The Wine project authors
 License: LGPL-2.1+
 
 
-License: BSD
+License: BSD-3-clause
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
