@@ -199,7 +199,7 @@ _beep
 _beginthread
 _beginthreadex
 _c_exit
-_cabs
+_cabs DATA
 _callnewh
 _cexit
 _cgets
@@ -656,14 +656,14 @@ _yn
 abort
 abs
 acos
-acosf
+acosf DATA
 asctime
 asin
-asinf
+asinf DATA
 atan
-atan2
-atan2f
-atanf
+atan2 DATA
+atan2f DATA
+atanf DATA
 atexit DATA
 atof
 atoi
@@ -780,6 +780,7 @@ puts
 putwc
 putwchar
 qsort
+qsort_s
 raise
 rand
 rand_s

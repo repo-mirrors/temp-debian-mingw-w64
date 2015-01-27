@@ -117,8 +117,10 @@ extern "C" {
   _CRTIMP errno_t __cdecl _wcsupr_s(wchar_t *_Str,size_t _Size);
   _CRTIMP errno_t __cdecl _wcsupr_s_l(wchar_t *_Str,size_t _Size,_locale_t _Locale);
 
-  __CRT_SECURE_CPP_OVERLOAD_SECURE_NAMES_0_2_(errno_t,wcscpy_s,wchar_t,,_Dst,size_t,,_nElem,const wchar_t *,,_Src)
-  __CRT_SECURE_CPP_OVERLOAD_SECURE_NAMES_0_2_(errno_t,wcscat_s,wchar_t,,_Dst,size_t,,_nElem,const wchar_t *,,_Src)
+  _CRTIMP errno_t __cdecl wcscat_s(wchar_t *_Dst, rsize_t _DstSize, const wchar_t *_Src);
+  __DEFINE_CPP_OVERLOAD_SECURE_FUNC_0_1(errno_t, wcscat_s, wchar_t, _Dest, const wchar_t *, _Source)
+  _CRTIMP errno_t __cdecl wcscpy_s(wchar_t *_Dst, rsize_t _DstSize, const wchar_t *_Src);
+  __DEFINE_CPP_OVERLOAD_SECURE_FUNC_0_1(errno_t, wcscpy_s, wchar_t, _Dest, const wchar_t *, _Source)
 
   _CRTIMP errno_t __cdecl wcsncat_s(wchar_t *_Dst,size_t _DstSizeInChars,const wchar_t *_Src,size_t _MaxCount);
   _CRTIMP errno_t __cdecl _wcsncat_s_l(wchar_t *_Dst,size_t _DstSizeInChars,const wchar_t *_Src,size_t _MaxCount,_locale_t _Locale);
@@ -128,6 +130,9 @@ extern "C" {
   _CRTIMP errno_t __cdecl _wcsset_s_l(wchar_t *_Str,size_t _SizeInChars,unsigned int _Val,_locale_t _Locale);
   _CRTIMP errno_t __cdecl _wcsnset_s_l(wchar_t *_Str,size_t _SizeInChars,unsigned int _Val, size_t _Count,_locale_t _Locale);
 
+  __forceinline size_t __cdecl wcsnlen_s(const wchar_t * _src, size_t _count) {
+    return _src ? wcsnlen(_src, _count) : 0;
+  }
 #endif
 
 #ifndef _WTIME_S_DEFINED

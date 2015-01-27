@@ -72,12 +72,12 @@ static const char usage[] =
 "   --prefix-client=p  Prefix names of client stubs with 'p'\n"
 "   --prefix-server=p  Prefix names of server functions with 'p'\n"
 "   -r                 Generate registration script\n"
+"   --rt               Enable WinRT's language extensions for IDL\n"
 "   -s                 Generate server stub\n"
 "   -t                 Generate typelib\n"
 "   -u                 Generate interface identifiers file\n"
 "   -V                 Print version and exit\n"
 "   -W                 Enable pedantic warnings\n"
-"   --rt               Enable RT's extensions\n"
 "   --win32            Only generate 32-bit code\n"
 "   --win64            Only generate 64-bit code\n"
 "   --win32-align n    Set win32 structure alignment to 'n'\n"
@@ -114,7 +114,7 @@ int do_win32 = 1;
 int do_win64 = 1;
 int win32_packing = 8;
 int win64_packing = 8;
-int flag_is_rt = 0;
+int do_rt_extension = 0;
 static enum stub_mode stub_mode = MODE_Os;
 
 char *input_name;
@@ -141,7 +141,7 @@ int line_number = 1;
 
 static FILE *idfile;
 
-unsigned int pointer_size = sizeof (void*);
+unsigned int pointer_size = sizeof(void*);
 syskind_t typelib_kind = sizeof(void*) == 8 ? SYS_WIN64 : SYS_WIN32;
 
 time_t now;
@@ -400,7 +400,7 @@ void write_dlldata(const statement_list_t *stmts)
 
   dlldata = fopen(dlldata_name, "r");
   if (dlldata) {
-    static char marker[] = "REFERENCE_PROXY_FILE";
+    static const char marker[] = "REFERENCE_PROXY_FILE";
     static const char delegation_define[] = "#define PROXY_DELEGATION";
     char *line = NULL;
     size_t len = 0;
@@ -446,6 +446,16 @@ void write_dlldata(const statement_list_t *stmts)
   free_filename_nodes(&filenames);
 }
 
+static void write_id_guid(FILE *f, const char *type, const char *guid_prefix, const char *name, const UUID *uuid)
+{
+  if (!uuid) return;
+  fprintf(f, "MIDL_DEFINE_GUID(%s, %s_%s, 0x%08x, 0x%04x, 0x%04x, 0x%02x,0x%02x, 0x%02x,"
+        "0x%02x,0x%02x,0x%02x,0x%02x,0x%02x);\n",
+        type, guid_prefix, name, uuid->Data1, uuid->Data2, uuid->Data3, uuid->Data4[0],
+        uuid->Data4[1], uuid->Data4[2], uuid->Data4[3], uuid->Data4[4], uuid->Data4[5],
+        uuid->Data4[6], uuid->Data4[7]);
+}
+
 static void write_id_data_stmts(const statement_list_t *stmts)
 {
   const statement_t *stmt;
@@ -460,19 +470,19 @@ static void write_id_data_stmts(const statement_list_t *stmts)
         if (!is_object(type) && !is_attr(type->attrs, ATTR_DISPINTERFACE))
           continue;
         uuid = get_attrp(type->attrs, ATTR_UUID);
-        write_guid(idfile, is_attr(type->attrs, ATTR_DISPINTERFACE) ? "DIID" : "IID",
+        write_id_guid(idfile, "IID", is_attr(type->attrs, ATTR_DISPINTERFACE) ? "DIID" : "IID",
                    type->name, uuid);
       }
       else if (type_get_type(type) == TYPE_COCLASS)
       {
         const UUID *uuid = get_attrp(type->attrs, ATTR_UUID);
-        write_guid(idfile, "CLSID", type->name, uuid);
+        write_id_guid(idfile, "CLSID", "CLSID", type->name, uuid);
       }
     }
     else if (stmt->type == STMT_LIBRARY)
     {
       const UUID *uuid = get_attrp(stmt->u.lib->attrs, ATTR_UUID);
-      write_guid(idfile, "LIBID", stmt->u.lib->name, uuid);
+      write_id_guid(idfile, "IID", "LIBID", stmt->u.lib->name, uuid);
       write_id_data_stmts(stmt->u.lib->stmts);
     }
   }
@@ -492,13 +502,33 @@ void write_id_data(const statement_list_t *stmts)
   fprintf(idfile, "from %s - Do not edit ***/\n\n", input_idl_name);
   fprintf(idfile, "#include <rpc.h>\n");
   fprintf(idfile, "#include <rpcndr.h>\n\n");
-  fprintf(idfile, "#include <initguid.h>\n\n");
+
+  fprintf(idfile, "#ifdef _MIDL_USE_GUIDDEF_\n\n");
+
+  fprintf(idfile, "#ifndef INITGUID\n");
+  fprintf(idfile, "#define INITGUID\n");
+  fprintf(idfile, "#include <guiddef.h>\n");
+  fprintf(idfile, "#undef INITGUID\n");
+  fprintf(idfile, "#else\n");
+  fprintf(idfile, "#include <guiddef.h>\n");
+  fprintf(idfile, "#endif\n\n");
+
+  fprintf(idfile, "#define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \\\n");
+  fprintf(idfile, "    DEFINE_GUID(name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8)\n\n");
+
+  fprintf(idfile, "#else\n\n");
+
+  fprintf(idfile, "#define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \\\n");
+  fprintf(idfile, "    const type name = {l,w1,w2,{b1,b2,b3,b4,b5,b6,b7,b8}}\n\n");
+
+  fprintf(idfile, "#endif\n\n");
   start_cplusplus_guard(idfile);
 
   write_id_data_stmts(stmts);
 
   fprintf(idfile, "\n");
   end_cplusplus_guard(idfile);
+  fprintf(idfile, "#undef MIDL_DEFINE_GUID\n" );
 
   fclose(idfile);
 }
@@ -548,7 +578,7 @@ int main(int argc,char *argv[])
       fprintf(stderr, "%s", usage);
       return 0;
     case RT_OPTION:
-      flag_is_rt = 1;
+      do_rt_extension = 1;
       break;
     case WIN32_OPTION:
       do_win32 = 1;
@@ -605,7 +635,6 @@ int main(int argc,char *argv[])
     case 'm':
       if (!strcmp( optarg, "32" )) typelib_kind = SYS_WIN32;
       else if (!strcmp( optarg, "64" )) typelib_kind = SYS_WIN64;
-      else error( "Invalid -m argument '%s'\n", optarg );
       break;
     case 'N':
       no_preprocess = 1;
@@ -669,14 +698,30 @@ int main(int argc,char *argv[])
   wpp_add_include_path(DEFAULT_INCLUDE_DIR);
 #endif
 
+  /* if nothing specified, try to guess output type from the output file name */
+  if (output_name && do_everything && !do_header && !do_typelib && !do_proxies &&
+      !do_client && !do_server && !do_regscript && !do_idfile && !do_dlldata)
+  {
+      do_everything = 0;
+      if (strendswith( output_name, ".h" )) do_header = 1;
+      else if (strendswith( output_name, ".tlb" )) do_typelib = 1;
+      else if (strendswith( output_name, "_p.c" )) do_proxies = 1;
+      else if (strendswith( output_name, "_c.c" )) do_client = 1;
+      else if (strendswith( output_name, "_s.c" )) do_server = 1;
+      else if (strendswith( output_name, "_i.c" )) do_idfile = 1;
+      else if (strendswith( output_name, "_r.res" )) do_regscript = 1;
+      else if (strendswith( output_name, "_t.res" )) do_typelib = 1;
+      else if (strendswith( output_name, "dlldata.c" )) do_dlldata = 1;
+      else do_everything = 1;
+  }
+
   if(do_everything) {
     set_everything(TRUE);
   }
 
   if (!output_name) output_name = dup_basename(input_name, ".idl");
 
-  if (!do_everything &&
-      do_header + do_typelib + do_proxies + do_client +
+  if (do_header + do_typelib + do_proxies + do_client +
       do_server + do_regscript + do_idfile + do_dlldata == 1)
   {
       if (do_header) header_name = output_name;
