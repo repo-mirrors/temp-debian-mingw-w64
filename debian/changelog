@@ -4,6 +4,7 @@ mingw-w64 (4.0~rc1-1) UNRELEASED; urgency=medium
   * Add upstream signing info.
   * Update license information.
   * Refresh patches.
+  * Standards-Version 3.9.6, no change required.
 
  -- Stephen Kitt <skitt@debian.org>  Tue, 27 Jan 2015 23:53:31 +0100
 
