@@ -1,9 +1,9 @@
-Format: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=174
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: mingw-w64
 Source: http://mingw-w64.sourceforge.net/
 
 Files: *
-Copyright: 2009-2013 mingw-w64 project
+Copyright: 2009-2014 the mingw-w64 project
 License: ZPL-2.1
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
@@ -237,10 +237,145 @@ License:
 
 Files: mingw-w64-crt/math/s_erf.c
        mingw-w64-crt/math/sf_erf.c
+       mingw-w64-crt/math/softmath/bsd_private.h
+       mingw-w64-crt/math/softmath/bsd_privatef.h
+       mingw-w64-crt/math/softmath/e_fmod.c
+       mingw-w64-crt/math/softmath/e_fmodf.c
+       mingw-w64-crt/math/softmath/e_pow.c
+       mingw-w64-crt/math/softmath/e_powf.c
+       mingw-w64-crt/math/softmath/e_remainder.c
+       mingw-w64-crt/math/softmath/e_remainderf.c
+       mingw-w64-crt/math/softmath/softmath_private.h
 Copyright: 1993 Sun Microsystems, Inc.
 License:
  Permission to use, copy, modify, and distribute this software is
  freely granted, provided that this notice is preserved.
+
+Files: mingw-w64-crt/math/DFP/mpdecimal/*
+Copyright: 2008-2016 Stefan Krah
+License: BSD-2-clause
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+ .
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+ .
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the
+    distribution.
+ .
+ THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND
+ ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS
+ BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+ OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+ OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+ BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Files: mingw-w64-crt/math/DFP/mpdecimal/doc/*
+Copyright: 2010-2016 Stefan Krah
+License: FreeBSD-documentation with modification exception
+ Redistribution and use in source (RST) and 'compiled' forms (HTML,
+ PDF, PostScript and so forth) with or without modification, are
+ permitted provided that the following conditions are met:
+ .
+    1. Redistributions of source code (RST) must retain the above
+       copyright notice, this list of conditions and the following
+       disclaimer as the first lines of this file unmodified.
+ .
+    2. Modified documents must carry a notice that modification has
+       occurred. This notice must also be present in any compiled
+       form.
+ .
+    3. Redistributions in compiled form (converted to HTML, PDF,
+       PostScript and other formats) must reproduce the above
+       copyright notice, this list of conditions and the following
+       disclaimer in the documentation and/or other materials provided
+       with the distribution.
+ .
+ THIS DOCUMENTATION IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS
+ OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+ GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS DOCUMENTATION,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Files: mingw-w64-crt/math/DFP/mpdecimal/doc/_static/*
+Copyright: 2007-2013 the Sphinx team
+License: BSD-2-clause
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+ .
+ * Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+ .
+ * Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the
+   distribution.
+ .
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Files: mingw-w64-crt/math/DFP/mpdecimal/doc/_static/jquery.js
+Copyright: 2012 jQuery Foundation and other contributors
+License: expat
+
+Files: mingw-w64-crt/math/DFP/mpdecimal/doc/_static/underscore.js
+Copyright: 2009-2012 Jeremy Ashkenas, DocumentCloud Inc.
+License: expat
+
+Files: mingw-w64-crt/math/DFP/mpdecimal/libmpdec/vcstdint.h
+Copyright: 2006-2008 Alexander Chemeris
+License: BSD-3-clause
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+ .
+   1. Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+ .
+   2. Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials provided
+      with the distribution.
+ .
+   3. The name of the author may be used to endorse or promote
+      products derived from this software without specific prior
+      written permission.
+ .
+ THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+ GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Files: mingw-w64-crt/misc/basename.c
        mingw-w64-crt/misc/dirname.c
@@ -360,6 +495,10 @@ Copyright: 1988, 1993 The Regents of the University of California
            1998 Softweyr LLC
 License: BSD-3-clause
 
+Files: mingw-w64-headers/crt/profile.h
+Copyright: 1992, 1993 The Regents of the University of California
+License: BSD-3-clause
+
 Files: mingw-w64-headers/crt/stdarg.h
 Copyright: 1989, 1997, 1998, 1999, 2000 Free Software Foundation, Inc.
 License: GPL-2+
@@ -417,12 +556,15 @@ Copyright: 2002 Alexandre Julliard
 License: LGPL-2.1+
 
 Files: mingw-w64-headers/direct-x/include/d3d10_1.idl
+       mingw-w64-headers/direct-x/include/d3d11_1.idl
+       mingw-w64-headers/direct-x/include/d3d11sdklayers.idl
+       mingw-w64-headers/direct-x/include/dxgi1_2.idl
        mingw-w64-headers/include/objectarray.idl
        mingw-w64-headers/include/optary.idl
        mingw-w64-headers/include/uiautomation*
        mingw-w64-headers/include/urlhist.idl
        mingw-w64-headers/include/wpcapi.idl
-Copyright: 2006, 2010, 2011, 2012 Jacek Caban for CodeWeavers
+Copyright: 2006, 2010-2014 Jacek Caban for CodeWeavers
 License: LGPL-2.1+
 
 Files: mingw-w64-headers/direct-x/include/d3d10_1shader.h
@@ -523,8 +665,7 @@ Files: mingw-w64-headers/direct-x/include/d3dx9anim.h
 Copyright: 2011 Dylan Smith
 License: LGPL-2.1+
 
-Files: mingw-w64-headers/direct-x/include/d3dxcore.h
-       mingw-w64-headers/direct-x/include/d3dx9core.h
+Files: mingw-w64-headers/direct-x/include/d3dx9core.h
        mingw-w64-headers/direct-x/include/d3dx9tex.h
 Copyright: 2007, 2008 Tony Wasserka
 License: LGPL-2.1+
@@ -589,7 +730,7 @@ Copyright: 2008 Andrew Fenn
 License: LGPL-2.1+
 
 Files: mingw-w64-headers/include/GL/*
-Copyright: 2013 The Khronos Group Inc.
+Copyright: 2013-2014 The Khronos Group Inc.
 License: expat
 
 Files: mingw-w64-headers/include/audioclient.idl
@@ -604,8 +745,8 @@ Copyright: 2009 Maarten Lankhorst
 License: LGPL-2.1+
 
 Files: mingw-w64-headers/include/corerror.h
-       mingw-w64-headers/include/fusion.idl
 Copyright: 2008 James Hawkins
+           2014 Kai Tietz
 License: LGPL-2.1+
 
 Files: mingw-w64-headers/include/ctfutb.idl
@@ -614,6 +755,10 @@ License: LGPL-2.1+
 
 Files: mingw-w64-headers/include/downloadmgr.idl
 Copyright: 2005 Jacek Caban
+License: LGPL-2.1+
+
+Files: mingw-w64-headers/include/fusion.idl
+Copyright: 2008 James Hawkins
 License: LGPL-2.1+
 
 Files: mingw-w64-headers/include/knownfolders.h
@@ -635,10 +780,6 @@ License: LGPL-2.1+
 Files: mingw-w64-headers/include/msctf.idl
 Copyright: 2008 Aric Stewart, CodeWeavers
 License: LGPL-2.1+
-
-Files: mingw-w64-headers/include/profile.h
-Copyright: 1992, 1993 The Regents of the University of California
-License: BSD-3-clause
 
 Files: mingw-w64-headers/include/propkey.h
 Copyright: 2010 Maarten Lankhorst for CodeWeavers
@@ -737,7 +878,7 @@ Copyright: 2013 mingw-w64 project
 License: expat
 
 Files: mingw-w64-tools/gendef/*
-Copyright: 2009-2013 mingw-w64 project
+Copyright: 2009-2014 mingw-w64 project
 License: GPL-3+
 
 Files: mingw-w64-tools/genidl/*
@@ -746,6 +887,10 @@ License: GPL-3+
 
 Files: mingw-w64-tools/genpeimg/*
 Copyright: 2009-2013 mingw-w64 project
+License: GPL-3+
+
+Files: mingw-w64-tools/genstubdll/*
+Copyright: 2014 mingw-w64 project
 License: GPL-3+
 
 Files: mingw-w64-tools/widl/*
@@ -775,7 +920,7 @@ License: LGPL-2+
 
 Files: debian/*
 Copyright: 2009, 2010 Robert Millan
-           2010-2013 Stephen Kitt <skitt@debian.org>
+           2010-2015 Stephen Kitt <skitt@debian.org>
 License: GPL-2+
 
 Files: debian/*widl.1

@@ -2,6 +2,7 @@ mingw-w64 (4.0~rc1-1) UNRELEASED; urgency=medium
 
   * New upstream release candidate.
   * Add upstream signing info.
+  * Update license information.
 
  -- Stephen Kitt <skitt@debian.org>  Tue, 27 Jan 2015 23:53:31 +0100
 
