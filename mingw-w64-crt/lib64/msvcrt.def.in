@@ -208,7 +208,7 @@ _beep
 _beginthread
 _beginthreadex
 _c_exit
-_cabs
+_cabs DATA
 _callnewh
 _cexit
 _cgets
@@ -228,7 +228,7 @@ _commit
 _commode DATA
 _control87
 _controlfp
-_controlfp_s
+; _controlfp_s replaced by emu
 _copysign
 _copysignf
 _cprintf
@@ -356,6 +356,7 @@ _getw
 _getwch
 _getwche
 _getws
+_gmtime32
 ; _gmtime32_s replaced by emu
 _gmtime64
 ; _gmtime64_s replaced by emu
@@ -471,6 +472,7 @@ _lfind
 _loaddll
 _lfind_s
 _local_unwind
+_localtime32
 ; _localtime32_s replaced by emu
 _localtime64
 ; _localtime64_s replaced by emu
@@ -1017,15 +1019,15 @@ _yn
 abort
 abs
 acos
-;acosf
+acosf DATA
 asctime
 ; asctime_s replaced by emu
 asin
-;asinf
+asinf DATA
 atan
-atan2
-;atan2f
-;atanf
+atan2 DATA
+atan2f DATA
+atanf DATA
 atexit DATA
 atof
 atoi
@@ -1038,17 +1040,17 @@ ceilf DATA
 clearerr
 clearerr_s
 clock
-cos
-;cosf
+cos DATA
+cosf DATA
 cosh
-;coshf
+coshf DATA
 ctime
 difftime
 div
 exit
 exp DATA
 expf DATA
-;fabs
+fabs DATA
 fclose
 feof
 ferror
@@ -1060,8 +1062,8 @@ fgetwc
 fgetws
 floor DATA
 floorf DATA
-fmod
-;fmodf
+fmod DATA
+fmodf DATA
 fopen
 fopen_s
 fprintf
@@ -1074,6 +1076,7 @@ fread
 free
 freopen
 freopen_s
+; If we implement frexp, we can set it to DATA only.
 frexp
 fscanf
 fscanf_s
@@ -1139,14 +1142,14 @@ memcmp
 memcpy
 ; memcpy_s replaced by emu
 memmove
-memmove_s
+; memmove_s replaced by emu
 memset
 mktime
-modf
-;modff
+modf DATA
+modff DATA
 perror
-;pow
-;powf
+pow DATA
+powf DATA
 printf
 printf_s
 putc
@@ -1158,7 +1161,7 @@ qsort
 qsort_s
 raise
 rand
-rand_s
+; rand_s replaced by emu
 realloc
 remove
 rename
@@ -1170,10 +1173,11 @@ setjmp
 setlocale
 setvbuf
 signal
-sin
-;sinf
+sin DATA
+sinf DATA
+; if we implement sinh, we can set it DATA only.
 sinh
-;sinhf
+sinhf DATA
 sprintf
 ; sprintf_s replaced by emu
 sqrt DATA
@@ -1215,7 +1219,8 @@ swscanf
 swscanf_s
 system
 tan
-;tanf
+tanf DATA
+; if we implement tanh, we can set it to DATA only.
 tanh
 time == _time64
 tmpfile
@@ -1237,7 +1242,7 @@ vprintf_s
 vsnprintf == _vsnprintf
 snprintf == _snprintf
 vsprintf
-vsprintf_s
+; vsprintf_s replaced by emu
 vswprintf
 vswprintf_s
 vwprintf

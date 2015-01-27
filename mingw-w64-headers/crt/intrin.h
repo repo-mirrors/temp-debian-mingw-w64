@@ -92,8 +92,14 @@ typedef union __m128i { char v[16]; } __m128i;
 #endif
 
 #ifndef WINAPI
+#if defined(_ARM_)
+#define WINAPI
+#else
 #define WINAPI __stdcall
 #endif
+#endif
+
+#if (defined(_X86_) || defined(__x86_64))
 
 #if defined(__MMX__) || defined(__MINGW_FORCE_SYS_INTRINS)
 #if defined(__cplusplus)
@@ -146,6 +152,8 @@ extern "C" {
 #endif
 #endif
 
+#endif
+
 #if (defined(_X86_) && !defined(__x86_64))
 #if defined(__cplusplus)
 extern "C" {
@@ -157,11 +165,6 @@ extern "C" {
 }
 #endif
 
-#if defined(__cplusplus)
-#include <dvec.h>
-#include <fvec.h>
-#include <ivec.h>
-#endif
 #endif
 
 #define __MACHINEX64 __MACHINE
@@ -1054,7 +1057,7 @@ extern "C" {
     /* __MACHINEI(__MINGW_EXTENSION unsigned __int64 __readmsr(unsigned __LONG32)) moved to psdk_inc/intrin-impl.h */
     /* __MACHINEI(__MINGW_EXTENSION void __writemsr(unsigned __LONG32,unsigned __int64)) moved to psdk_inc/intrin-impl.h */
 #ifndef __GNUC__
-    __MACHINEI(__MINGW_EXTENSION unsigned __int64 __rdtsc(void))
+    __MACHINEIW64(__MINGW_EXTENSION unsigned __int64 __rdtsc(void))
 #endif
     /* __MACHINEI(void __movsb(unsigned char *,unsigned char const *,size_t)) moved to psdk_inc/intrin-impl.h */
     /* __MACHINEI(void __movsw(unsigned short *,unsigned short const *,size_t)) moved to psdk_inc/intrin-impl.h */

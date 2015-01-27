@@ -378,12 +378,19 @@ extern "C" {
   _CRTIMP int __cdecl _mbtowc_l(wchar_t * __restrict__ _DstCh,const char * __restrict__ _SrcCh,size_t _SrcSizeInBytes,_locale_t _Locale);
   size_t __cdecl mbstowcs(wchar_t * __restrict__ _Dest,const char * __restrict__ _Source,size_t _MaxCount);
   _CRTIMP size_t __cdecl _mbstowcs_l(wchar_t * __restrict__ _Dest,const char * __restrict__ _Source,size_t _MaxCount,_locale_t _Locale);
+  int __cdecl mkstemp(char *template_name);
   int __cdecl rand(void);
   _CRTIMP int __cdecl _set_error_mode(int _Mode);
   void __cdecl srand(unsigned int _Seed);
+#if defined(_POSIX) || defined(_POSIX_THREAD_SAFE_FUNCTIONS)
+  #ifndef rand_r
+  #define rand_r(__seed) (__seed == __seed ? rand () : rand ())
+  #endif
+#endif
 #ifdef _CRT_RAND_S
   _CRTIMP errno_t __cdecl rand_s(unsigned int *randomValue);
 #endif
+
 #if defined(__USE_MINGW_STRTOX)
 __mingw_ovr
 double __cdecl __MINGW_NOTHROW strtod(const char * __restrict__ _Str,char ** __restrict__ _EndPtr)
@@ -409,7 +416,9 @@ float __cdecl __MINGW_NOTHROW strtof(const char * __restrict__ _Str,char ** __re
   /* libmingwex.a provides a c99-compliant strtod() exported as __strtod() */
   extern double __cdecl __MINGW_NOTHROW
   __strtod (const char * __restrict__ , char ** __restrict__);
+#if !defined(__USE_MINGW_STRTOX)
 #define strtod __strtod
+#endif /* !defined(__USE_MINGW_STRTOX) */
 #endif /* __NO_ISOCEXT */
 
 #if !defined __NO_ISOCEXT  /* in libmingwex.a */
@@ -512,6 +521,9 @@ float __cdecl __MINGW_NOTHROW strtof(const char * __restrict__ _Str,char ** __re
   __MINGW_EXTENSION _CRTIMP unsigned __int64 __cdecl _wcstoui64_l(const wchar_t *_Str ,wchar_t **_EndPtr,int _Radix,_locale_t _Locale);
 #endif
 
+  _CRTIMP int __cdecl _putenv(const char *_EnvString);
+  _CRTIMP int __cdecl _wputenv(const wchar_t *_EnvString);
+
 #ifndef _POSIX_
 #define _CVTBUFSIZE (309+40)
   _CRTIMP char *__cdecl _fullpath(char *_FullPath,const char *_Path,size_t _SizeInBytes);
@@ -545,7 +557,6 @@ float __cdecl __MINGW_NOTHROW strtof(const char * __restrict__ _Str,char ** __re
 #define _CRT_PERROR_DEFINED
   void __cdecl perror(const char *_ErrMsg);
 #endif
-  _CRTIMP int __cdecl _putenv(const char *_EnvString);
 #pragma push_macro ("_rotr64")
 #pragma push_macro ("_rotl64")
 #undef _rotl64
@@ -575,7 +586,6 @@ float __cdecl __MINGW_NOTHROW strtof(const char * __restrict__ _Str,char ** __re
 #define _CRT_WPERROR_DEFINED
   _CRTIMP void __cdecl _wperror(const wchar_t *_ErrMsg);
 #endif
-  _CRTIMP int __cdecl _wputenv(const wchar_t *_EnvString);
   _CRTIMP void __cdecl _wsearchenv(const wchar_t *_Filename,const wchar_t *_EnvVar,wchar_t *_ResultPath) __MINGW_ATTRIB_DEPRECATED_SEC_WARN;
   _CRTIMP void __cdecl _wsplitpath(const wchar_t *_FullPath,wchar_t *_Drive,wchar_t *_Dir,wchar_t *_Filename,wchar_t *_Ext) __MINGW_ATTRIB_DEPRECATED_SEC_WARN;
 #endif

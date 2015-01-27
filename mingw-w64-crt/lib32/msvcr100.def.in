@@ -750,7 +750,7 @@ _byteswap_uint64 DATA
 _byteswap_ulong DATA
 _byteswap_ushort DATA
 _c_exit
-_cabs
+_cabs DATA
 _callnewh
 _calloc_crt
 _cexit
@@ -1672,7 +1672,7 @@ asctime
 asctime_s
 asin
 atan
-atan2
+atan2 DATA
 atexit DATA
 atof
 atoi
@@ -1686,6 +1686,7 @@ clearerr
 clearerr_s
 clock
 cos DATA
+; If we implement cosh too, we can set it to DATA only.
 cosh
 div
 exit
@@ -1715,6 +1716,7 @@ fread_s
 free
 freopen
 freopen_s
+; If we implement frexp, we can set it to DATA only.
 frexp
 fscanf
 fscanf_s
@@ -1767,6 +1769,7 @@ llabs DATA
 lldiv DATA
 localeconv
 log DATA
+; If we implement log10, we can set it to DATA only.
 log10
 malloc
 mblen
@@ -1810,6 +1813,7 @@ setlocale
 setvbuf
 signal
 sin DATA
+; If we implenent sinh, we can set it to DATA only.
 sinh
 sprintf
 sprintf_s
@@ -1850,6 +1854,7 @@ swscanf
 swscanf_s
 system
 tan
+; If we implement tanh, we can set it to DATA only.
 tanh
 tmpfile
 tmpfile_s

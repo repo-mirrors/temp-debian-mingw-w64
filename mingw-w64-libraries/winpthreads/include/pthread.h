@@ -407,54 +407,10 @@ unsigned long long         WINPTHREAD_API _pthread_rel_time_in_ms(const struct t
 unsigned long long         WINPTHREAD_API _pthread_time_in_ms(void);
 unsigned long long         WINPTHREAD_API _pthread_time_in_ms_from_timespec(const struct timespec *ts);
 int                        WINPTHREAD_API _pthread_tryjoin (pthread_t t, void **res);
-int                        WINPTHREAD_API pthread_delay_np (const struct timespec *interval);
 int                        WINPTHREAD_API pthread_rwlockattr_destroy(pthread_rwlockattr_t *a);
 int                        WINPTHREAD_API pthread_rwlockattr_getpshared(pthread_rwlockattr_t *a, int *s);
 int                        WINPTHREAD_API pthread_rwlockattr_init(pthread_rwlockattr_t *a);
 int                        WINPTHREAD_API pthread_rwlockattr_setpshared(pthread_rwlockattr_t *a, int s);
-
-/* Recursive API emulation.  */
-#undef localtime_r
-#define localtime_r(_Time, _Tm)	({ struct tm *___tmp_tm;		\
-						pthread_testcancel();	\
-						___tmp_tm = localtime((_Time));\
-						if (___tmp_tm) {	\
-						  *(_Tm) = *___tmp_tm;	\
-						  ___tmp_tm = (_Tm);	\
-						}			\
-						___tmp_tm;	})
-
-#undef gmtime_r
-#define gmtime_r(_Time,_Tm)	({ struct tm *___tmp_tm;		\
-						pthread_testcancel();	\
-						___tmp_tm = gmtime((_Time)); \
-						if (___tmp_tm) {	\
-						  *(_Tm) = *___tmp_tm;	\
-						  ___tmp_tm = (_Tm);	\
-						}			\
-						___tmp_tm;	})
-
-#undef ctime_r
-#define ctime_r(_Time,_Str)	({ char *___tmp_tm;			\
-						pthread_testcancel();	\
-						___tmp_tm = ctime((_Time));  \
-						if (___tmp_tm)		\
-						 ___tmp_tm =		\
-						   strcpy((_Str),___tmp_tm); \
-						___tmp_tm;	})
-
-#undef asctime_r
-#define asctime_r(_Tm, _Buf)	({ char *___tmp_tm;			\
-						pthread_testcancel();	\
-						___tmp_tm = asctime((_Tm)); \
-						if (___tmp_tm)		\
-						 ___tmp_tm =		\
-						   strcpy((_Buf),___tmp_tm);\
-						___tmp_tm;	})
-
-#ifndef rand_r
-#define rand_r(__seed) (__seed == __seed ? rand () : rand ())
-#endif
 
 #ifndef SIG_BLOCK
 #define SIG_BLOCK 0
