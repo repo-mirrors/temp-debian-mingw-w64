@@ -1,4 +1,4 @@
-mingw-w64 (4.0~rc1-1) UNRELEASED; urgency=medium
+mingw-w64 (4.0~rc1-1) experimental; urgency=medium
 
   * New upstream release candidate.
   * Add upstream signing info.
@@ -6,7 +6,7 @@ mingw-w64 (4.0~rc1-1) UNRELEASED; urgency=medium
   * Refresh patches.
   * Standards-Version 3.9.6, no change required.
 
- -- Stephen Kitt <skitt@debian.org>  Tue, 27 Jan 2015 23:53:31 +0100
+ -- Stephen Kitt <skitt@debian.org>  Wed, 28 Jan 2015 00:50:06 +0100
 
 mingw-w64 (3.3.0-1) experimental; urgency=medium
 
