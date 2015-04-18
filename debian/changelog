@@ -1,3 +1,9 @@
+mingw-w64 (4.0.2-1) experimental; urgency=medium
+
+  * New upstream release.
+
+ -- Stephen Kitt <skitt@debian.org>  Sat, 18 Apr 2015 20:15:20 +0200
+
 mingw-w64 (4.0.1-1) experimental; urgency=medium
 
   * New upstream release.
