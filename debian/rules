@@ -120,12 +120,12 @@ binary: binary-indep binary-arch
 
 # If we're targetting the build host, configure for hardening
 # If we're targetting the target host, disable hardening (see above),
-# change the prefix and use the new headers
+# change the prefix and use the new headers and libraries
 %-configure-stamp: autoreconf-stamp
 	if [ "$(call rulehost,$*)" = "$(host)" ]; then \
 		dh_auto_configure -D$(call sourcefolder,$*) -B$(call buildfolder,$*) -- $(shell dpkg-buildflags --export=configure) --host=$(call rulehost,$*) --target=$(call ruletarget,$*); \
 	else \
-		CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(call ruletarget,$*)/include" dh_auto_configure -D$(call sourcefolder,$*) -B$(call buildfolder,$*) -- --prefix=/usr/$(call ruletarget,$*) --host=$(call rulehost,$*) --target=$(call ruletarget,$*); \
+		CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(call ruletarget,$*)/include" LDFLAGS="$(LDFLAGS) -L$(top_dir)/debian/tmp/usr/$(call ruletarget,$*)/lib" dh_auto_configure -D$(call sourcefolder,$*) -B$(call buildfolder,$*) -- --prefix=/usr/$(call ruletarget,$*) --host=$(call rulehost,$*) --target=$(call ruletarget,$*); \
 	fi
 	touch $*-configure-stamp
 
