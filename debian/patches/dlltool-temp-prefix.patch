@@ -1,0 +1,18 @@
+Description: Specify dlltool's temp prefix
+Author: Stephen Kitt <steve@sk2.org>
+
+By default dlltool uses its pid for the object files it generates.
+Enforcing its temp prefix allows the files it generates to be
+reproducible.
+
+--- a/mingw-w64-crt/Makefile.am
++++ b/mingw-w64-crt/Makefile.am
+@@ -22,7 +22,7 @@
+ AM_CPPFLAGS=-D_CRTBLD $(sysincludes)
+ AM_CFLAGS=-pipe -std=gnu99 -D_WIN32_WINNT=0x0f00 @ADD_C_CXX_WARNING_FLAGS@ @ADD_C_ONLY_WARNING_FLAGS@
+ AM_CXXFLAGS=@ADD_C_CXX_WARNING_FLAGS@ @ADD_CXX_ONLY_WARNING_FLAGS@
+-AM_DLLTOOLFLAGS=-k --as=$(AS) --output-lib $@
++AM_DLLTOOLFLAGS=-k --as=$(AS) --output-lib $@ --temp-prefix $$(basename $@ .a)
+ if DELAY_IMPORT_LIBS
+   AM_DLLTOOLFLAGS += --output-delaylib $@.delayimp.a
+ endif
