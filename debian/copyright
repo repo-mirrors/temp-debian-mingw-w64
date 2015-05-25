@@ -186,13 +186,11 @@ Files: mingw-w64-crt/crt/*
        mingw-w64-headers/include/*
 Copyright: public-domain
 License: public-domain
- This file has no copyright assigned and is placed in the Public
- Domain.
 
 Files: mingw-w64-crt/gdtoa/*
        mingw-w64-crt/stdio/mingw_pformat.c
 Copyright: 1997-2001 Lucent Technologies
-License:
+License: Lucent
  Permission to use, copy, modify, and distribute this software and
  its documentation for any purpose and without fee is hereby
  granted, provided that the above copyright notice appear in all
@@ -216,7 +214,7 @@ Files: mingw-w64-crt/gdtoa/qnan.c
        mingw-w64-crt/gdtoa/strtodnrp.c
 Copyright: 2004, 2005 David M. Gay
            1998, 2000 Lucent Technologies
-License:
+License: David-Gay
  Permission to use, copy, modify, and distribute this software and its
  documentation for any purpose and without fee is hereby granted,
  provided that the above copyright notice appear in all copies and
@@ -247,13 +245,13 @@ Files: mingw-w64-crt/math/s_erf.c
        mingw-w64-crt/math/softmath/e_remainderf.c
        mingw-w64-crt/math/softmath/softmath_private.h
 Copyright: 1993 Sun Microsystems, Inc.
-License:
+License: Permissive-Sun
  Permission to use, copy, modify, and distribute this software is
  freely granted, provided that this notice is preserved.
 
 Files: mingw-w64-crt/math/DFP/mpdecimal/*
 Copyright: 2008-2016 Stefan Krah
-License: BSD-2-clause
+License: BSD-2-clause-Krah
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
@@ -313,7 +311,7 @@ License: FreeBSD-documentation with modification exception
 
 Files: mingw-w64-crt/math/DFP/mpdecimal/doc/_static/*
 Copyright: 2007-2013 the Sphinx team
-License: BSD-2-clause
+License: BSD-2-clause-Sphinx
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
@@ -348,7 +346,7 @@ License: expat
 
 Files: mingw-w64-crt/math/DFP/mpdecimal/libmpdec/vcstdint.h
 Copyright: 2006-2008 Alexander Chemeris
-License: BSD-3-clause
+License: BSD-3-clause-Chemeris
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
@@ -389,7 +387,7 @@ Files: mingw-w64-crt/misc/basename.c
        mingw-w64-crt/stdio/mingw_vsnprintf.c
        mingw-w64-crt/stdio/mingw_vsprintf.c
 Copyright: Keith Marshall
-License:
+License: Keith-Marshall
  This is free software.  You may redistribute and/or modify it as you
  see fit, without restriction of copyright.
  .
@@ -401,46 +399,8 @@ License:
 
 Files: mingw-w64-crt/misc/getopt.c
 Copyright: 2000 The NetBSD Foundation, Inc.
-License: BSD-2-clause
- Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions
- are met:
- 1. Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer.
- 2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions and the following disclaimer in
-    the documentation and/or other materials provided with the
-    distribution.
- .
- THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND
- CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES,
- INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY
- DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
- GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
- IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
- OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
- IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-Files: mingw-w64-crt/misc/getopt.c
-Copyright: 2002 Todd C. Miller <Todd.Miller@courtesan.com>
-License: ISC
- Permission to use, copy, modify, and distribute this software for any
- purpose with or without fee is hereby granted, provided that the
- above copyright notice and this permission notice appear in all
- copies.
- .
- THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
- WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
- WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
- AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
- DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
- PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
- TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- PERFORMANCE OF THIS SOFTWARE.
+           2002 Todd C. Miller <Todd.Miller@courtesan.com>
+License: BSD-2-clause-NetBSD and ISC
 
 Files: mingw-w64-crt/profile/gcrt0.c
        mingw-w64-crt/profile/profil.*
@@ -505,7 +465,7 @@ License: GPL-2+
 
 Files: mingw-w64-headers/ddk/include/ddk/csq.h
 Copyright: 2004 Vizzini (vizzini@plasmic.com)
-License:
+License: public-domain-Vizzini
  THIS SOFTWARE IS NOT COPYRIGHTED
  .
  This source code is offered for use in the public domain. You may
@@ -795,7 +755,31 @@ License: LGPL-2.1+
 
 Files: mingw-w64-headers/include/textstor.idl
 Copyright: 2009 Aric Stewart, CodeWeavers
-License: BSD-3-clause
+License: BSD-3-clause-MinGW-w64
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials provided
+      with the distribution.
+    * Neither the name of the mingw-w64 nor the names of its
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+ .
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ HOLDERS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Files: mingw-w64-headers/include/wincodec.idl
 Copyright: 2009 Vincent Povirk for CodeWeavers
@@ -829,7 +813,7 @@ License: expat
 Files: mingw-w64-libraries/winpthreads/include/pthread.h
        mingw-w64-libraries/winpthreads/include/pthread_compat.h
 Copyright: 2010 Lockless Inc.
-License: BSD-3-clause
+License: BSD-3-clause-Lockless
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
@@ -861,8 +845,6 @@ Files: mingw-w64-libraries/winpthreads/src/clock.c
        mingw-w64-libraries/winpthreads/src/nanosleep.c
 Copyright: public-domain
 License: public-domain
- This file has no copyright assigned and is placed in the Public
- Domain.
 
 Files: mingw-w64-libraries/winpthreads/src/libgcc/dll_math.c
 Copyright: 1992, 1993 The Regents of the University of California
@@ -994,3 +976,46 @@ License: expat
  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
+
+License: BSD-2-clause-NetBSD
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the
+    distribution.
+ .
+ THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND
+ CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY
+ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+ GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+License: ISC
+ Permission to use, copy, modify, and distribute this software for any
+ purpose with or without fee is hereby granted, provided that the
+ above copyright notice and this permission notice appear in all
+ copies.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+ WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+ AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+ DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
+ PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+ TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ PERFORMANCE OF THIS SOFTWARE.
+
+License: public-domain
+ This file has no copyright assigned and is placed in the Public
+ Domain.

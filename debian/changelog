@@ -2,6 +2,8 @@ mingw-w64 (4.0.2-2) UNRELEASED; urgency=medium
 
   * Build the extra libraries using the newly provided runtime
     libraries.
+  * Fix debian/copyright (no empty license names, unique license names
+    throughout).
 
  -- Stephen Kitt <skitt@debian.org>  Sun, 19 Apr 2015 20:42:31 +0200
 
