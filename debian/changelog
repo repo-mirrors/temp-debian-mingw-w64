@@ -4,6 +4,7 @@ mingw-w64 (4.0.2-2) UNRELEASED; urgency=medium
     libraries.
   * Fix debian/copyright (no empty license names, unique license names
     throughout).
+  * Avoid inserting timestamps in PE binaries.
 
  -- Stephen Kitt <skitt@debian.org>  Sun, 19 Apr 2015 20:42:31 +0200
 
