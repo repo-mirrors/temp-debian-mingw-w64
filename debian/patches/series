@@ -4,3 +4,4 @@ disable-werror.patch
 missing-cpu-info.patch
 basetsd-hppa.patch
 dlltool-temp-prefix.patch
+reproducible-gendef.patch
