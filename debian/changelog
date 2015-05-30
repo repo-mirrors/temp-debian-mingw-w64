@@ -1,8 +1,8 @@
-mingw-w64 (4.0.2-3) UNRELEASED; urgency=medium
+mingw-w64 (4.0.2-3) unstable; urgency=medium
 
   * Drop __DATE__ from gendef so it builds reproducibly.
 
- -- Stephen Kitt <skitt@debian.org>  Fri, 29 May 2015 06:54:18 +0200
+ -- Stephen Kitt <skitt@debian.org>  Fri, 29 May 2015 07:12:25 +0200
 
 mingw-w64 (4.0.2-2) unstable; urgency=medium
 
