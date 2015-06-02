@@ -1,3 +1,10 @@
+mingw-w64 (4.0.2-4) unstable; urgency=medium
+
+  * Apply upstream patch to fix shlobj.h. (Closes: #787546.) Thanks to
+    Markus Koschany for pointing out the bug and the fix!
+
+ -- Stephen Kitt <skitt@debian.org>  Tue, 02 Jun 2015 19:02:37 +0200
+
 mingw-w64 (4.0.2-3) unstable; urgency=medium
 
   * Drop __DATE__ from gendef so it builds reproducibly.
