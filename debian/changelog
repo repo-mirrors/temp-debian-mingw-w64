@@ -1,3 +1,9 @@
+mingw-w64 (4.0.2-5) UNRELEASED; urgency=medium
+
+  * Specify the PE timestamp using the changelog's date.
+
+ -- Stephen Kitt <skitt@debian.org>  Sat, 06 Jun 2015 17:54:25 +0200
+
 mingw-w64 (4.0.2-4) unstable; urgency=medium
 
   * Apply upstream patch to fix shlobj.h. (Closes: #787546.) Thanks to
