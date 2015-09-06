@@ -37,8 +37,7 @@ CFLAGS = $(shell $(dpkg_buildflags) --get CFLAGS)
 CPPFLAGS = $(shell $(dpkg_buildflags) --get CPPFLAGS)
 CXXFLAGS = $(shell $(dpkg_buildflags) --get CXXFLAGS)
 FFLAGS = $(shell $(dpkg_buildflags) --get FFLAGS)
-LDFLAGS = $(shell $(dpkg_buildflags) --get LDFLAGS) -Xlinker --insert-timestamp=$(shell date -d "$(shell dpkg-parsechangelog -S Date)" +%s)
-export CFLAGS CPPFLAGS CXXFLAGS FFLAGS LDFLAGS
+export CFLAGS CPPFLAGS CXXFLAGS FFLAGS
 
 clean:
 	dh_testdir
