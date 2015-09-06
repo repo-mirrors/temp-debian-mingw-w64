@@ -158,6 +158,8 @@ override_dh_install-indep:
 			done; \
 		fi; \
 	done
+# DLLs should be executable (see #796224)
+	find debian/tmp -name \*.dll | xargs chmod 755
 # Do the rest of the installation
 	dh_install -i
 
