@@ -96,11 +96,10 @@ $(target64crt)-configure-stamp: $(target64)~$(target64)~headers-install-stamp au
 	touch $@
 
 build-indep-stamp: $(foreach target,$(targets),$(patsubst %,$(target)~$(target)~%-install-stamp,$(TARGET_PROJECTS))) $(patsubst %,$(target32)~$(target32)~%-install-stamp,$(TARGET32_PROJECTS))
-	# Move DLLs to lib, change their permissions to 644, drop .la files
+	# Move DLLs to lib, drop .la files
 	for target in $(targets); do \
 		mv $(top_dir)/debian/tmp/usr/$$target/bin/*.dll $(top_dir)/debian/tmp/usr/$$target/lib/; \
 		rmdir $(top_dir)/debian/tmp/usr/$$target/bin; \
-		chmod 644 $(top_dir)/debian/tmp/usr/$$target/lib/*.dll; \
 		rm $(top_dir)/debian/tmp/usr/$$target/lib/*.la; \
 	done
 	touch $@
@@ -158,8 +157,6 @@ override_dh_install-indep:
 			done; \
 		fi; \
 	done
-# DLLs should be executable (see #796224)
-	find debian/tmp -name \*.dll | xargs chmod 755
 # Do the rest of the installation
 	dh_install -i
 
