@@ -1,4 +1,4 @@
-mingw-w64 (4.0.4-2) UNRELEASED; urgency=medium
+mingw-w64 (4.0.4-2) unstable; urgency=medium
 
   * Rely on binutils-mingw-w64's support of SOURCE_DATE_EPOCH to build
     reproducibly (instead of explicitly specifying PE timestamps). Thus
@@ -6,7 +6,7 @@ mingw-w64 (4.0.4-2) UNRELEASED; urgency=medium
   * Ship executable DLLs. (Closes: #796224.)
   * Switch to debhelper compatibility level 9.
 
- -- Stephen Kitt <skitt@debian.org>  Fri, 04 Sep 2015 23:34:46 +0200
+ -- Stephen Kitt <skitt@debian.org>  Sat, 02 Jan 2016 17:16:26 +0100
 
 mingw-w64 (4.0.4-1) unstable; urgency=medium
 
