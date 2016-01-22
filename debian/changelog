@@ -1,3 +1,9 @@
+mingw-w64 (4.0.4-3) UNRELEASED; urgency=medium
+
+  * Switch to https: VCS URIs (see #810378).
+
+ -- Stephen Kitt <skitt@debian.org>  Fri, 22 Jan 2016 18:56:33 +0100
+
 mingw-w64 (4.0.4-2) unstable; urgency=medium
 
   * Rely on binutils-mingw-w64's support of SOURCE_DATE_EPOCH to build
