@@ -1,10 +1,10 @@
-mingw-w64 (4.0.5-1) UNRELEASED; urgency=medium
+mingw-w64 (4.0.5-1) unstable; urgency=medium
 
   * New upstream release.
   * Switch to https: VCS URIs (see #810378).
   * Standards-Version 3.9.7, no change required.
 
- -- Stephen Kitt <skitt@debian.org>  Sat, 27 Feb 2016 14:12:00 +0100
+ -- Stephen Kitt <skitt@debian.org>  Sat, 27 Feb 2016 14:25:01 +0100
 
 mingw-w64 (4.0.4-2) unstable; urgency=medium
 
