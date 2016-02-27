@@ -1,8 +1,8 @@
-mingw-w64 (5.0~rc1-1) UNRELEASED; urgency=medium
+mingw-w64 (5.0~rc1-1) experimental; urgency=medium
 
   * New upstream release candidate, merging the pthreads libgomp patch.
 
- -- Stephen Kitt <skitt@debian.org>  Sat, 27 Feb 2016 14:48:22 +0100
+ -- Stephen Kitt <skitt@debian.org>  Sat, 27 Feb 2016 15:01:56 +0100
 
 mingw-w64 (4.0.5-1) unstable; urgency=medium
 
