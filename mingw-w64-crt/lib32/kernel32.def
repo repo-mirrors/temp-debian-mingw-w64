@@ -233,6 +233,7 @@ DeleteVolumeMountPointW@4
 DeviceIoControl@32
 DisableThreadLibraryCalls@4
 DisassociateCurrentThreadFromCallback@4
+DiscardVirtualMemory@8
 DisconnectNamedPipe@4
 DnsHostnameToComputerNameA@12
 DnsHostnameToComputerNameW@12
@@ -872,6 +873,7 @@ NlsWriteEtwEvent@20
 NormalizeString@20
 NotifyMountMgr@12
 NotifyUILanguageChange@20
+OfferVirtualMemory@12
 OpenConsoleW@16
 OpenEventA@12
 OpenEventW@12
@@ -900,7 +902,8 @@ PeekNamedPipe@24
 PostQueuedCompletionStatus@16
 PowerClearRequest@8
 PowerCreateRequest@4
-PostQueuedCompletionStatus@16
+PowerSetRequest@8
+PrefetchVirtualMemory@16
 PrepareTape@12
 PrivCopyFileExW@24
 PrivMoveFileIdentityW@12
@@ -936,6 +939,7 @@ QueueUserWorkItem@12
 RaiseException@16
 RaiseFailFastException@12
 ReOpenFile@16
+ReclaimVirtualMemory@8
 ReadConsoleA@20
 ReadConsoleInputA@16
 ReadConsoleInputExA@20
