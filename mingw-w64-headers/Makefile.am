@@ -36,6 +36,7 @@ dist-hook:
 	find $(distdir) -name ".svn" -type d -delete
 
 EXTRA_HEADERS = \
+  include/*.c \
   include/*.dlg \
   include/*.h \
   include/*.h16 \
@@ -107,6 +108,7 @@ IDL_SRCS = \
   include/mmdeviceapi.idl \
   include/mscoree.idl \
   include/msctf.idl \
+  include/msinkaut.idl \
   include/mshtml.idl \
   include/mshtmhst.idl \
   include/msopc.idl \
