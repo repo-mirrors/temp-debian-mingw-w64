@@ -22,19 +22,29 @@ endif
 AM_CPPFLAGS=-D_CRTBLD $(sysincludes)
 AM_CFLAGS=-pipe -std=gnu99 -D_WIN32_WINNT=0x0f00 @ADD_C_CXX_WARNING_FLAGS@ @ADD_C_ONLY_WARNING_FLAGS@
 AM_CXXFLAGS=@ADD_C_CXX_WARNING_FLAGS@ @ADD_CXX_ONLY_WARNING_FLAGS@
-AM_DLLTOOLFLAGS=-k --as=$(AS) --output-lib $@
-if DELAY_IMPORT_LIBS
-  AM_DLLTOOLFLAGS += --output-delaylib $@.delayimp.a
-endif
 CPPFLAGSARM32=-mfpu=vfp
 CPPFLAGS32=-m32
 CPPFLAGS64=-m64
-DLLTOOLFLAGSARM32=
-DLLTOOLFLAGS32=--as-flags=--32 -m i386
-DLLTOOLFLAGS64=--as-flags=--64 -m i386:x86-64
-DTDEFARM32=$(DLLTOOL) $(DLLTOOLFLAGSARM32) $(AM_DLLTOOLFLAGS) --input-def
-DTDEF32=$(DLLTOOL) $(DLLTOOLFLAGS32) $(AM_DLLTOOLFLAGS) --input-def
-DTDEF64=$(DLLTOOL) $(DLLTOOLFLAGS64) $(AM_DLLTOOLFLAGS) --input-def
+if WITH_GENLIB
+  AM_DLLTOOLFLAGS=-o $@
+  DLLTOOLFLAGSARM32=-a arm
+  DLLTOOLFLAGS32=-a x86
+  DLLTOOLFLAGS64=-a x86_64
+  DTDEFARM32=$(GENLIB) $(DLLTOOLFLAGSARM32) $(AM_DLLTOOLFLAGS)
+  DTDEF32=$(GENLIB) $(DLLTOOLFLAGS32) $(AM_DLLTOOLFLAGS)
+  DTDEF64=$(GENLIB) $(DLLTOOLFLAGS64) $(AM_DLLTOOLFLAGS)
+else
+  AM_DLLTOOLFLAGS=-k --as=$(AS) --output-lib $@
+  DLLTOOLFLAGSARM32=
+  DLLTOOLFLAGS32=--as-flags=--32 -m i386
+  DLLTOOLFLAGS64=--as-flags=--64 -m i386:x86-64
+  DTDEFARM32=$(DLLTOOL) $(DLLTOOLFLAGSARM32) $(AM_DLLTOOLFLAGS) --input-def
+  DTDEF32=$(DLLTOOL) $(DLLTOOLFLAGS32) $(AM_DLLTOOLFLAGS) --input-def
+  DTDEF64=$(DLLTOOL) $(DLLTOOLFLAGS64) $(AM_DLLTOOLFLAGS) --input-def
+endif
+if DELAY_IMPORT_LIBS
+  AM_DLLTOOLFLAGS += --output-delaylib $@.delayimp.a
+endif
 DTLIBARM32=$(DTDEFARM32) $(top_srcdir)/`echo $@ | $(SED) 's|/lib|/|;s|\.a|.def|'`
 DTLIB32=$(DTDEF32) $(top_srcdir)/`echo $@ | $(SED) 's|/lib|/|;s|\.a|.def|'`
 DTLIB64=$(DTDEF64) $(top_srcdir)/`echo $@ | $(SED) 's|/lib|/|;s|\.a|.def|'`
@@ -97,6 +107,7 @@ src_libdmoguids=libsrc/dmoguids.c
 src_libdxerr8=libsrc/dxerr8.c libsrc/dxerr8w.c
 src_libdxerr9=libsrc/dxerr9.c libsrc/dxerr9w.c
 src_libmfuuid=libsrc/mfuuid.c
+src_libamstrmid=libsrc/amstrmid.c
 src_libwbemuuid=libsrc/wbemuuid.c
 src_libwmcodecdspuuid=libsrc/wmcodecdspuuid.c
 src_libwindowscodecs=libsrc/windowscodecs.c
@@ -105,6 +116,7 @@ src_libksuser=libsrc/ksuser.c
 src_libksguid=libsrc/ksuser.c
 src_liblargeint=libsrc/largeint.c
 src_liblocationapi=libsrc/locationapi.c
+src_libsapi=libsrc/sapi.c
 src_libsensorsapi=libsrc/sensorsapi.c
 src_libportabledeviceguids=libsrc/portabledeviceguids.c
 
@@ -152,6 +164,7 @@ src_libws2_32=libsrc/ws2_32.c \
   libsrc/wspiapi/WspiapiFreeAddrInfo.c
 
 src_msvcrt=\
+  misc/_configthreadlocale.c \
   misc/invalid_parameter_handler.c \
   misc/output_format.c \
   misc/purecall.c \
@@ -171,6 +184,7 @@ src_msvcrt=\
   secapi/_localtime32_s.c \
   secapi/_localtime64_s.c \
   secapi/_mktemp_s.c \
+  secapi/_sopen_s.c \
   secapi/_strdate_s.c \
   secapi/_strtime_s.c \
   secapi/_umask_s.c \
@@ -178,6 +192,9 @@ src_msvcrt=\
   secapi/_vcprintf_s_l.c \
   secapi/_vcwprintf_s.c \
   secapi/_vcwprintf_s_l.c \
+  secapi/_vscprintf_p.c \
+  secapi/_vscwprintf_p.c \
+  secapi/_vswprintf_p.c \
   secapi/_waccess_s.c \
   secapi/_wasctime_s.c \
   secapi/_wctime32_s.c \
@@ -193,7 +210,8 @@ src_msvcrt=\
   secapi/strerror_s.c \
   secapi/vsprintf_s.c \
   secapi/wmemcpy_s.c \
-  secapi/wmemmove_s.c
+  secapi/wmemmove_s.c \
+  stdio/mingw_lock.c
 
 src_msvcrt32=\
   $(src_msvcrt) \
@@ -362,8 +380,8 @@ src_intrincs= \
   intrincs/indword.c        intrincs/indwordstring.c  intrincs/inword.c          intrincs/inwordstring.c  intrincs/outbyte.c        \
   intrincs/outbytestring.c  intrincs/outdword.c       intrincs/outdwordstring.c  intrincs/outword.c       intrincs/outwordstring.c  \
   intrincs/readcr0.c        intrincs/readcr2.c        intrincs/readcr3.c         intrincs/readcr4.c       \
-  intrincs/readcr8.c        intrincs/readmsr.c        intrincs/writecr0.c        intrincs/writecr2.c      intrincs/writecr3.c       \
-  intrincs/writecr4.c       intrincs/writecr8.c       intrincs/writemsr.c        intrincs/__int2c.c       intrincs/RtlSecureZeroMemory.c
+  intrincs/readmsr.c        intrincs/writecr0.c        intrincs/writecr2.c      intrincs/writecr3.c       \
+  intrincs/writecr4.c       intrincs/writemsr.c        intrincs/__int2c.c       intrincs/RtlSecureZeroMemory.c
 
 # these only go into the 64 bit version:
 src_intrincs64=\
@@ -373,7 +391,8 @@ src_intrincs64=\
   intrincs/readgsqword.c  intrincs/writegsbyte.c  intrincs/writegsword.c  intrincs/writegsdword.c    \
   intrincs/writegsqword.c intrincs/mul128ex.c     intrincs/umul128ex.c    intrincs/_mul128.c         \
   intrincs/_umul128.c     intrincs/__movsq.c      intrincs/__stosq.c      intrincs/__shiftright128.c \
-  intrincs/bittestci64.c  intrincs/__faststorefence.c    intrincs/__shiftleft128.c
+  intrincs/bittestci64.c  intrincs/__faststorefence.c    intrincs/__shiftleft128.c                   \
+  intrincs/readcr8.c      intrincs/writecr8.c
 
 # these only go into the 32 bit version:
 src_intrincs32=\
@@ -391,7 +410,7 @@ if LIB32
 # Compiling 32-bit runtime
 #
 
-lib32dir=$(prefix)/@LIB32SUFFIXDIR@
+lib32dir=$(prefix)/@LIBX8632SUFFIXDIR@
 crt32dir=$(lib32dir)
 winrt32dir=$(lib32dir)
 dx32dir=$(lib32dir)
@@ -483,6 +502,10 @@ lib32_LIBRARIES += lib32/libmfuuid.a
 lib32_libmfuuid_a_SOURCES = $(src_libmfuuid)
 lib32_libmfuuid_a_CPPFLAGS = $(CPPFLAGS32) $(sysincludes)
 
+lib32_LIBRARIES += lib32/libamstrmid.a
+lib32_libamstrmid_a_SOURCES = $(src_libamstrmid)
+lib32_libamstrmid_a_CPPFLAGS = $(CPPFLAGS32) $(sysincludes)
+
 lib32_LIBRARIES += lib32/libwmcodecdspuuid.a
 lib32_libwmcodecdspuuid_a_SOURCES = $(src_libwmcodecdspuuid)
 lib32_libwmcodecdspuuid_a_CPPFLAGS = $(CPPFLAGS32) $(sysincludes)
@@ -511,6 +534,10 @@ lib32_libksguid_a_CPPFLAGS=$(CPPFLAGS32) $(sysincludes)
 lib32_LIBRARIES += lib32/liblocationapi.a
 lib32_liblocationapi_a_SOURCES = $(src_liblocationapi)
 lib32_liblocationapi_a_CPPFLAGS=$(CPPFLAGS32) $(sysincludes)
+
+lib32_LIBRARIES += lib32/libsapi.a
+lib32_libsapi_a_SOURCES = $(src_libsapi)
+lib32_libsapi_a_CPPFLAGS=$(CPPFLAGS32) $(sysincludes)
 
 lib32_LIBRARIES += lib32/libsensorsapi.a
 lib32_libsensorsapi_a_SOURCES = $(src_libsensorsapi)
@@ -583,14 +610,14 @@ lib32_LIBRARIES += lib32/libmingwthrd.a
 lib32_libmingwthrd_a_SOURCES = $(src_libmingwthrd)
 lib32_libmingwthrd_a_CPPFLAGS=$(CPPFLAGS32) $(sysincludes)
 
-processed_defs += lib32/msvcrt.def lib32/msvcr80.def lib32/msvcr90.def lib32/msvcr90d.def lib32/msvcr100.def lib32/msvcr110.def
+processed_defs += lib32/msvcrt.def lib32/msvcr80.def lib32/msvcr90.def lib32/msvcr90d.def lib32/msvcr100.def lib32/msvcr110.def lib32/msvcr120.def lib32/msvcr120d.def
 
 endif
 
 include lib32/Makefile.am
 
 if !W32API
-lib32_DATA += lib32/libglut.a lib32/libmsvcp60.a lib32/libmsvcr80.a lib32/libmsvcr90.a lib32/libmsvcr90d.a lib32/libmsvcr100.a lib32/libmsvcr110.a lib32/libcrtdll.a
+lib32_DATA += lib32/libglut.a lib32/libmsvcp60.a lib32/libmsvcr80.a lib32/libmsvcr90.a lib32/libmsvcr90d.a lib32/libmsvcr100.a lib32/libmsvcr110.a lib32/libmsvcr120.a lib32/libmsvcr120d.a lib32/libcrtdll.a
 endif
 
 # combine these two rules with the ones for lib64
@@ -648,7 +675,7 @@ if LIB64
 # Compiling 64-bit runtime
 # #######################################################################
 
-lib64dir=$(prefix)/@LIB64SUFFIXDIR@
+lib64dir=$(prefix)/@LIBX8664SUFFIXDIR@
 crt64dir=$(lib64dir)
 winrt64dir=$(lib64dir)
 dx64dir=$(lib64dir)
@@ -732,6 +759,10 @@ lib64_LIBRARIES += lib64/libmfuuid.a
 lib64_libmfuuid_a_SOURCES = $(src_libmfuuid)
 lib64_libmfuuid_a_CPPFLAGS = $(CPPFLAGS64) $(sysincludes)
 
+lib64_LIBRARIES += lib64/libamstrmid.a
+lib64_libamstrmid_a_SOURCES = $(src_libamstrmid)
+lib64_libamstrmid_a_CPPFLAGS = $(CPPFLAGS64) $(sysincludes)
+
 lib64_LIBRARIES += lib64/libwmcodecdspuuid.a
 lib64_libwmcodecdspuuid_a_SOURCES = $(src_libwmcodecdspuuid)
 lib64_libwmcodecdspuuid_a_CPPFLAGS = $(CPPFLAGS64) $(sysincludes)
@@ -751,6 +782,10 @@ lib64_libdxguid_a_CPPFLAGS=$(CPPFLAGS64) $(sysincludes)
 lib64_LIBRARIES += lib64/liblocationapi.a
 lib64_liblocationapi_a_SOURCES = $(src_liblocationapi)
 lib64_liblocationapi_a_CPPFLAGS=$(CPPFLAGS64) $(sysincludes)
+
+lib64_LIBRARIES += lib64/libsapi.a
+lib64_libsapi_a_SOURCES = $(src_libsapi)
+lib64_libsapi_a_CPPFLAGS=$(CPPFLAGS64) $(sysincludes)
 
 lib64_LIBRARIES += lib64/libsensorsapi.a
 lib64_libsensorsapi_a_SOURCES = $(src_libsensorsapi)
@@ -832,7 +867,7 @@ lib64_LIBRARIES += lib64/libmingwthrd.a
 lib64_libmingwthrd_a_SOURCES = $(src_libmingwthrd)
 lib64_libmingwthrd_a_CPPFLAGS=$(CPPFLAGS64) $(sysincludes)
 
-processed_defs += lib64/msvcrt.def lib64/msvcr80.def lib64/msvcr90.def lib64/msvcr90d.def lib64/msvcr100.def lib64/msvcr110.def
+processed_defs += lib64/msvcrt.def lib64/msvcr80.def lib64/msvcr90.def lib64/msvcr90d.def lib64/msvcr100.def lib64/msvcr110.def lib64/msvcr120.def lib64/msvcr120d.def
 
 endif
 
@@ -1105,11 +1140,10 @@ lib64_DATA = \
   lib64/libxaudio2_8.a      lib64/libd3dcompiler_46.a lib64/libd3dcsx_46.a \
   lib64/libd3d11.a          lib64/libd3dcompiler_47.a \
   lib64/libwinhttp.a \
-  lib64/libapi-ms-win-core-winrt-string-l1-1-0.a \
-  lib64/libapi-ms-win-core-winrt-l1-1-0.a
+  lib64/libruntimeobject.a
 
 if !W32API
-lib64_DATA += lib64/libmsvcp60.a lib64/libmsvcr80.a lib64/libmsvcr90.a lib64/libmsvcr100.a lib64/libmsvcr90d.a lib64/libmsvcr110.a lib64/libcrtdll.a
+lib64_DATA += lib64/libmsvcp60.a lib64/libmsvcr80.a lib64/libmsvcr90.a lib64/libmsvcr100.a lib64/libmsvcr90d.a lib64/libmsvcr110.a lib64/libmsvcr120.a lib64/libmsvcr120d.a lib64/libcrtdll.a
 endif
 
 lib64/libcrtdll.a lib64/libmsvcr80.a: lib64/lib%.a: lib64/%.def
@@ -1247,6 +1281,10 @@ libarm32_LIBRARIES += libarm32/libmfuuid.a
 libarm32_libmfuuid_a_SOURCES = $(src_libmfuuid)
 libarm32_libmfuuid_a_CPPFLAGS = $(CPPFLAGSARM32) $(sysincludes)
 
+libarm32_LIBRARIES += libarm32/libamstrmid.a
+libarm32_libamstrmid_a_SOURCES = $(src_libamstrmid)
+libarm32_libamstrmid_a_CPPFLAGS = $(CPPFLAGSARM32) $(sysincludes)
+
 libarm32_LIBRARIES += libarm32/libwmcodecdspuuid.a
 libarm32_libwmcodecdspuuid_a_SOURCES = $(src_libwmcodecdspuuid)
 libarm32_libwmcodecdspuuid_a_CPPFLAGS = $(CPPFLAGSARM32) $(sysincludes)
@@ -1279,6 +1317,10 @@ libarm32_liblocationapi_a_CPPFLAGS=$(CPPFLAGSARM32) $(sysincludes)
 libarm32_LIBRARIES += libarm32/libsensorsapi.a
 libarm32_libsensorsapi_a_SOURCES = $(src_libsensorsapi)
 libarm32_libsensorsapi_a_CPPFLAGS=$(CPPFLAGSARM32) $(sysincludes)
+
+libarm32_LIBRARIES += libarm32/libsapi.a
+libarm32_libsapi_a_SOURCES = $(src_libsapi)
+libarm32_libsapi_a_CPPFLAGS=$(CPPFLAGSARM32) $(sysincludes)
 
 libarm32_LIBRARIES += libarm32/libportabledeviceguids.a
 libarm32_libportabledeviceguids_a_SOURCES = $(src_libportabledeviceguids)
@@ -1388,7 +1430,7 @@ endif
 # ##########
 
 %.def: %.def.in
-	$(CPP) -x c $< -Wp,-w -I$(top_srcdir)/def-include | $(SED) 's/^#/;/' >$@
+	$(MKDIR_P) $(@D) && $(CPP) -x c $< -Wp,-w -I$(top_srcdir)/def-include | $(SED) 's/^#/;/' > $@
 
 # Don't compile these, but install as is:
 #
