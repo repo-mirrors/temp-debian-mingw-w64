@@ -6,3 +6,4 @@ basetsd-hppa.patch
 dlltool-temp-prefix.patch
 reproducible-gendef.patch
 pthreads-libgomp.patch
+winnt-inline.patch

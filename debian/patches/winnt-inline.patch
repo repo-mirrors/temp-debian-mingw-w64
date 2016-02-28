@@ -1,0 +1,27 @@
+From: Thomas Dickey <tom@invisible-island.net>
+Subject: mingw-w64-common: missing ifdef in winnt.h
+Bug-Debian: https://bugs.debian.org/816146
+
+my test builds for cross-compiling ncurses failed due to a missing ifdef
+in winnt.h
+
+Here is a fix:
+
+--- a/mingw-w64-headers/include/winnt.h
++++ b/mingw-w64-headers/include/winnt.h
+@@ -1998,6 +1998,7 @@
+ 
+ #define DbgRaiseAssertionFailure __int2c
+ 
++#ifndef __CRT__NO_INLINE
+   __CRT_INLINE struct _TEB *NtCurrentTeb(void)
+   {
+     return (struct _TEB *)__readfsdword(PcTeb);
+@@ -2010,6 +2011,7 @@
+   {
+       return *(PVOID *)GetCurrentFiber();
+   }
++#endif /* !__CRT__NO_INLINE */
+ #endif /* defined(__i386__) && !defined(__x86_64) */
+ 
+ #define EXCEPTION_READ_FAULT 0
