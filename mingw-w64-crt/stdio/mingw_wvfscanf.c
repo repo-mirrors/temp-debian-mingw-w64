@@ -213,6 +213,11 @@ release_ptrs (struct gcollect **pt, wchar_t **wbuf)
   struct gcollect *pf;
   size_t cnt;
 
+  if (wbuf)
+    {
+      free (*wbuf);
+      *wbuf = NULL;
+    }
   if (!pt || (pf = *pt) == NULL)
     return;
   while (pf != NULL)
@@ -227,17 +232,12 @@ release_ptrs (struct gcollect **pt, wchar_t **wbuf)
       free (pf_sv);
     }
   *pt = NULL;
-  if (wbuf)
-    {
-      free (*wbuf);
-      *wbuf = NULL;
-    }
 }
 
 static int
 cleanup_return (int rval, struct gcollect **pfree, char **strp, wchar_t **wbuf)
 {
-  if (rval == EOF)
+  if (rval == WEOF)
       release_ptrs (pfree, wbuf);
   else
     {
@@ -1326,7 +1326,7 @@ __mingw_swformat (_IFP *s, const wchar_t *format, va_list argp)
 		    return cleanup_return (rval, &gcollect, pstr, &wbuf);
 		  str_sz = 100;
 		  if ((str = *pstr = (char *) malloc (100)) == NULL)
-		    return cleanup_return (((flags & USE_POSIX_ALLOC) != 0 ? EOF : rval), &gcollect, pstr, &wbuf);
+		    return cleanup_return (((flags & USE_POSIX_ALLOC) != 0 ? WEOF : rval), &gcollect, pstr, &wbuf);
 		  gcollect = resize_gcollect (gcollect);
 		  gcollect->ptrs[gcollect->count++] = pstr;
 		}
