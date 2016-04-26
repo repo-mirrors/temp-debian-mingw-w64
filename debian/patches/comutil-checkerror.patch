@@ -1,0 +1,15 @@
+Description: Drop the empty exception declaration from CheckError
+Author: Stephen Kitt <skitt@debian.org>
+Bug-Debian: https://bugs.debian.org/816427
+
+--- a/mingw-w64-headers/include/comutil.h
++++ b/mingw-w64-headers/include/comutil.h
+@@ -44,7 +44,7 @@
+ class _variant_t;
+ 
+ namespace _com_util {
+-  inline void CheckError(HRESULT hr) throw() {
++  inline void CheckError(HRESULT hr) {
+     if(FAILED(hr)) { _com_issue_error(hr); }
+   }
+ }
