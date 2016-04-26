@@ -6,6 +6,7 @@ mingw-w64 (5.0~rc2-1) UNRELEASED; urgency=medium
   * Remove the empty exception declaration from CheckError(); thanks to
     Sam Morris for the hint. (Closes: #816427.)
   * Enable all hardening options for the tools.
+  * Update the spelling fixes.
 
  -- Stephen Kitt <skitt@debian.org>  Mon, 25 Apr 2016 23:04:17 +0200
 
