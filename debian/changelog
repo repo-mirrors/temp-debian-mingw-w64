@@ -1,3 +1,9 @@
+mingw-w64 (4.0.6-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+
+ -- Stephen Kitt <skitt@debian.org>  Fri, 01 Jul 2016 23:05:37 +0200
+
 mingw-w64 (4.0.5-2) unstable; urgency=medium
 
   * Support no-inline builds in winnt.h. (Closes: #816146; thanks to
