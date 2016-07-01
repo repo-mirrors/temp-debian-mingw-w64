@@ -1,10 +1,10 @@
-mingw-w64 (4.0.6-1) UNRELEASED; urgency=medium
+mingw-w64 (4.0.6-1) unstable; urgency=medium
 
   * New upstream release.
   * Clean up debian/control using cme.
   * Standards-Version 3.9.8, no further change required.
 
- -- Stephen Kitt <skitt@debian.org>  Fri, 01 Jul 2016 23:05:37 +0200
+ -- Stephen Kitt <skitt@debian.org>  Fri, 01 Jul 2016 23:23:08 +0200
 
 mingw-w64 (4.0.5-2) unstable; urgency=medium
 
