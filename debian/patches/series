@@ -5,6 +5,4 @@ missing-cpu-info.patch
 basetsd-hppa.patch
 dlltool-temp-prefix.patch
 reproducible-gendef.patch
-pthreads-libgomp.patch
-winnt-inline.patch
 comutil-checkerror.patch

@@ -1,8 +1,7 @@
 mingw-w64 (5.0.0-1) UNRELEASED; urgency=medium
 
   * New upstream release.
-  * Merge support for no-inline builds in winnt.h. (Closes: #816146;
-    thanks to Thomas Dickey for the patch!)
+  * Drop pthreads-libgomp.patch, merged upstream.
 
  -- Stephen Kitt <skitt@debian.org>  Sun, 20 Oct 2016 22:44:02 +0200
 
