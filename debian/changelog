@@ -1,17 +1,28 @@
-mingw-w64 (4.0.6-1) unstable; urgency=medium
+mingw-w64 (5.0.0-1) UNRELEASED; urgency=medium
 
   * New upstream release.
+  * Merge support for no-inline builds in winnt.h. (Closes: #816146;
+    thanks to Thomas Dickey for the patch!)
+
+ -- Stephen Kitt <skitt@debian.org>  Sun, 20 Oct 2016 22:44:02 +0200
+
+mingw-w64 (5.0~rc2-1) experimental; urgency=medium
+
+  * New upstream release candidate.
   * Clean up debian/control using cme.
-  * Standards-Version 3.9.8, no further change required.
+  * Standards-Version 3.9.8, no change required.
+  * Remove the empty exception declaration from CheckError(); thanks to
+    Sam Morris for the hint. (Closes: #816427.)
+  * Enable all hardening options for the tools.
+  * Update the spelling fixes.
 
- -- Stephen Kitt <skitt@debian.org>  Fri, 01 Jul 2016 23:23:08 +0200
+ -- Stephen Kitt <skitt@debian.org>  Tue, 26 Apr 2016 21:58:43 +0200
 
-mingw-w64 (4.0.5-2) unstable; urgency=medium
+mingw-w64 (5.0~rc1-1) experimental; urgency=medium
 
-  * Support no-inline builds in winnt.h. (Closes: #816146; thanks to
-    Thomas Dickey for the patch!)
+  * New upstream release candidate, merging the pthreads libgomp patch.
 
- -- Stephen Kitt <skitt@debian.org>  Sun, 28 Feb 2016 14:34:02 +0100
+ -- Stephen Kitt <skitt@debian.org>  Sat, 27 Feb 2016 15:01:56 +0100
 
 mingw-w64 (4.0.5-1) unstable; urgency=medium
 

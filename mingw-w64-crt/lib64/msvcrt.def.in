@@ -715,7 +715,7 @@ _snwscanf_l
 _snwscanf_s
 _snwscanf_s_l
 _sopen
-_sopen_s
+; _sopen_s replaced by emu
 _spawnl
 _spawnle
 _spawnlp
@@ -1084,6 +1084,7 @@ fseek
 fsetpos
 ftell
 fwprintf
+__ms_fwprintf == fwprintf
 fwprintf_s
 fwrite
 fwscanf

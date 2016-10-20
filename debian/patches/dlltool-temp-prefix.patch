@@ -7,12 +7,12 @@ reproducible.
 
 --- a/mingw-w64-crt/Makefile.am
 +++ b/mingw-w64-crt/Makefile.am
-@@ -22,7 +22,7 @@
- AM_CPPFLAGS=-D_CRTBLD $(sysincludes)
- AM_CFLAGS=-pipe -std=gnu99 -D_WIN32_WINNT=0x0f00 @ADD_C_CXX_WARNING_FLAGS@ @ADD_C_ONLY_WARNING_FLAGS@
- AM_CXXFLAGS=@ADD_C_CXX_WARNING_FLAGS@ @ADD_CXX_ONLY_WARNING_FLAGS@
--AM_DLLTOOLFLAGS=-k --as=$(AS) --output-lib $@
-+AM_DLLTOOLFLAGS=-k --as=$(AS) --output-lib $@ --temp-prefix $$(basename $@ .a)
- if DELAY_IMPORT_LIBS
-   AM_DLLTOOLFLAGS += --output-delaylib $@.delayimp.a
- endif
+@@ -34,7 +34,7 @@
+   DTDEF32=$(GENLIB) $(DLLTOOLFLAGS32) $(AM_DLLTOOLFLAGS)
+   DTDEF64=$(GENLIB) $(DLLTOOLFLAGS64) $(AM_DLLTOOLFLAGS)
+ else
+-  AM_DLLTOOLFLAGS=-k --as=$(AS) --output-lib $@
++  AM_DLLTOOLFLAGS=-k --as=$(AS) --output-lib $@ --temp-prefix $$(basename $@ .a)
+   DLLTOOLFLAGSARM32=
+   DLLTOOLFLAGS32=--as-flags=--32 -m i386
+   DLLTOOLFLAGS64=--as-flags=--64 -m i386:x86-64

@@ -31,13 +31,14 @@ TARGET_PROJECTS := crt libraries-libmangle libraries-winstorecompat libraries-wi
 TARGET32_PROJECTS := libraries-pseh
 
 # No hardening support for now, except in the tools (build-arch-stamp)
-dpkg_buildflags = DEB_BUILD_MAINT_OPTIONS="hardening=-all" dpkg-buildflags
+dpkg_soft_buildflags = DEB_BUILD_MAINT_OPTIONS="hardening=-all" dpkg-buildflags
+dpkg_hard_buildflags = DEB_BUILD_MAINT_OPTIONS="hardening=+all" dpkg-buildflags
 
-CFLAGS = $(shell $(dpkg_buildflags) --get CFLAGS)
-CPPFLAGS = $(shell $(dpkg_buildflags) --get CPPFLAGS)
-CXXFLAGS = $(shell $(dpkg_buildflags) --get CXXFLAGS)
-FFLAGS = $(shell $(dpkg_buildflags) --get FFLAGS)
-LDFLAGS = $(shell $(dpkg_buildflags) --get LDFLAGS)
+CFLAGS = $(shell $(dpkg_soft_buildflags) --get CFLAGS)
+CPPFLAGS = $(shell $(dpkg_soft_buildflags) --get CPPFLAGS)
+CXXFLAGS = $(shell $(dpkg_soft_buildflags) --get CXXFLAGS)
+FFLAGS = $(shell $(dpkg_soft_buildflags) --get FFLAGS)
+LDFLAGS = $(shell $(dpkg_soft_buildflags) --get LDFLAGS)
 export CFLAGS CPPFLAGS CXXFLAGS FFLAGS LDFLAGS
 
 clean:
@@ -74,7 +75,7 @@ buildfolder = $(build_dir)/$(call rulehost,$(1))-$(call ruletarget,$(1))-$(call 
 $(host)~$(host)~tools-gendef-configure-stamp: autoreconf-stamp $(host)~$(host)~libraries-libmangle-install-stamp
 	mkdir -p $(call buildfolder,$(host)~$(host)~tools-gendef) && \
 	cd $(call buildfolder,$(host)~$(host)~tools-gendef) && \
-	$(call sourcefolder,$(host)~$(host)~tools-gendef)/configure --prefix=/usr --with-mangle=$(top_dir)/debian/tmp/usr $(shell dpkg-buildflags --export=configure)
+	$(call sourcefolder,$(host)~$(host)~tools-gendef)/configure --prefix=/usr --with-mangle=$(top_dir)/debian/tmp/usr $(shell $(dpkg_hard_buildflags) --export=configure)
 	touch $@
 
 build-arch-stamp: $(patsubst %,$(host)~$(host)~tools-%-install-stamp,$(HOST_TOOLS)) $(foreach target,$(targets),$(patsubst %,$(host)~$(target)~tools-%-install-stamp,$(TARGET_TOOLS)))
@@ -132,7 +133,7 @@ binary: binary-indep binary-arch
 	mkdir -p $(call buildfolder,$*) && \
 	cd $(call buildfolder,$*) && \
 	if [ "$(call rulehost,$*)" = "$(host)" ]; then \
-		$(call sourcefolder,$*)/configure --prefix=/usr $(shell dpkg-buildflags --export=configure) --host=$(call rulehost,$*) --target=$(call ruletarget,$*); \
+		$(call sourcefolder,$*)/configure --prefix=/usr $(shell $(dpkg_hard_buildflags) --export=configure) --host=$(call rulehost,$*) --target=$(call ruletarget,$*); \
 	else \
 		$(call sourcefolder,$*)/configure --prefix=/usr/$(call ruletarget,$*) --host=$(call rulehost,$*) --target=$(call ruletarget,$*) CPPFLAGS="$(CPPFLAGS) -I$(top_dir)/debian/tmp/usr/$(call ruletarget,$*)/include" LDFLAGS="$(LDFLAGS) -L$(top_dir)/debian/tmp/usr/$(call ruletarget,$*)/lib"; \
 	fi

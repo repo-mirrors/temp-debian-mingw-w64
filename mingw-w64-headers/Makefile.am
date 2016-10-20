@@ -5,6 +5,8 @@ secheaddir = $(baseheaddir)/sec_api
 secsysheaddir = $(baseheaddir)/sec_api/sys
 glheaddir = $(baseheaddir)/GL
 gdiplusheaddir = $(baseheaddir)/gdiplus
+wrlheaddir = $(baseheaddir)/wrl
+wrlwrappersheaddir = $(baseheaddir)/wrl/wrappers
 mingwhelperheaddir = $(baseheaddir)/psdk_inc
 sdksheaddir = $(baseheaddir)/sdks
 
@@ -14,6 +16,8 @@ sechead_HEADERS = @SECHEAD_LIST@
 secsyshead_HEADERS = @SECSYSHEAD_LIST@
 glhead_HEADERS = @GLHEAD_LIST@
 gdiplushead_HEADERS = @GDIPLUSHEAD_LIST@
+wrlhead_HEADERS = @WRLHEAD_LIST@
+wrlwrappershead_HEADERS = @WRLWRAPPERSHEAD_LIST@
 mingwhelperhead_HEADERS = @MINGWHELPERHEAD_LIST@
 nodist_sdkshead_HEADERS = _mingw_directx.h _mingw_ddk.h
 noinst_HEADERS = crt/sdks/_mingw_directx.h.in crt/sdks/_mingw_ddk.h.in
@@ -47,6 +51,8 @@ EXTRA_HEADERS = \
   include/GL/*.h \
   include/psdk_inc/*.h \
   include/gdiplus/*.h \
+  include/wrl/*.h \
+  include/wrl/wrappers/*.h \
   crt/*.h \
   crt/*.inl \
   crt/sys/*.h \
@@ -70,11 +76,13 @@ IDL_SRCS = \
   include/audioclient.idl \
   include/audioendpoints.idl \
   include/audiopolicy.idl \
+  include/bdaiface.idl \
   include/comadmin.idl \
   include/commoncontrols.idl \
   include/control.idl \
   include/ctfutb.idl \
   include/dbgprop.idl \
+  include/dcompanimation.idl \
   include/dimm.idl \
   include/dispex.idl \
   include/docobj.idl \
@@ -84,6 +92,7 @@ IDL_SRCS = \
   include/downloadmgr.idl \
   include/dxva2api.idl \
   include/endpointvolume.idl \
+  include/exdisp.idl \
   include/filter.idl \
   include/fsrm.idl \
   include/fsrmenums.idl \
@@ -97,6 +106,7 @@ IDL_SRCS = \
   include/iketypes.idl \
   include/inputscope.idl \
   include/inspectable.idl \
+  include/locationapi.idl \
   include/oaidl.idl \
   include/ocidl.idl \
   include/comcat.idl \
@@ -130,6 +140,7 @@ IDL_SRCS = \
   include/portabledevicetypes.idl \
   include/propidl.idl \
   include/propsys.idl \
+  include/regbag.idl \
   include/sapi51.idl \
   include/sapi53.idl \
   include/sapi54.idl \
@@ -142,8 +153,10 @@ IDL_SRCS = \
   include/structuredquerycondition.idl \
   include/tpcshrd.idl \
   include/textstor.idl \
+  include/tuner.idl \
   include/uiautomationclient.idl \
   include/uiautomationcore.idl \
+  include/uiviewsettingsinterop.idl \
   include/unknwn.idl \
   include/unknwnbase.idl \
   include/urlmon.idl \

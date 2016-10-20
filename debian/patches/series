@@ -1,4 +1,4 @@
-spelling-fix.patch
+spelling-fixes.patch
 widl-no-context.patch
 disable-werror.patch
 missing-cpu-info.patch
@@ -7,3 +7,4 @@ dlltool-temp-prefix.patch
 reproducible-gendef.patch
 pthreads-libgomp.patch
 winnt-inline.patch
+comutil-checkerror.patch
