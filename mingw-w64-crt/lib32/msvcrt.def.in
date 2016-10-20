@@ -585,6 +585,7 @@ fseek
 fsetpos
 ftell
 fwprintf
+__ms_fwprintf == fwprintf
 fwrite
 fwscanf
 getc
@@ -1039,7 +1040,7 @@ _snwprintf_s_l
 _snwscanf_l
 _snwscanf_s
 _snwscanf_s_l
-_sopen_s DATA
+; _sopen_s replaced by emu
 _splitpath_s
 _sprintf_l
 _sprintf_p_l
