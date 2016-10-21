@@ -1,9 +1,9 @@
-mingw-w64 (5.0.0-1) UNRELEASED; urgency=medium
+mingw-w64 (5.0.0-1) unstable; urgency=medium
 
   * New upstream release.
   * Drop pthreads-libgomp.patch, merged upstream.
 
- -- Stephen Kitt <skitt@debian.org>  Sun, 20 Oct 2016 22:44:02 +0200
+ -- Stephen Kitt <skitt@debian.org>  Fri, 21 Oct 2016 13:25:05 +0200
 
 mingw-w64 (5.0~rc2-1) experimental; urgency=medium
 
