@@ -10,7 +10,7 @@
 	.align 4
 	.globl __MINGW_USYMBOL(ceilf)
 	.def	__MINGW_USYMBOL(ceilf);	.scl	2;	.type	32;	.endef
-#ifdef _WIN64
+#ifdef __x86_64__
 	.seh_proc	__MINGW_USYMBOL(ceilf)
 #endif
 
@@ -92,7 +92,7 @@ __MINGW_USYMBOL(ceilf):
 	bic		r0, r1, #0x00c00000
 	orr		r0, r0, #0x00400000 /* Round towards Plus Infinity */
 	vmsr	fpscr, r0
-	vcvt.s32.f32	s0, s0
+	vcvtr.s32.f32	s0, s0
 	vcvt.f32.s32	s0, s0
 	vmsr	fpscr, r1
 	bx	lr
